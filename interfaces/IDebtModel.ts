@@ -1,6 +1,7 @@
 import Mongoose = require("mongoose");
+import { IUserModel } from "./IUserModel";
 
-interface Debt extends Document {
+interface IDebtModel extends Document {
   debtID: string;
   amount: number;
   debtor: User;
