@@ -1,10 +1,9 @@
 import Mongoose from "mongoose";
 
 interface IGroupModel extends Mongoose.Document {
-  requestID: number;
-  sender: number;
-  receiver: number;
-  status: string;
+  groupID: string,
+  groupName: string,
+  usersInGroup: [],
 }
 
 export {IGroupModel};

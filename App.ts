@@ -1,3 +1,5 @@
+this.expressApp = express();
+
 const App = () => {
   return;
 }

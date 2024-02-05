@@ -1,16 +1,26 @@
 import Mongoose from "mongoose";
 
 interface IUserModel extends Mongoose.Document {
-  userID: number,
+  userID: string,
   username: string,
   email: string,
-  debtsOwed: number[],
-  debtsOwedTo: number[],
-  receiptsList: Receipt[],
+  debtsOwed: [
+    debtID: string,
+    amount: number,
+    debtorID: number,
+    creditorID: number
+  ],
+  debtsOwedTo: [
+    debtID: string,
+    amount: number,
+    debtorID: number,
+    creditorID: number
+  ],
+  receiptsList: number[],
   balance: number,
   friendRequestsSent: number[],
-  friendRequestsReceived: number[];
-  groupsList: number[];
+  friendRequestsReceived: number[],
+  groupsList: number[]
 }
 
 export {IUserModel};

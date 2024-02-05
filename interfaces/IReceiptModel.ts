@@ -1,17 +1,21 @@
-interface Receipt {
-  receiptID: string;
-  totalAmount: number;
-  date: Date;
-  usersList: number[];
-  owner: number[];
-  debtsList: number[];
+import Mongoose from "mongoose";
+
+interface IReceipt extends Mongoose.Document {
+  receiptID: string,
+  totalAmount: number,
+  date: Date,
+  usersList: string[],
+  owner: string[],
+  debtsList: string[],
   itemsList: [
     {
-      itemID: number;
-      itemName: string;
-      quantity: number;
-      unitPrice: number;
-      totalPrice: number;
+      itemID: string,
+      itemName: string,
+      quantity: number,
+      unitPrice: number,
+      totalPrice: number,
     }
-  ];
+  ],
 }
+
+export {IReceipt};
