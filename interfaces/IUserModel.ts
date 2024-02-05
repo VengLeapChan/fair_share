@@ -1,16 +1,16 @@
-import Mongoose = require("mongoose");
+import Mongoose from "mongoose";
 
 interface IUserModel extends Mongoose.Document {
-  userID: string;
-  username: string;
-  email: string;
-  debtsOwed: Debt[];
-  debtsOwedTo: Debt[];
-  receiptsList: Receipt[];
-  balance: number;
-  friendRequestsSent: FriendRequest[];
-  friendRequestsReceived: FriendRequest[];
-  groupsList: Group[];
+  userID: number,
+  username: string,
+  email: string,
+  debtsOwed: number[],
+  debtsOwedTo: number[],
+  receiptsList: Receipt[],
+  balance: number,
+  friendRequestsSent: number[],
+  friendRequestsReceived: number[];
+  groupsList: number[];
 }
 
 export {IUserModel};
