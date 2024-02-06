@@ -10,5 +10,5 @@ const mongoDBConnection = 'mongodb://' + dbUser + ':' + encodeURIComponent(dbPas
 console.log("server db connection URL " + mongoDBConnection);
 
 let server: any = new App(mongoDBConnection);
-server.listen(port);
+server.expressApp.listen(port);
 console.log("server running in port " + port);
