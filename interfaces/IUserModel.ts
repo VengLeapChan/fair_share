@@ -16,11 +16,11 @@ interface IUserModel extends Mongoose.Document {
     debtorID: string,
     creditorID: string}
   ],
-receiptsList: [string],
+receiptsList: [{receiptID: string}],
 balance: number,
-friendRequestsSent: [string],
-friendRequestsReceived: [string],
-groupsList: [string]
+friendRequestsSent: [{requestID: string}],
+friendRequestsReceived: [{requestId: string}],
+groupsList: [{groupID: string}]
 }
 
 export {IUserModel};
