@@ -156,6 +156,24 @@ class App {
                 console.error(e);
             }
         }));
+        router.post('/app/:userID/splitItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = crypto.randomBytes(16).toString("hex");
+            const userID = req.params.userID;
+            var jsonObj = req.body;
+            const splitID = id;
+            const splitAmount = jsonObj.splitAmount;
+            const targetID = jsonObj.targetID.userID;
+            try {
+                const addedSplitItem = yield this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, userID);
+                yield this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
+                yield this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
+                res.json({ message: "Split item added successfully." });
+            }
+            catch (e) {
+                console.error(e);
+                throw e;
+            }
+        }));
         this.expressApp.use('/', router);
     }
 }

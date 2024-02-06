@@ -25,14 +25,14 @@ class UserModel {
             debtsOwed: [
                 { debtID: String,
                     amount: Number,
-                    debtorID: String,
-                    creditorID: String }
+                    receiverID: String,
+                    senderID: String }
             ],
             debtsOwedTo: [
                 { debtID: String,
                     amount: Number,
-                    debtorID: String,
-                    creditorID: String }
+                    receiverID: String,
+                    senderID: String }
             ],
             receiptsList: [{ receiptID: String }],
             balance: Number,
@@ -103,13 +103,60 @@ class UserModel {
     addReceiptID(response, receiptID, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             // query to find user based on userID and updated the receiptList 
-            const query = this.model.findOneAndUpdate({ userID: userID }, { $push: { receiptsList: { receiptID: receiptID }, } }, { new: true });
+            const query = this.model.findOneAndUpdate({ userID: userID }, { $push: {
+                    receiptsList: {
+                        receiptID: receiptID
+                    },
+                }
+            }, { new: true });
             try {
                 const user = yield query.exec();
                 response.json(user);
             }
             catch (e) {
                 console.log(e);
+            }
+        });
+    }
+    addDebtsOwed(response, receiverID, senderID, amount, debtID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOneAndUpdate({ userID: receiverID }, {
+                $push: {
+                    debtsOwed: {
+                        debtID: debtID,
+                        amount: amount,
+                        receiverID: receiverID,
+                        senderID: senderID
+                    }
+                }
+            }, { new: true });
+            try {
+                return yield query.exec();
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+        });
+    }
+    addDebtsOwedTo(response, receiverID, senderID, amount, debtID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOneAndUpdate({ userID: senderID }, {
+                $push: {
+                    debtsOwedTo: {
+                        debtID: debtID,
+                        amount: amount,
+                        receiverID: receiverID,
+                        senderID: senderID
+                    }
+                }
+            }, { new: true });
+            try {
+                return yield query.exec();
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
             }
         });
     }

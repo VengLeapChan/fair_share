@@ -23,7 +23,7 @@ class ReceiptModel {
       splitList: [{
         splitID: String,
         splitAmount: Number,
-        userID: String,
+        targetID: {userID: String},
       }],
       itemsList: [
         {
@@ -74,8 +74,32 @@ class ReceiptModel {
       const savedReceipt = await newReceipt.save();
       return savedReceipt; // Return the saved receipt instead of sending a response
     } catch (e) {
-      console.log(e);
-      throw e; // Rethrow the error to handle it in the route handler
+      console.log(e)
+    }
+  }
+
+  public async addSplitsItem(response: any, splitID: string, splitAmount: number, targetID: string, ownerID: string) {
+    console.log("adding to split list")
+    const query = this.model.findOneAndUpdate(
+      { userID: ownerID },
+      {
+        $push: {
+          splitList: {
+            splitID: splitID,
+            splitAmount: splitAmount,
+            targetID: {userID: targetID},
+          }
+        }
+      },
+      { new: true }
+    );
+    try {
+
+        return await query.exec();
+
+    } catch (e) {
+      console.log(e)
+      throw e;
     }
   }
 

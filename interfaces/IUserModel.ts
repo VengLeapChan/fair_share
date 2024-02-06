@@ -14,10 +14,10 @@ interface IUserModel extends Mongoose.Document {
   ],
   debtsOwedTo: [
     {
-      debtID: string,
+    debtID: string,
     amount: number,
-    debtorID: string,
-    creditorID: string
+    receiverID: string,
+    senderID: string
   }
   ],
 receiptsList: [{receiptID: string}],

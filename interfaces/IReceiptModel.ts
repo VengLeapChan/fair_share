@@ -10,7 +10,7 @@ interface IReceiptModel extends Mongoose.Document {
     {
       splitID: string,
       splitAmount: number,
-      userID: string,
+      targetID: {userID: string},
     }
   ],
   itemsList: [

@@ -20,14 +20,14 @@ class UserModel {
       debtsOwed: [
         {debtID: String,
         amount: Number,
-        debtorID: String,
-        creditorID: String}
+        receiverID: String,
+        senderID: String}
       ],
       debtsOwedTo: [
         {debtID: String,
         amount: Number,
-        debtorID: String,
-        creditorID: String}
+        receiverID: String,
+        senderID: String}
       ],
     receiptsList: [{receiptID: String}],
     balance: Number,
@@ -95,14 +95,69 @@ class UserModel {
     // query to find user based on userID and updated the receiptList 
     const query = this.model.findOneAndUpdate(
       {userID: userID}, 
-      {$push:{receiptsList: {receiptID: receiptID},}},  
-      {new:true} );
+      {$push: {
+        receiptsList: {
+          receiptID: receiptID
+        },
+      }
+    },  
+    { new:true } );
     try {
       const user = await query.exec();
       response.json(user);
     } catch (e) {
       console.log(e);
     }
+  }
+
+  public async addDebtsOwed(response: any, receiverID: string, senderID: string, amount: number, debtID: string){
+    
+    const query = this.model.findOneAndUpdate(
+      { userID: receiverID },
+      {
+        $push: {
+          debtsOwed: {
+            debtID: debtID,
+            amount: amount,
+            receiverID: receiverID,
+            senderID: senderID
+          }
+        }
+      },
+      { new: true }
+    );
+    try {
+      return await query.exec();
+
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
+  }
+  public async addDebtsOwedTo(response: any, receiverID: string, senderID: string, amount: number, debtID: string){
+    
+    const query = this.model.findOneAndUpdate(
+      { userID: senderID },
+      {
+        $push: {
+          debtsOwedTo: {
+            debtID: debtID,
+            amount: amount,
+            receiverID: receiverID,
+            senderID: senderID
+          }
+        }
+      },
+      { new: true }
+    );
+    try {
+      return await query.exec();
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
   }
 }
 

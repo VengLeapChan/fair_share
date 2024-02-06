@@ -60,8 +60,8 @@ receiptsCollection.insertMany([
     totalAmount: 5,
     date: Date,
     usersList: [],
-    ownerID: "1",
-    debtsList: [],
+    ownerID: { userID: "1" },
+    splitsList: [],
     itemsList: [
       {
         itemID: "1",
@@ -77,8 +77,8 @@ receiptsCollection.insertMany([
     totalAmount: 7,
     date: Date,
     usersList: [],
-    ownerID: "2",
-    debtsList: [],
+    ownerID: { userID: "2" },
+    splitsList: [],
     itemsList: [
       {
         itemID: "2",
@@ -94,8 +94,8 @@ receiptsCollection.insertMany([
     totalAmount: 7,
     date: Date,
     usersList: [],
-    ownerID: "3",
-    debtsList: [],
+    ownerID: { userID: "3" },
+    splitsList: [],
     itemsList: [
       {
         itemID: "3",
@@ -116,14 +116,14 @@ friendRequestCollection.deleteMany({});
 friendRequestCollection.insertMany([
   {
     requestID: "1",
-    senderID: "1",
-    receiverID: "3",
+    senderID: { userID: "1" },
+    receiverID: { userID: "3" },
     status: "pending",
   },
   {
     requestID: "2",
-    senderID: "1",
-    receiverID: "2",
+    senderID: { userID: "1" },
+    receiverID: { userID: "2" },
     status: "pending",
   },
 ]);

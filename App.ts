@@ -172,9 +172,30 @@ class App {
         console.log('object creation failed');
         console.error(e);
       }
-      
-
     })
+
+    router.post('/app/:userID/splitItems', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      const userID = req.params.userID
+      var jsonObj = req.body;
+
+      const splitID = id;
+      const splitAmount = jsonObj.splitAmount;
+      const targetID = jsonObj.targetID.userID;
+
+      try {
+        await this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, userID);
+        await this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
+        await this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
+    
+        res.json({ message: "Split item added successfully." });
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
+    });
+
 
     this.expressApp.use('/', router);
   }
