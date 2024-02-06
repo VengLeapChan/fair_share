@@ -10,6 +10,7 @@ class App {
   public expressApp: express.Application;
   public User: UserModel;
   public Receipt: ReceiptModel;
+  public FriendRequest: FriendRequestModel;
 
   constructor(mongoDBConnection: string) {
     this.expressApp = express();

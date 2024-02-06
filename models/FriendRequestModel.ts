@@ -18,7 +18,7 @@ class FriendRequestModel {
             sender: { userID: String },
             receiver: { userID: String },
             status: String,
-        }, { collection: "friendRequests" });
+        }, { collection: "friendRequest" });
     }
 
     public async createModel() {
