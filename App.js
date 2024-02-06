@@ -40,6 +40,7 @@ exports.App = void 0;
 var express = require("express");
 var UserModel_1 = require("./models/UserModel");
 var bodyParser = require("body-parser");
+var crypto = require("crypto");
 var App = /** @class */ (function () {
     function App(mongoDBConnection) {
         this.expressApp = express();
@@ -87,6 +88,7 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
+<<<<<<< HEAD
         router.post("/app/user/add", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var newUser;
             return __generator(this, function (_a) {
@@ -98,6 +100,35 @@ var App = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
+=======
+        router.post('/app/user/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var id, jsonObj, doc, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        id = crypto.randomBytes(16).toString("hex");
+                        console.log(req.body);
+                        jsonObj = req.body;
+                        // set the payload's userID
+                        jsonObj.userID = id;
+                        doc = new this.User.model(jsonObj);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        // save it in the db 
+                        return [4 /*yield*/, doc.save()];
+                    case 2:
+                        // save it in the db 
+                        _a.sent();
+                        res.send('{"id":"' + id + '"}');
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.log('object creation failed');
+                        console.error(e_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+>>>>>>> 42800352886d0194eaff97a70f9d1b839da1c9ff
                 }
             });
         }); });
