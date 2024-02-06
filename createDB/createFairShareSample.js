@@ -108,8 +108,14 @@ receiptsCollection.insertMany([
   },
 ]);
 
-db.createCollection("friendRequests");
+// update owner's receipt ID
+usersCollection.findOneAndUpdate({userID: "1"}, {$push: {receiptsList: {receiptID: "1"}}});
 
+usersCollection.findOneAndUpdate({userID: "2"}, {$push: {receiptsList: {receiptID: "2"}}});
+
+usersCollection.findOneAndUpdate({userID: "3"}, {$push: {receiptsList: {receiptID: "3"}}});
+
+db.createCollection("friendRequests");
 friendRequestCollection = db.getCollection("friendRequests");
 friendRequestCollection.deleteMany({});
 
@@ -127,3 +133,11 @@ friendRequestCollection.insertMany([
     status: "pending",
   },
 ]);
+
+usersCollection.findOneAndUpdate({userID: "1"}, {$push: {friendRequestsSent: {requestID: "1"}}})
+
+usersCollection.findOneAndUpdate({userID: "3"}, {$push: {friendRequestsReceived: {requestID: "1"}}})
+
+usersCollection.findOneAndUpdate({userID: "1"}, {$push: {friendRequestsSent: {requestID: "2"}}})
+
+usersCollection.findOneAndUpdate({userID: "2"}, {$push: {friendRequestsReceived: {requestID: "2"}}})
