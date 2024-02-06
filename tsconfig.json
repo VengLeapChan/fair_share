@@ -1,18 +1,25 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": ["ES2015", "es2018", "dom", "ES6"],
+    "lib": [
+      "ES2015",
+      "es2018",
+      "dom",
+      "ES6"
+    ],
     "target": "es6",
-    "moduleResolution" : "node",
+    "moduleResolution": "node",
     "rootDir": "./",
     "sourceMap": true,
-    "types":["node"],
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
-    ],
+    ]
   },
-  "includes" : [
-    "**/*"
+  "includes": [
+    "**/*.ts"
   ],
   "exclude": [
     "node_modules"

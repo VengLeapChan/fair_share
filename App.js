@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var express = require("express");
 var UserModel_1 = require("./models/UserModel");
+var FriendRequestModel_1 = require("./models/FriendRequestModel");
 var bodyParser = require("body-parser");
 var crypto = require("crypto");
 var App = /** @class */ (function () {
@@ -47,6 +48,7 @@ var App = /** @class */ (function () {
         this.middleware();
         this.routes();
         this.User = new UserModel_1.UserModel(mongoDBConnection);
+        this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
     }
     App.prototype.middleware = function () {
         this.expressApp.use(bodyParser.json());
@@ -88,18 +90,6 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
-        router.get("/app/usersCount", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Query All User Count");
-                        return [4 /*yield*/, this.User.retreiveAllUsersCount(res)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
         router.post('/app/user/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var id, jsonObj, doc, e_1;
             return __generator(this, function (_a) {
@@ -131,25 +121,32 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
-        router.get("/app/userAddReceipt", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var userID, receiptID, e_2;
+        // Add routes for FriendRequestModel
+        router.get("/app/friendrequest", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var friendRequests;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        userID = "1";
-                        receiptID = "2";
-                        _a.label = 1;
+                        console.log('Query All Friend Requests');
+                        return [4 /*yield*/, this.FriendRequest.retrieveAllFriendRequests(res)];
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.User.addReceiptID(res, userID, receiptID)];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_2 = _a.sent();
-                        console.log(e_2);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        friendRequests = _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        router.post("/app/friendrequest", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var id, newFriendRequest;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('Creating a new Friend Request');
+                        id = crypto.randomBytes(16).toString("hex");
+                        return [4 /*yield*/, this.FriendRequest.retrieveSpecificFriendRequest(express.response, id)];
+                    case 1:
+                        newFriendRequest = _a.sent();
+                        res.json(newFriendRequest);
+                        return [2 /*return*/];
                 }
             });
         }); });
