@@ -18,7 +18,7 @@ class App {
     this.routes();
     this.User = new UserModel(mongoDBConnection);
     this.Receipt = new ReceiptModel(mongoDBConnection);
-
+    this.FriendRequest = new FriendRequestModel(mongoDBConnection);
   }
 
   private middleware(): void {

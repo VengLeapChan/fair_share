@@ -13,6 +13,7 @@ exports.App = void 0;
 const express = require("express");
 const UserModel_1 = require("./models/UserModel");
 const ReceiptModel_1 = require("./models/ReceiptModel");
+const FriendRequestModel_1 = require("./models/FriendRequestModel");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 class App {
@@ -22,6 +23,7 @@ class App {
         this.routes();
         this.User = new UserModel_1.UserModel(mongoDBConnection);
         this.Receipt = new ReceiptModel_1.ReceiptModel(mongoDBConnection);
+        this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
     }
     middleware() {
         this.expressApp.use(bodyParser.json());
