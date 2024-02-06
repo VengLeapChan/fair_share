@@ -61,7 +61,7 @@ receiptsCollection.insertMany([
     date: Date,
     usersList: [],
     ownerID: { userID: "1" },
-    splitsList: [],
+    splitList: [],
     itemsList: [
       {
         itemID: "1",
@@ -78,7 +78,7 @@ receiptsCollection.insertMany([
     date: Date,
     usersList: [],
     ownerID: { userID: "2" },
-    splitsList: [],
+    splitList: [],
     itemsList: [
       {
         itemID: "2",
@@ -95,7 +95,7 @@ receiptsCollection.insertMany([
     date: Date,
     usersList: [],
     ownerID: { userID: "3" },
-    splitsList: [],
+    splitList: [],
     itemsList: [
       {
         itemID: "3",

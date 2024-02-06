@@ -4,7 +4,6 @@ import { ReceiptModel } from './models/ReceiptModel';
 import { FriendRequestModel } from './models/FriendRequestModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
-import { json } from 'stream/consumers';
 
 class App {
   public expressApp: express.Application;
@@ -36,6 +35,8 @@ class App {
   private routes(): void {
     let router = express.Router();
 
+    // ROUTES FOR USER
+
     router.get("/app/user", async (req, res) => {
       console.log('Query All User');
       await this.User.retreiveAllUsers(res);
@@ -49,17 +50,14 @@ class App {
 
     router.post('/app/user/', async (req, res) => {
       console.log("Adding a user");
-      // generate a unique userID 
       const id = crypto.randomBytes(16).toString("hex");
       console.log(req.body);
-      // get the payload 
+
       var jsonObj = req.body;
-      // set the payload's userID
+ 
       jsonObj.userID = id;
-      // create a new model 
       const doc = new this.User.model(jsonObj);
       try {
-        // save it in the db 
         await doc.save();
         res.send('{"id":"' + id + '"}');
       }
@@ -69,42 +67,7 @@ class App {
       }
     });
 
-    router.get('/app/receipt', async (req, res) => {
-      try {
-        await this.Receipt.getAllReceipt(res);
-      } catch (e) {
-        console.error(e)
-      }
-    })
-
-    router.get('/app/receipt/:receiptID', async (req, res) => {
-
-      const receiptID = req.params.receiptID;
-      console.log("get specific receipt ", receiptID)
-      try {
-        await this.Receipt.getSpecificReceipt(res, receiptID)
-      } catch (e) {
-        console.error(e)
-      }
-    })
-    router.post('/app/receipt', async (req, res) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      var jsonObj = req.body;
-
-      jsonObj.receiptID = id;
-
-      try {
-        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
-        console.log(addedReceipt);
-        await this.User.addReceiptID(res, id, addedReceipt.ownerID.userID)
-
-      } catch (e) {
-        console.error(e);
-
-      }
-    });
-
+    // ROUTES FOR RECEIPT
 
     router.get('/app/receipt', async (req, res) => {
       try {
@@ -143,7 +106,68 @@ class App {
     });
 
 
-    // Add routes for FriendRequestModel
+    router.get('/app/receipt', async (req, res) => {
+      try {
+        await this.Receipt.getAllReceipt(res);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    router.get('/app/receipt/:receiptID', async (req, res) => {
+
+      const receiptID = req.params.receiptID;
+      console.log("get specific receipt ", receiptID)
+      try {
+        await this.Receipt.getSpecificReceipt(res, receiptID)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+    router.post('/app/receipt', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      var jsonObj = req.body;
+
+      jsonObj.receiptID = id;
+
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
+        console.log(addedReceipt);
+        await this.User.addReceiptID(res, id, addedReceipt.ownerID.userID)
+
+      } catch (e) {
+        console.error(e);
+
+      }
+    });
+
+    router.post('/app/:userID/:receiptID/splitItems', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      const userID = req.params.userID;
+      const receiptID = req.params.receiptID;
+      var jsonObj = req.body;
+
+      const splitID = id;
+      const splitAmount = jsonObj.splitAmount;
+      const targetID = jsonObj.targetID.userID;
+
+      try {
+        await this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, receiptID);
+        await this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
+        await this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
+    
+        res.json({ message: "Split item added successfully." });
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
+    });
+
+
+    // ROUTES FOR FRIENDS
+    
     router.get("/app/friendRequest", async (req, res) => {
       console.log('Query All Friend Requests');
       const friendRequests = await this.FriendRequest.retrieveAllFriendRequests(res);
@@ -173,28 +197,6 @@ class App {
         console.error(e);
       }
     })
-
-    router.post('/app/:userID/splitItems', async (req, res) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      const userID = req.params.userID
-      var jsonObj = req.body;
-
-      const splitID = id;
-      const splitAmount = jsonObj.splitAmount;
-      const targetID = jsonObj.targetID.userID;
-
-      try {
-        await this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, userID);
-        await this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
-        await this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
-    
-        res.json({ message: "Split item added successfully." });
-      } catch (e) {
-        console.error(e);
-        throw e;
-      }
-    });
 
 
     this.expressApp.use('/', router);

@@ -78,10 +78,10 @@ class ReceiptModel {
     }
   }
 
-  public async addSplitsItem(response: any, splitID: string, splitAmount: number, targetID: string, ownerID: string) {
-    console.log("adding to split list")
+  public async addSplitsItem(response: any, splitID: string, splitAmount: number, targetID: string, receiptID: string) {
+    console.log("adding to split list");
     const query = this.model.findOneAndUpdate(
-      { userID: ownerID },
+      { receiptID: receiptID},
       {
         $push: {
           splitList: {

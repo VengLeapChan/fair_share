@@ -89,10 +89,10 @@ class ReceiptModel {
             }
         });
     }
-    addSplitsItem(response, splitID, splitAmount, targetID, ownerID) {
+    addSplitsItem(response, splitID, splitAmount, targetID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("adding to split list");
-            const query = this.model.findOneAndUpdate({ userID: ownerID }, {
+            const query = this.model.findOneAndUpdate({ receiptID: receiptID }, {
                 $push: {
                     splitList: {
                         splitID: splitID,

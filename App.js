@@ -38,6 +38,7 @@ class App {
     }
     routes() {
         let router = express.Router();
+        // ROUTES FOR USER
         router.get("/app/user", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All User');
             yield this.User.retreiveAllUsers(res);
@@ -49,17 +50,12 @@ class App {
         }));
         router.post('/app/user/', (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a user");
-            // generate a unique userID 
             const id = crypto.randomBytes(16).toString("hex");
             console.log(req.body);
-            // get the payload 
             var jsonObj = req.body;
-            // set the payload's userID
             jsonObj.userID = id;
-            // create a new model 
             const doc = new this.User.model(jsonObj);
             try {
-                // save it in the db 
                 yield doc.save();
                 res.send('{"id":"' + id + '"}');
             }
@@ -68,6 +64,7 @@ class App {
                 console.error(e);
             }
         }));
+        // ROUTES FOR RECEIPT
         router.get('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield this.Receipt.getAllReceipt(res);
@@ -130,7 +127,26 @@ class App {
                 console.error(e);
             }
         }));
-        // Add routes for FriendRequestModel
+        router.post('/app/:userID/:receiptID/splitItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = crypto.randomBytes(16).toString("hex");
+            const userID = req.params.userID;
+            const receiptID = req.params.receiptID;
+            var jsonObj = req.body;
+            const splitID = id;
+            const splitAmount = jsonObj.splitAmount;
+            const targetID = jsonObj.targetID.userID;
+            try {
+                yield this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, receiptID);
+                yield this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
+                yield this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
+                res.json({ message: "Split item added successfully." });
+            }
+            catch (e) {
+                console.error(e);
+                throw e;
+            }
+        }));
+        // ROUTES FOR FRIENDS
         router.get("/app/friendRequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All Friend Requests');
             const friendRequests = yield this.FriendRequest.retrieveAllFriendRequests(res);
@@ -154,24 +170,6 @@ class App {
             catch (e) {
                 console.log('object creation failed');
                 console.error(e);
-            }
-        }));
-        router.post('/app/:userID/splitItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = crypto.randomBytes(16).toString("hex");
-            const userID = req.params.userID;
-            var jsonObj = req.body;
-            const splitID = id;
-            const splitAmount = jsonObj.splitAmount;
-            const targetID = jsonObj.targetID.userID;
-            try {
-                const addedSplitItem = yield this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, userID);
-                yield this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
-                yield this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
-                res.json({ message: "Split item added successfully." });
-            }
-            catch (e) {
-                console.error(e);
-                throw e;
             }
         }));
         this.expressApp.use('/', router);
