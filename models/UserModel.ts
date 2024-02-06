@@ -39,35 +39,46 @@ class UserModel {
   }
 
 
-public async createModel(){
-  try {
-    await Mongoose.connect(this.dbConnectionString);
-    this.model = Mongoose.model<IUserModel>("Users", this.schema);
-  } catch (e) {
-    console.error(e);
+  public async createModel(){
+    try {
+      await Mongoose.connect(this.dbConnectionString);
+      this.model = Mongoose.model<IUserModel>("Users", this.schema);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  public async retreiveAllUsers(response: any){
+    const query = this.model.find({});
+    try {
+      const usersArray = await query.exec();
+      response.json(usersArray)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public async retreiveSpecificUser(response: any, userID: string) {
+    const query = this.model.findOne({"userID": userID});
+    
+    try {
+      const user = await query.exec();
+      response.json(user)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  public async addUser(response: any, newUser: IUserModel) {
+    try {
+      const user = new this.model(newUser);
+      await user.save();
+      response.json({ message: "User added successfully", user });
+    } catch (e) {
+      console.error(e);
+      response.status(500).json({ error: "Error adding user" });
+    }
   }
 }
 
-public async retreiveAllUsers(response: any){
-  const query = this.model.find({});
-  try {
-    const usersArray = await query.exec();
-    response.json(usersArray)
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-public async retreiveSpecificUser(response: any, userID: string) {
-  const query = this.model.findOne({"userID": userID});
-  
-  try {
-    const user = await query.exec();
-    response.json(user)
-  } catch (e) {
-    console.log(e)
-  }
-}
-}
 
 export {UserModel};

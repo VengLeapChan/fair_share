@@ -137,6 +137,29 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
+    UserModel.prototype.addUser = function (response, newUser) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        user = new this.model(newUser);
+                        return [4 /*yield*/, user.save()];
+                    case 1:
+                        _a.sent();
+                        response.json({ message: "User added successfully", user: user });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_4 = _a.sent();
+                        console.error(e_4);
+                        response.status(500).json({ error: "Error adding user" });
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return UserModel;
 }());
 exports.UserModel = UserModel;

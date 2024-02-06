@@ -1,58 +1,56 @@
-// get fairShare db 
-db = db.getSiblingDB('fairShare');
+// get fairShare db
+db = db.getSiblingDB("fairShare");
 
 // create a user collection
-db.createCollection('users')
+db.createCollection("users");
 
-usersCollection = db.getCollection("users")
+usersCollection = db.getCollection("users");
 // remove all users
 // usersCollection.remove({})
 
 usersCollection.deleteMany({});
 
-usersCollection.insertMany(
-  [
-    {
-      userID: "1",
-      username: "leapvchan",
-      email: "leapvchan@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      receiptsList: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: [],
-    },
-    {
-      userID: "2",
-      username: "summerxia",
-      email: "summer@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      receiptsList: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: [],
-    },
-    {
-      userID: "3",
-      username: "robertWidjaja",
-      email: "robertWidjaja@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: []
-    }
-  ]
-)
+usersCollection.insertMany([
+  {
+    userID: "1",
+    username: "leapvchan",
+    email: "leapvchan@gmail.com",
+    debtsOwed: [],
+    debtsOwedTo: [],
+    receiptsList: [],
+    balance: 0,
+    friendRequestsSent: [],
+    friendRequestsReceived: [],
+    groupsList: [],
+  },
+  {
+    userID: "2",
+    username: "summerxia",
+    email: "summer@gmail.com",
+    debtsOwed: [],
+    debtsOwedTo: [],
+    receiptsList: [],
+    balance: 0,
+    friendRequestsSent: [],
+    friendRequestsReceived: [],
+    groupsList: [],
+  },
+  {
+    userID: "3",
+    username: "robertWidjaja",
+    email: "robertWidjaja@gmail.com",
+    debtsOwed: [],
+    debtsOwedTo: [],
+    balance: 0,
+    friendRequestsSent: [],
+    friendRequestsReceived: [],
+    groupsList: [],
+  },
+]);
 
 db.createCollection("receipts");
 
-receiptsCollection = db.getCollection("receipts")
+receiptsCollection = db.getCollection("receipts");
 receiptsCollection.deleteMany({});
 
 receiptsCollection.insertMany([
@@ -61,16 +59,16 @@ receiptsCollection.insertMany([
     totalAmount: 5,
     date: Date,
     usersList: [],
-    ownerID:"1",
+    ownerID: "1",
     debtsList: [],
     itemsList: [
       {
-        itemID:"1",
+        itemID: "1",
         itemName: "Apple",
         quantity: 1,
         unitPrice: 5,
         totalPrice: 5,
-      }
+      },
     ],
   },
   {
@@ -82,16 +80,16 @@ receiptsCollection.insertMany([
     debtsList: [],
     itemsList: [
       {
-        itemID:"2",
+        itemID: "2",
         itemName: "Kiwi",
         quantity: 1,
         unitPrice: 7,
         totalPrice: 7,
-      }
+      },
     ],
   },
   {
-    receiptID:"3",
+    receiptID: "3",
     totalAmount: 7,
     date: Date,
     usersList: [],
@@ -104,10 +102,10 @@ receiptsCollection.insertMany([
         quantity: 10,
         unitPrice: 0.5,
         totalPrice: 5,
-      }
+      },
     ],
-  }
-])
+  },
+]);
 
 db.createCollection("friendRequest");
 
@@ -126,5 +124,5 @@ friendRequestCollection.insertMany([
     senderID: "1",
     receiverID: "2",
     status: "pending",
-  }
-])
+  },
+]);

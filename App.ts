@@ -40,6 +40,12 @@ class App {
       await this.User.retreiveSpecificUser(res, id);
     })
 
+    router.post("/app/user/add", async (req, res) => {
+      console.log("Add User");
+      const newUser = req.body;
+      await this.User.addUser(res, newUser);
+    })
+
     this.expressApp.use('/', router);
   }
 }

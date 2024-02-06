@@ -36,73 +36,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
-var express = require("express");
-var UserModel_1 = require("./models/UserModel");
-var bodyParser = require("body-parser");
-var App = /** @class */ (function () {
-    function App(mongoDBConnection) {
-        this.expressApp = express();
-        this.middleware();
-        this.routes();
-        this.User = new UserModel_1.UserModel(mongoDBConnection);
+exports.ReceiptModel = void 0;
+var Mongoose = require("mongoose");
+var ReceiptModel = /** @class */ (function () {
+    function ReceiptModel(dbConnectionString) {
+        this.dbConnectionString = dbConnectionString;
+        this.createSchema();
+        this.createModel();
     }
-    App.prototype.middleware = function () {
-        this.expressApp.use(bodyParser.json());
-        this.expressApp.use(bodyParser.urlencoded({ extended: false }));
-        this.expressApp.use(function (req, res, next) {
-            // Set the Access-Control-Allow-Origin header to allow all domains to access resources
-            res.header("Access-Control-Allow-Origin", "*");
-            // Set the Access-Control-Allow-Headers to specify which headers can be used in the actual request
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
+    ReceiptModel.prototype.createSchema = function () {
+        this.schema = new Mongoose.Schema({
+            receiptID: String,
+            totalAmount: Number,
+            date: Date,
+            usersList: [String],
+            owner: String,
+            debtsList: [String],
+            itemsList: [
+                {
+                    itemID: String,
+                    itemName: String,
+                    quantity: Number,
+                    unitPrice: Number,
+                    totalPrice: Number,
+                }
+            ]
+        }, { collection: "receipt" });
+    };
+    ReceiptModel.prototype.createModel = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Mongoose.connect(this.dbConnectionString)];
+                    case 1:
+                        _a.sent();
+                        this.model = Mongoose.model("Receipt", this.schema);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
         });
     };
-    App.prototype.routes = function () {
-        var _this = this;
-        var router = express.Router();
-        router.get("/app/user", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('Query All User');
-                        return [4 /*yield*/, this.User.retreiveAllUsers(res)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        router.get("/app/user/:id", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var id;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Query Single User");
-                        id = req.params.id;
-                        return [4 /*yield*/, this.User.retreiveSpecificUser(res, id)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        router.post("/app/user/add", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var newUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Add User");
-                        newUser = req.body;
-                        return [4 /*yield*/, this.User.addUser(res, newUser)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        this.expressApp.use('/', router);
-    };
-    return App;
+    return ReceiptModel;
 }());
-exports.App = App;
+exports.ReceiptModel = ReceiptModel;
