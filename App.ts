@@ -1,17 +1,22 @@
 import * as express from 'express';
 import {UserModel} from "./models/UserModel";
+import { ReceiptModel } from './models/ReceiptModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
+import { json } from 'stream/consumers';
 
 class App {
   public expressApp: express.Application;
   public User: UserModel;
+  public Receipt: ReceiptModel;
 
   constructor(mongoDBConnection:string) {
     this.expressApp = express();
     this.middleware();
     this.routes();
     this.User = new UserModel(mongoDBConnection);
+    this.Receipt = new ReceiptModel(mongoDBConnection);
+
   }
 
   private middleware():void {
@@ -66,6 +71,41 @@ class App {
           console.error(e);
         }        
     });
+
+    router.get('/app/receipt', async (req,res) => {
+      try {
+        await this.Receipt.getAllReceipt(res);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    router.get('/app/receipt/:receiptID', async (req, res) => {
+
+      const receiptID = req.params.receiptID;
+      console.log("get specific receipt ", receiptID)
+      try {
+        await this.Receipt.getSpecificReceipt(res, receiptID)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+    router.post('/app/receipt', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+    
+      var jsonObj = req.body;
+    
+      jsonObj.receiptID = id;
+    
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
+        res.status(201).json({ id: id, addedReceipt: addedReceipt });
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    
 
 
     this.expressApp.use('/', router);
