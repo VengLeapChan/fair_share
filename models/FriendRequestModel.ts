@@ -15,8 +15,8 @@ class FriendRequestModel {
     public createSchema() {
         this.schema = new Mongoose.Schema({
             requestID: String,
-            sender: String,
-            receiver: String,
+            sender: {userID: String},
+            receiver: {userID: String},
             status: String,
         }, { collection: "friendRequests" });
     }

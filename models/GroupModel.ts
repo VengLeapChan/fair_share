@@ -16,7 +16,7 @@ class GroupModel {
     this.schema = new Mongoose.Schema({
       groupID: String,
       groupName: String,
-      usersInGroup: [String],
+      usersInGroup: [{userID: String}],
     }, {collection: "groups"} 
     )
   }

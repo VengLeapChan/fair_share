@@ -5,16 +5,20 @@ interface IUserModel extends Mongoose.Document {
   username: string,
   email: string,
   debtsOwed: [
-    {debtID: string,
+    {
+      debtID: string,
     amount: number,
     debtorID: string,
-    creditorID: string}
+    creditorID: string
+  }
   ],
   debtsOwedTo: [
-    {debtID: string,
+    {
+      debtID: string,
     amount: number,
     debtorID: string,
-    creditorID: string}
+    creditorID: string
+  }
   ],
 receiptsList: [{receiptID: string}],
 balance: number,

@@ -17,9 +17,13 @@ class ReceiptModel {
       receiptID: String,
       totalAmount: Number,
       date: Date,
-      usersList: [String],
-      owner: String,
-      debtsList: [String],
+      usersList: [{userID: String}],
+      owner: {userID: String},
+      splitList: [{
+        splitID: String,
+        splitAmount: Number,
+        userID: String,
+      }],
       itemsList: [
         {
           itemID: String,
