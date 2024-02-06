@@ -131,15 +131,30 @@ class App {
             }
         }));
         // Add routes for FriendRequestModel
-        router.get("/app/friendrequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get("/app/friendRequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All Friend Requests');
             const friendRequests = yield this.FriendRequest.retrieveAllFriendRequests(res);
         }));
-        router.post("/app/friendrequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
-            console.log('Creating a new Friend Request');
+        router.get("/app/friendRequest/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log('Get Friend Request By ID');
+            const id = req.params.id;
+            yield this.FriendRequest.retrieveSpecificFriendRequest(res, id);
+        }));
+        router.post("/app/friendRequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Create Friend Request");
+            const newFriendRequest = req.body;
             const id = crypto.randomBytes(16).toString("hex");
-            const newFriendRequest = yield this.FriendRequest.retrieveSpecificFriendRequest(express.response, id);
-            res.json(newFriendRequest);
+            newFriendRequest.userID = id;
+            const doc = new this.FriendRequest.model(newFriendRequest);
+            try {
+                // save it in the db 
+                yield doc.save();
+                res.send('{"id":"' + id + '"}');
+            }
+            catch (e) {
+                console.log('object creation failed');
+                console.error(e);
+            }
         }));
         this.expressApp.use('/', router);
     }

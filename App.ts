@@ -144,22 +144,40 @@ class App {
 
 
     // Add routes for FriendRequestModel
-    router.get("/app/friendrequest", async (req, res) => {
+    router.get("/app/friendRequest", async (req, res) => {
       console.log('Query All Friend Requests');
       const friendRequests = await this.FriendRequest.retrieveAllFriendRequests(res);
     });
 
-    router.post("/app/friendrequest", async (req, res) => {
-      console.log('Creating a new Friend Request');
-      const id = crypto.randomBytes(16).toString("hex");
-      const newFriendRequest = await this.FriendRequest.retrieveSpecificFriendRequest(express.response, id);
-      res.json(newFriendRequest);
+    router.get("/app/friendRequest/:id", async (req, res) => {
+      console.log('Get Friend Request By ID');
+      const id = req.params.id;
+      await this.FriendRequest.retrieveSpecificFriendRequest(res, id);
     });
+
+    router.post("/app/friendRequest", async (req, res) => {
+      console.log("Create Friend Request");
+      const newFriendRequest = req.body; 
+      const id = crypto.randomBytes(16).toString("hex");
+      newFriendRequest.userID = id;
+
+      const doc = new this.FriendRequest.model(newFriendRequest);
+
+      try {
+        // save it in the db 
+        await doc.save();
+        res.send('{"id":"' + id + '"}');
+      }
+      catch (e) {
+        console.log('object creation failed');
+        console.error(e);
+      }
+      
+
+    })
 
     this.expressApp.use('/', router);
   }
-
-
 }
 
 export { App }
