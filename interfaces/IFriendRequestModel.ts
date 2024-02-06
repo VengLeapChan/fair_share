@@ -2,8 +2,8 @@ import Mongoose from "mongoose";
 
 interface IFriendRequest extends Mongoose.Document {
   requestID: string,
-  sender: string,
-  receiver: string,
+  sender: {userID: string},
+  receiver: {userID: string},
   status: string,
 }
 

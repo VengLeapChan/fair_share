@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReceiptModel = void 0;
+exports.GroupModel = void 0;
 const Mongoose = require("mongoose");
-class ReceiptModel {
+class GroupModel {
     constructor(dbConnectionString) {
         this.dbConnectionString = dbConnectionString;
         this.createSchema();
@@ -19,32 +19,16 @@ class ReceiptModel {
     }
     createSchema() {
         this.schema = new Mongoose.Schema({
-            receiptID: String,
-            totalAmount: Number,
-            date: Date,
-            usersList: [{ userID: String }],
-            owner: { userID: String },
-            splitList: [{
-                    splitID: String,
-                    splitAmount: Number,
-                    userID: String,
-                }],
-            itemsList: [
-                {
-                    itemID: String,
-                    itemName: String,
-                    quantity: Number,
-                    unitPrice: Number,
-                    totalPrice: Number,
-                }
-            ]
-        }, { collection: "receipt" });
+            groupID: String,
+            groupName: String,
+            usersInGroup: [{ userID: String }],
+        }, { collection: "groups" });
     }
     createModel() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield Mongoose.connect(this.dbConnectionString);
-                this.model = Mongoose.model("Receipt", this.schema);
+                this.model = Mongoose.model("Group", this.schema);
             }
             catch (e) {
                 console.error(e);
@@ -52,5 +36,5 @@ class ReceiptModel {
         });
     }
 }
-exports.ReceiptModel = ReceiptModel;
-//# sourceMappingURL=ReceiptModel.js.map
+exports.GroupModel = GroupModel;
+//# sourceMappingURL=GroupModel.js.map

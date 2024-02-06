@@ -61,11 +61,11 @@ var UserModel = /** @class */ (function () {
                     debtorID: String,
                     creditorID: String }
             ],
-            receiptsList: [String],
+            receiptsList: [{ receiptID: String }],
             balance: Number,
-            friendRequestsSent: [String],
-            friendRequestsReceived: [String],
-            groupsList: [String]
+            friendRequestsSent: [{ requestID: String }],
+            friendRequestsReceived: [{ requestID: String }],
+            groupsList: [{ groupID: String }]
         }, { collection: "users" });
     };
     UserModel.prototype.createModel = function () {
