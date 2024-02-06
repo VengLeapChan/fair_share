@@ -70,4 +70,5 @@ public async retreiveSpecificUser(response: any, userID: string) {
 }
 }
 
+
 export {UserModel};

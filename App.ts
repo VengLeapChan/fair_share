@@ -40,6 +40,32 @@ class App {
       await this.User.retreiveSpecificUser(res, id);
     })
 
+    router.post('/app/user/', async (req, res) => {
+      console.log("Adding a user");
+      // generate a unique userID 
+      const id = crypto.randomBytes(16).toString("hex");
+      console.log(req.body);
+
+      // get the payload 
+      var jsonObj = req.body;
+      
+      // set the payload's userID
+      jsonObj.userID = id;
+        
+      // create a new model
+      const doc = new this.User.model(jsonObj);
+        try {
+
+          // save it in the db 
+          await doc.save();
+          res.send('{"id":"' + id + '"}');
+        }
+        catch (e) {
+          console.log('object creation failed');
+          console.error(e);
+        }        
+    });
+
     this.expressApp.use('/', router);
   }
 }

@@ -42,6 +42,7 @@ usersCollection.insertMany(
       email: "robertWidjaja@gmail.com",
       debtsOwed: [],
       debtsOwedTo: [],
+      receiptsList: [],
       balance: 0,
       friendRequestsSent: [],
       friendRequestsReceived: [],
@@ -108,6 +109,8 @@ receiptsCollection.insertMany([
     ],
   }
 ])
+
+
 
 db.createCollection("friendRequest");
 
