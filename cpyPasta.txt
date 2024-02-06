@@ -1,0 +1,2 @@
+load ('createDB/createFairShareSample.js');
+load('createDB/createAdminUser.js');

@@ -1,6 +1,6 @@
 import Mongoose from "mongoose";
 
-interface IReceipt extends Mongoose.Document {
+interface IReceiptModel extends Mongoose.Document {
   receiptID: string,
   totalAmount: number,
   date: Date,
@@ -18,4 +18,4 @@ interface IReceipt extends Mongoose.Document {
   ],
 }
 
-export {IReceipt};
+export {IReceiptModel};
