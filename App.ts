@@ -10,6 +10,7 @@ class App {
   public expressApp: express.Application;
   public User: UserModel;
   public Receipt: ReceiptModel;
+  public FriendRequest: FriendRequestModel;
 
   constructor(mongoDBConnection: string) {
     this.expressApp = express();
@@ -17,7 +18,7 @@ class App {
     this.routes();
     this.User = new UserModel(mongoDBConnection);
     this.Receipt = new ReceiptModel(mongoDBConnection);
-
+    this.FriendRequest = new FriendRequestModel(mongoDBConnection);
   }
 
   private middleware(): void {

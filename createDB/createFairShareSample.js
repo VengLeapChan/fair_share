@@ -108,9 +108,9 @@ receiptsCollection.insertMany([
   },
 ]);
 
-db.createCollection("friendRequest");
+db.createCollection("friendRequests");
 
-friendRequestCollection = db.getCollection("friendRequest");
+friendRequestCollection = db.getCollection("friendRequests");
 friendRequestCollection.deleteMany({});
 
 friendRequestCollection.insertMany([
