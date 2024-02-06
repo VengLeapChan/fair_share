@@ -36,39 +36,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserModel = void 0;
+exports.FriendRequestModel = void 0;
 var Mongoose = require("mongoose");
-var UserModel = /** @class */ (function () {
-    function UserModel(dbConnectionString) {
+var FriendRequestModel = /** @class */ (function () {
+    function FriendRequestModel(dbConnectionString) {
         this.dbConnectionString = dbConnectionString;
         this.createSchema();
         this.createModel();
     }
-    UserModel.prototype.createSchema = function () {
+    FriendRequestModel.prototype.createSchema = function () {
         this.schema = new Mongoose.Schema({
-            userID: String,
-            username: String,
-            email: String,
-            debtsOwed: [
-                { debtID: String,
-                    amount: Number,
-                    debtorID: String,
-                    creditorID: String }
-            ],
-            debtsOwedTo: [
-                { debtID: String,
-                    amount: Number,
-                    debtorID: String,
-                    creditorID: String }
-            ],
-            receiptsList: [{ receiptID: String }],
-            balance: Number,
-            friendRequestsSent: [{ requestID: String }],
-            friendRequestsReceived: [{ requestID: String }],
-            groupsList: [{ groupID: String }]
-        }, { collection: "users" });
+            requestID: String,
+            sender: String,
+            receiver: String,
+            status: String,
+        }, { collection: "friendRequests" });
     };
-    UserModel.prototype.createModel = function () {
+    FriendRequestModel.prototype.createModel = function () {
         return __awaiter(this, void 0, void 0, function () {
             var e_1;
             return __generator(this, function (_a) {
@@ -78,7 +62,7 @@ var UserModel = /** @class */ (function () {
                         return [4 /*yield*/, Mongoose.connect(this.dbConnectionString)];
                     case 1:
                         _a.sent();
-                        this.model = Mongoose.model("Users", this.schema);
+                        this.model = Mongoose.model("FriendRequests", this.schema);
                         return [3 /*break*/, 3];
                     case 2:
                         e_1 = _a.sent();
@@ -89,9 +73,9 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
-    UserModel.prototype.retreiveAllUsers = function (response) {
+    FriendRequestModel.prototype.retrieveAllFriendRequests = function (response) {
         return __awaiter(this, void 0, void 0, function () {
-            var query, usersArray, e_2;
+            var query, friendRequestsArray, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -101,8 +85,8 @@ var UserModel = /** @class */ (function () {
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, query.exec()];
                     case 2:
-                        usersArray = _a.sent();
-                        response.json(usersArray);
+                        friendRequestsArray = _a.sent();
+                        response.json(friendRequestsArray);
                         return [3 /*break*/, 4];
                     case 3:
                         e_2 = _a.sent();
@@ -113,20 +97,20 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
-    UserModel.prototype.retreiveSpecificUser = function (response, userID) {
+    FriendRequestModel.prototype.retrieveSpecificFriendRequest = function (response, requestID) {
         return __awaiter(this, void 0, void 0, function () {
-            var query, user, e_3;
+            var query, friendRequest, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        query = this.model.findOne({ "userID": userID });
+                        query = this.model.findOne({ "requestID": requestID });
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, query.exec()];
                     case 2:
-                        user = _a.sent();
-                        response.json(user);
+                        friendRequest = _a.sent();
+                        response.json(friendRequest);
                         return [3 /*break*/, 4];
                     case 3:
                         e_3 = _a.sent();
@@ -137,42 +121,6 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
-    // public async addUser(response: any, newUser: IUserModel) {
-    //   try {
-    //     const user = new this.model(newUser);
-    //     await user.save();
-    //     response.json({ message: "User added successfully", user });
-    //   } catch (e) {
-    //     console.error(e);
-    //     response.status(500).json({ error: "Error adding user" });
-    //   }
-    // }
-    UserModel.prototype.retreiveAllUsersCount = function (response) {
-        return __awaiter(this, void 0, void 0, function () {
-            var query, userList, count, e_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        query = this.model.find({});
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, query.exec()];
-                    case 2:
-                        userList = _a.sent();
-                        count = userList.length;
-                        console.log(count);
-                        response.json({ "count": count });
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_4 = _a.sent();
-                        console.log(e_4);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return UserModel;
+    return FriendRequestModel;
 }());
-exports.UserModel = UserModel;
+exports.FriendRequestModel = FriendRequestModel;

@@ -68,14 +68,26 @@ class UserModel {
       console.log(e)
     }
   }
-  public async addUser(response: any, newUser: IUserModel) {
+  // public async addUser(response: any, newUser: IUserModel) {
+  //   try {
+  //     const user = new this.model(newUser);
+  //     await user.save();
+  //     response.json({ message: "User added successfully", user });
+  //   } catch (e) {
+  //     console.error(e);
+  //     response.status(500).json({ error: "Error adding user" });
+  //   }
+  // }
+
+  public async retreiveAllUsersCount(response: any) {
+    const query = this.model.find({});
     try {
-      const user = new this.model(newUser);
-      await user.save();
-      response.json({ message: "User added successfully", user });
+      const userList = await query.exec();
+      const count = userList.length;
+      console.log(count)
+      response.json({"count": count});
     } catch (e) {
-      console.error(e);
-      response.status(500).json({ error: "Error adding user" });
+      console.log(e)
     }
   }
 }
