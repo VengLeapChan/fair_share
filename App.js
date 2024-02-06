@@ -8,35 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
+<<<<<<< HEAD
 var express = require("express");
 var UserModel_1 = require("./models/UserModel");
 var FriendRequestModel_1 = require("./models/FriendRequestModel");
@@ -44,22 +18,36 @@ var bodyParser = require("body-parser");
 var crypto = require("crypto");
 var App = /** @class */ (function () {
     function App(mongoDBConnection) {
+=======
+const express = require("express");
+const UserModel_1 = require("./models/UserModel");
+const ReceiptModel_1 = require("./models/ReceiptModel");
+const bodyParser = require("body-parser");
+const crypto = require("crypto");
+class App {
+    constructor(mongoDBConnection) {
+>>>>>>> aeb61eefca27df3f39218f5357037e6267c42d7e
         this.expressApp = express();
         this.middleware();
         this.routes();
         this.User = new UserModel_1.UserModel(mongoDBConnection);
+<<<<<<< HEAD
         this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
+=======
+        this.Receipt = new ReceiptModel_1.ReceiptModel(mongoDBConnection);
+>>>>>>> aeb61eefca27df3f39218f5357037e6267c42d7e
     }
-    App.prototype.middleware = function () {
+    middleware() {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(bodyParser.urlencoded({ extended: false }));
-        this.expressApp.use(function (req, res, next) {
+        this.expressApp.use((req, res, next) => {
             // Set the Access-Control-Allow-Origin header to allow all domains to access resources
             res.header("Access-Control-Allow-Origin", "*");
             // Set the Access-Control-Allow-Headers to specify which headers can be used in the actual request
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
+<<<<<<< HEAD
     };
     App.prototype.routes = function () {
         var _this = this;
@@ -150,8 +138,88 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
+=======
+    }
+    routes() {
+        let router = express.Router();
+        router.get("/app/user", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log('Query All User');
+            yield this.User.retreiveAllUsers(res);
+        }));
+        router.get("/app/user/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Query Single User");
+            const id = req.params.id;
+            yield this.User.retreiveSpecificUser(res, id);
+        }));
+        router.get("/app/usersCount", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Query All User Count");
+            yield this.User.retreiveAllUsersCount(res);
+        }));
+        router.post('/app/user/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("Adding a user");
+            // generate a unique userID 
+            const id = crypto.randomBytes(16).toString("hex");
+            console.log(req.body);
+            // get the payload 
+            var jsonObj = req.body;
+            // set the payload's userID
+            jsonObj.userID = id;
+            // create a new model 
+            const doc = new this.User.model(jsonObj);
+            try {
+                // save it in the db 
+                yield doc.save();
+                res.send('{"id":"' + id + '"}');
+            }
+            catch (e) {
+                console.log('object creation failed');
+                console.error(e);
+            }
+        }));
+        router.get('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.Receipt.getAllReceipt(res);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.get('/app/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const receiptID = req.params.receiptID;
+            console.log("get specific receipt ", receiptID);
+            try {
+                yield this.Receipt.getSpecificReceipt(res, receiptID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.post('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = crypto.randomBytes(16).toString("hex");
+            var jsonObj = req.body;
+            jsonObj.receiptID = id;
+            try {
+                const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
+                console.log(addedReceipt);
+                yield this.User.addReceiptID(res, id, addedReceipt.ownerID.userID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.get("/app/userAddReceipt", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const userID = "1";
+            const receiptID = "2";
+            try {
+                yield this.User.addReceiptID(res, userID, receiptID);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }));
+>>>>>>> aeb61eefca27df3f39218f5357037e6267c42d7e
         this.expressApp.use('/', router);
-    };
-    return App;
-}());
+    }
+}
 exports.App = App;
+//# sourceMappingURL=App.js.map

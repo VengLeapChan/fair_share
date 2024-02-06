@@ -23,7 +23,7 @@ class ReceiptModel {
             totalAmount: Number,
             date: Date,
             usersList: [{ userID: String }],
-            owner: { userID: String },
+            ownerID: { userID: String },
             splitList: [{
                     splitID: String,
                     splitAmount: Number,
@@ -38,7 +38,7 @@ class ReceiptModel {
                     totalPrice: Number,
                 }
             ]
-        }, { collection: "receipt" });
+        }, { collection: "receipts" });
     }
     createModel() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -48,6 +48,45 @@ class ReceiptModel {
             }
             catch (e) {
                 console.error(e);
+            }
+        });
+    }
+    getAllReceipt(response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Getting all receipts");
+            const query = this.model.find({});
+            try {
+                const receiptList = yield query.exec();
+                response.json({ "receiptList": receiptList });
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getSpecificReceipt(response, receiptID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.find({ "receiptID": receiptID });
+            try {
+                const receipt = yield query.exec();
+                response.json({ "receipt": receipt });
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    addSpecificReceipt(response, newReceiptData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Adding a receipt");
+            try {
+                const newReceipt = new this.model(newReceiptData);
+                const savedReceipt = yield newReceipt.save();
+                return savedReceipt; // Return the saved receipt instead of sending a response
+            }
+            catch (e) {
+                console.log(e);
+                throw e; // Rethrow the error to handle it in the route handler
             }
         });
     }

@@ -1,20 +1,23 @@
 import * as express from 'express';
 import { UserModel } from "./models/UserModel";
+import { ReceiptModel } from './models/ReceiptModel';
 import { FriendRequestModel } from './models/FriendRequestModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
+import { json } from 'stream/consumers';
 
 class App {
   public expressApp: express.Application;
   public User: UserModel;
-  public FriendRequest: FriendRequestModel;
+  public Receipt: ReceiptModel;
 
   constructor(mongoDBConnection: string) {
     this.expressApp = express();
     this.middleware();
     this.routes();
     this.User = new UserModel(mongoDBConnection);
-    this.FriendRequest = new FriendRequestModel(mongoDBConnection);
+    this.Receipt = new ReceiptModel(mongoDBConnection);
+
   }
 
   private middleware(): void {
@@ -64,6 +67,80 @@ class App {
         console.error(e);
       }
     });
+
+    router.get('/app/receipt', async (req, res) => {
+      try {
+        await this.Receipt.getAllReceipt(res);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    router.get('/app/receipt/:receiptID', async (req, res) => {
+
+      const receiptID = req.params.receiptID;
+      console.log("get specific receipt ", receiptID)
+      try {
+        await this.Receipt.getSpecificReceipt(res, receiptID)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+    router.post('/app/receipt', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      var jsonObj = req.body;
+
+      jsonObj.receiptID = id;
+
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
+        console.log(addedReceipt);
+        await this.User.addReceiptID(res, id, addedReceipt.ownerID.userID)
+
+      } catch (e) {
+        console.error(e);
+
+      }
+    });
+
+
+    router.get('/app/receipt', async (req, res) => {
+      try {
+        await this.Receipt.getAllReceipt(res);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    router.get('/app/receipt/:receiptID', async (req, res) => {
+
+      const receiptID = req.params.receiptID;
+      console.log("get specific receipt ", receiptID)
+      try {
+        await this.Receipt.getSpecificReceipt(res, receiptID)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+    router.post('/app/receipt', async (req, res) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      var jsonObj = req.body;
+
+      jsonObj.receiptID = id;
+
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
+        console.log(addedReceipt);
+        await this.User.addReceiptID(res, id, addedReceipt.ownerID.userID)
+
+      } catch (e) {
+        console.error(e);
+
+      }
+    });
+
 
     // Add routes for FriendRequestModel
     router.get("/app/friendrequest", async (req, res) => {
