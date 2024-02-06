@@ -94,11 +94,21 @@ class App {
             jsonObj.receiptID = id;
             try {
                 const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
-                res.status(201).json({ id: id, addedReceipt: addedReceipt });
+                console.log(addedReceipt);
+                yield this.User.addReceiptID(res, id, addedReceipt.ownerID.userID);
             }
             catch (e) {
                 console.error(e);
-                res.status(500).json({ error: 'Internal server error' });
+            }
+        }));
+        router.get("/app/userAddReceipt", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const userID = "1";
+            const receiptID = "2";
+            try {
+                yield this.User.addReceiptID(res, userID, receiptID);
+            }
+            catch (e) {
+                console.log(e);
             }
         }));
         this.expressApp.use('/', router);

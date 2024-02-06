@@ -23,7 +23,7 @@ class ReceiptModel {
             totalAmount: Number,
             date: Date,
             usersList: [{ userID: String }],
-            owner: { userID: String },
+            ownerID: { userID: String },
             splitList: [{
                     splitID: String,
                     splitAmount: Number,
@@ -53,6 +53,7 @@ class ReceiptModel {
     }
     getAllReceipt(response) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("Getting all receipts");
             const query = this.model.find({});
             try {
                 const receiptList = yield query.exec();

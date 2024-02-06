@@ -102,7 +102,15 @@ class UserModel {
     }
     addReceiptID(response, receiptID, userID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.find({ userID: userID });
+            // query to find user based on userID and updated the receiptList 
+            const query = this.model.findOneAndUpdate({ userID: userID }, { $push: { receiptsList: { receiptID: receiptID }, } }, { new: true });
+            try {
+                const user = yield query.exec();
+                response.json(user);
+            }
+            catch (e) {
+                console.log(e);
+            }
         });
     }
 }

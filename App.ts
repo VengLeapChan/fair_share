@@ -96,16 +96,29 @@ class App {
       var jsonObj = req.body;
     
       jsonObj.receiptID = id;
-    
+      
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
-        res.status(201).json({ id: id, addedReceipt: addedReceipt });
+        console.log(addedReceipt);
+        await this.User.addReceiptID(res, id, addedReceipt.ownerID.userID)
+
       } catch (e) {
         console.error(e);
-        res.status(500).json({ error: 'Internal server error' });
+
       }
     });
     
+
+    router.get("/app/userAddReceipt", async (req,res) => {
+      const userID = "1";
+      const receiptID = "2";
+
+      try {
+        await this.User.addReceiptID(res, userID, receiptID);
+      } catch (e) {
+        console.log(e);
+      }
+    })
 
 
     this.expressApp.use('/', router);
