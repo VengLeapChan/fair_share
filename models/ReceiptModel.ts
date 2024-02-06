@@ -32,8 +32,6 @@ class ReceiptModel {
     }, {collection: "receipt"} 
     )
   }
-  
-
 
   public async createModel(){
     try {

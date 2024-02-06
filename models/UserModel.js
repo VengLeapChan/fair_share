@@ -137,25 +137,38 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
-    UserModel.prototype.addUser = function (response, newUser) {
+    // public async addUser(response: any, newUser: IUserModel) {
+    //   try {
+    //     const user = new this.model(newUser);
+    //     await user.save();
+    //     response.json({ message: "User added successfully", user });
+    //   } catch (e) {
+    //     console.error(e);
+    //     response.status(500).json({ error: "Error adding user" });
+    //   }
+    // }
+    UserModel.prototype.retreiveAllUsersCount = function (response) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, e_4;
+            var query, userList, count, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        user = new this.model(newUser);
-                        return [4 /*yield*/, user.save()];
+                        query = this.model.find({});
+                        _a.label = 1;
                     case 1:
-                        _a.sent();
-                        response.json({ message: "User added successfully", user: user });
-                        return [3 /*break*/, 3];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, query.exec()];
                     case 2:
+                        userList = _a.sent();
+                        count = userList.length;
+                        console.log(count);
+                        response.json({ "count": count });
+                        return [3 /*break*/, 4];
+                    case 3:
                         e_4 = _a.sent();
-                        console.error(e_4);
-                        response.status(500).json({ error: "Error adding user" });
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        console.log(e_4);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

@@ -40,6 +40,11 @@ class App {
       await this.User.retreiveSpecificUser(res, id);
     })
 
+    router.get("/app/usersCount", async (req, res) => {
+      console.log("Query All User Count");
+      await this.User.retreiveAllUsersCount(res);
+    })
+
     router.post('/app/user/', async (req, res) => {
       console.log("Adding a user");
       // generate a unique userID 
@@ -62,7 +67,7 @@ class App {
         }        
     });
 
-    
+
     this.expressApp.use('/', router);
   }
 }
