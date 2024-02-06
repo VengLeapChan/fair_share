@@ -92,8 +92,17 @@ class UserModel {
   }
 
   public async addReceiptID(response: any, receiptID: string, userID: string){
-    const query = this.model.find({userID: userID});
-    
+    // query to find user based on userID and updated the receiptList 
+    const query = this.model.findOneAndUpdate(
+      {userID: userID}, 
+      {$push:{receiptsList: {receiptID: receiptID},}},  
+      {new:true} );
+    try {
+      const user = await query.exec();
+      response.json(user);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

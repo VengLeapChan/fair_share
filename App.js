@@ -131,6 +131,28 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
+        router.get("/app/userAddReceipt", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var userID, receiptID, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        userID = "1";
+                        receiptID = "2";
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.User.addReceiptID(res, userID, receiptID)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        console.log(e_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
         this.expressApp.use('/', router);
     };
     return App;

@@ -67,6 +67,17 @@ class App {
         }        
     });
 
+    router.get("/app/userAddReceipt", async (req,res) => {
+      const userID = "1";
+      const receiptID = "2";
+
+      try {
+        await this.User.addReceiptID(res, userID, receiptID);
+      } catch (e) {
+        console.log(e);
+      }
+    })
+
 
     this.expressApp.use('/', router);
   }

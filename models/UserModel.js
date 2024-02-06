@@ -173,6 +173,30 @@ var UserModel = /** @class */ (function () {
             });
         });
     };
+    UserModel.prototype.addReceiptID = function (response, receiptID, userID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var query, user, e_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        query = this.model.findOneAndUpdate({ userID: userID }, { $push: { receiptsList: { receiptID: receiptID }, } }, { new: true });
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, query.exec()];
+                    case 2:
+                        user = _a.sent();
+                        response.json(user);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_5 = _a.sent();
+                        console.log(e_5);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return UserModel;
 }());
 exports.UserModel = UserModel;
