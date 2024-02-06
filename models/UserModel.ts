@@ -90,6 +90,11 @@ class UserModel {
       console.log(e)
     }
   }
+
+  public async addReceiptID(response: any, receiptID: string, userID: string){
+    const query = this.model.find({userID: userID});
+    
+  }
 }
 
 
