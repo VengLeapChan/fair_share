@@ -45,17 +45,13 @@ class App {
       // generate a unique userID 
       const id = crypto.randomBytes(16).toString("hex");
       console.log(req.body);
-
       // get the payload 
       var jsonObj = req.body;
-      
       // set the payload's userID
       jsonObj.userID = id;
-        
-      // create a new model
+      // create a new model 
       const doc = new this.User.model(jsonObj);
         try {
-
           // save it in the db 
           await doc.save();
           res.send('{"id":"' + id + '"}');
@@ -66,6 +62,7 @@ class App {
         }        
     });
 
+    
     this.expressApp.use('/', router);
   }
 }
