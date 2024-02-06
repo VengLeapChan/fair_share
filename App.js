@@ -88,24 +88,12 @@ var App = /** @class */ (function () {
                 }
             });
         }); });
-<<<<<<< HEAD
-        router.post("/app/user/add", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var newUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Add User");
-                        newUser = req.body;
-                        return [4 /*yield*/, this.User.addUser(res, newUser)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-=======
         router.post('/app/user/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var id, jsonObj, doc, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log("Adding a user");
                         id = crypto.randomBytes(16).toString("hex");
                         console.log(req.body);
                         jsonObj = req.body;
@@ -128,7 +116,6 @@ var App = /** @class */ (function () {
                         console.error(e_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
->>>>>>> 42800352886d0194eaff97a70f9d1b839da1c9ff
                 }
             });
         }); });

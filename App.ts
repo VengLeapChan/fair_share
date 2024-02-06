@@ -40,13 +40,6 @@ class App {
       await this.User.retreiveSpecificUser(res, id);
     })
 
-<<<<<<< HEAD
-    router.post("/app/user/add", async (req, res) => {
-      console.log("Add User");
-      const newUser = req.body;
-      await this.User.addUser(res, newUser);
-    })
-=======
     router.post('/app/user/', async (req, res) => {
       console.log("Adding a user");
       // generate a unique userID 
@@ -72,7 +65,6 @@ class App {
           console.error(e);
         }        
     });
->>>>>>> 42800352886d0194eaff97a70f9d1b839da1c9ff
 
     this.expressApp.use('/', router);
   }

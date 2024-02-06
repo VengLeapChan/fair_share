@@ -10,7 +10,6 @@ usersCollection = db.getCollection("users");
 
 usersCollection.deleteMany({});
 
-<<<<<<< HEAD
 usersCollection.insertMany([
   {
     userID: "1",
@@ -42,54 +41,13 @@ usersCollection.insertMany([
     email: "robertWidjaja@gmail.com",
     debtsOwed: [],
     debtsOwedTo: [],
+    receiptsList: [],
     balance: 0,
     friendRequestsSent: [],
     friendRequestsReceived: [],
     groupsList: [],
   },
 ]);
-=======
-usersCollection.insertMany(
-  [
-    {
-      userID: "1",
-      username: "leapvchan",
-      email: "leapvchan@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      receiptsList: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: [],
-    },
-    {
-      userID: "2",
-      username: "summerxia",
-      email: "summer@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      receiptsList: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: [],
-    },
-    {
-      userID: "3",
-      username: "robertWidjaja",
-      email: "robertWidjaja@gmail.com",
-      debtsOwed: [],
-      debtsOwedTo: [],
-      receiptsList: [],
-      balance: 0,
-      friendRequestsSent: [],
-      friendRequestsReceived: [],
-      groupsList: []
-    }
-  ]
-)
->>>>>>> 42800352886d0194eaff97a70f9d1b839da1c9ff
 
 db.createCollection("receipts");
 
@@ -149,8 +107,6 @@ receiptsCollection.insertMany([
     ],
   },
 ]);
-
-
 
 db.createCollection("friendRequest");
 
