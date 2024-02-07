@@ -68,7 +68,6 @@ class App {
     });
 
     // ROUTES FOR RECEIPT
-
     router.get('/app/receipt', async (req, res) => {
       try {
         await this.Receipt.getAllReceipt(res);

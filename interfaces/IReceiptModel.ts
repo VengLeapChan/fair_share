@@ -2,6 +2,7 @@ import Mongoose from "mongoose";
 
 interface IReceiptModel extends Mongoose.Document {
   receiptID: string,
+  receiptName: string,
   totalAmount: number,
   date: Date,
   usersList: [{userID: string}],

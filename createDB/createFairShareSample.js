@@ -57,6 +57,7 @@ receiptsCollection.deleteMany({});
 receiptsCollection.insertMany([
   {
     receiptID: "1",
+    receiptName: "Carmelo's Taco",
     totalAmount: 5,
     date: Date,
     usersList: [],
@@ -74,6 +75,7 @@ receiptsCollection.insertMany([
   },
   {
     receiptID: "2",
+    receiptName: "Trader Joe's",
     totalAmount: 7,
     date: Date,
     usersList: [],
@@ -91,6 +93,7 @@ receiptsCollection.insertMany([
   },
   {
     receiptID: "3",
+    receiptName: "Safeway",
     totalAmount: 7,
     date: Date,
     usersList: [],

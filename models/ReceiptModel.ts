@@ -16,6 +16,7 @@ class ReceiptModel {
   public createSchema() {
     this.schema = new Mongoose.Schema({
       receiptID: String,
+      receiptName: String,
       totalAmount: Number,
       date: Date,
       usersList: [{userID: String}],
