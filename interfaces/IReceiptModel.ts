@@ -5,16 +5,16 @@ interface IReceiptModel extends Mongoose.Document {
   receiptName: string,
   totalAmount: number,
   date: Date,
-  usersList: [{userID: string}],
-  owner: {userID: string},
-  splitList: [
+  receiptSplitUsersList: [{ userID: string }],
+  owner: { userID: string },
+  receiptSplitList: [
     {
-      splitID: string,
-      splitAmount: number,
-      targetID: {userID: string},
+      receiptSplitID: string,
+      receiptSplitAmount: number,
+      receiptSplitUserID: { userID: string },
     }
   ],
-  itemsList: 
+  itemsList:
   [
     {
       itemID: string,
@@ -26,4 +26,4 @@ interface IReceiptModel extends Mongoose.Document {
   ],
 }
 
-export {IReceiptModel};
+export { IReceiptModel };
