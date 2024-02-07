@@ -6,7 +6,7 @@ interface IUserModel extends Mongoose.Document {
   email: string,
   debtsOwed: [
     {
-      debtID: string,
+    debtID: string,
     amount: number,
     debtorID: string,
     creditorID: string

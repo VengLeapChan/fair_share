@@ -14,7 +14,8 @@ interface IReceiptModel extends Mongoose.Document {
       targetID: {userID: string},
     }
   ],
-  itemsList: [
+  itemsList: 
+  [
     {
       itemID: string,
       itemName: string,

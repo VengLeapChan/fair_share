@@ -133,10 +133,10 @@ class UserModel {
       console.log(e);
       throw e;
     }
-
   }
+
+
   public async addDebtsOwedTo(response: any, receiverID: string, senderID: string, amount: number, debtID: string){
-    
     const query = this.model.findOneAndUpdate(
       { userID: senderID },
       {
