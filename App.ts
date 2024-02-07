@@ -54,7 +54,7 @@ class App {
       console.log(req.body);
 
       var jsonObj = req.body;
- 
+
       jsonObj.userID = id;
       const doc = new this.User.model(jsonObj);
       try {
@@ -156,7 +156,7 @@ class App {
         await this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, receiptID);
         await this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
         await this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
-    
+
         res.json({ message: "Split item added successfully." });
       } catch (e) {
         console.error(e);
@@ -166,7 +166,7 @@ class App {
 
 
     // ROUTES FOR FRIENDS
-    
+
     router.get("/app/friendRequest", async (req, res) => {
       console.log('Query All Friend Requests');
       const friendRequests = await this.FriendRequest.retrieveAllFriendRequests(res);
@@ -180,7 +180,7 @@ class App {
 
     router.post("/app/friendRequest", async (req, res) => {
       console.log("Create Friend Request");
-      const newFriendRequest = req.body; 
+      const newFriendRequest = req.body;
       const id = crypto.randomBytes(16).toString("hex");
       newFriendRequest.userID = id;
 

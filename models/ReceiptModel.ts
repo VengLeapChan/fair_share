@@ -1,6 +1,5 @@
 import * as Mongoose from "mongoose";
-import * as crypto from 'crypto';
-import {IReceiptModel} from '../interfaces/IReceiptModel';
+import { IReceiptModel } from '../interfaces/IReceiptModel';
 
 class ReceiptModel {
   public schema: any;
@@ -19,12 +18,12 @@ class ReceiptModel {
       receiptName: String,
       totalAmount: Number,
       date: Date,
-      usersList: [{userID: String}],
-      ownerID: {userID: String},
-      splitList: [{
-        splitID: String,
-        splitAmount: Number,
-        targetID: {userID: String},
+      receiptSplitUsersList: [{ userID: String }],
+      ownerID: { userID: String },
+      receiptSplitList: [{
+        receiptSplitID: String,
+        receiptSplitAmount: Number,
+        receiptSplitUserID: { userID: String },
       }],
       itemsList: [
         {
@@ -35,11 +34,11 @@ class ReceiptModel {
           totalPrice: Number,
         }
       ]
-    }, {collection: "receipts"} 
+    }, { collection: "receipts" }
     )
   }
 
-  public async createModel(){
+  public async createModel() {
     try {
       await Mongoose.connect(this.dbConnectionString);
       this.model = Mongoose.model<IReceiptModel>("Receipt", this.schema);
@@ -53,16 +52,16 @@ class ReceiptModel {
     const query = this.model.find({});
     try {
       const receiptList = await query.exec();
-      response.json({"receiptList": receiptList });
+      response.json({ "receiptList": receiptList });
     } catch (e) {
       console.log(e)
     }
   }
   public async getSpecificReceipt(response: any, receiptID: string) {
-    const query = this.model.find({"receiptID": receiptID});
+    const query = this.model.find({ "receiptID": receiptID });
     try {
       const receipt = await query.exec();
-      response.json({"receipt": receipt });
+      response.json({ "receipt": receipt });
     } catch (e) {
       console.log(e)
     }
@@ -79,16 +78,16 @@ class ReceiptModel {
     }
   }
 
-  public async addSplitsItem(response: any, splitID: string, splitAmount: number, targetID: string, receiptID: string) {
+  public async addSplitsItem(response: any, receiptSplitID: string, receiptSplitAmount: number, receiptSplitUserID: string, receiptID: string) {
     console.log("adding to split list");
     const query = this.model.findOneAndUpdate(
-      { receiptID: receiptID},
+      { receiptID: receiptID },
       {
         $push: {
-          splitList: {
-            splitID: splitID,
-            splitAmount: splitAmount,
-            targetID: {userID: targetID},
+          receiptSplitList: {
+            receiptSplitID: receiptSplitID,
+            receiptSplitAmount: receiptSplitAmount,
+            targetID: { userID: receiptSplitUserID },
           }
         }
       },
@@ -96,7 +95,7 @@ class ReceiptModel {
     );
     try {
 
-        return await query.exec();
+      return await query.exec();
 
     } catch (e) {
       console.log(e)
@@ -106,4 +105,4 @@ class ReceiptModel {
 
 }
 
-export {ReceiptModel};
+export { ReceiptModel };

@@ -23,12 +23,12 @@ class ReceiptModel {
             receiptName: String,
             totalAmount: Number,
             date: Date,
-            usersList: [{ userID: String }],
+            receiptSplitUsersList: [{ userID: String }],
             ownerID: { userID: String },
-            splitList: [{
-                    splitID: String,
-                    splitAmount: Number,
-                    targetID: { userID: String },
+            receiptSplitList: [{
+                    receiptSplitID: String,
+                    receiptSplitAmount: Number,
+                    receiptSplitUserID: { userID: String },
                 }],
             itemsList: [
                 {
@@ -90,15 +90,15 @@ class ReceiptModel {
             }
         });
     }
-    addSplitsItem(response, splitID, splitAmount, targetID, receiptID) {
+    addSplitsItem(response, receiptSplitID, receiptSplitAmount, receiptSplitUserID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("adding to split list");
             const query = this.model.findOneAndUpdate({ receiptID: receiptID }, {
                 $push: {
-                    splitList: {
-                        splitID: splitID,
-                        splitAmount: splitAmount,
-                        targetID: { userID: targetID },
+                    receiptSplitList: {
+                        receiptSplitID: receiptSplitID,
+                        receiptSplitAmount: receiptSplitAmount,
+                        targetID: { userID: receiptSplitUserID },
                     }
                 }
             }, { new: true });
