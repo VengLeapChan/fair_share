@@ -1,1 +1,1 @@
-mongodb://dbAdmin:test@localhost:27017/
+mongod -port 3000 -dbpath ".\db"
