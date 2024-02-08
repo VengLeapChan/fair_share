@@ -77,6 +77,18 @@ class UserModel {
             }
         });
     }
+    returnSpecificUser(response, userID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOne({ "userID": userID });
+            try {
+                const user = yield query.exec();
+                return user;
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
     retreiveAllUsersCount(response) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.find({});

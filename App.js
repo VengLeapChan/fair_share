@@ -38,6 +38,41 @@ class App {
     }
     routes() {
         let router = express.Router();
+        //ROUTES FOR DEMONSTRATION 
+        router.get('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userID = req.params.userID;
+                yield this.Receipt.getAllReceiptForSpecificUser(res, userID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.get('/app/user/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const receiptID = req.params.receiptID;
+            const userID = req.params.userID;
+            console.log("get specific receipt ", receiptID);
+            try {
+                yield this.Receipt.getSpecificReceiptForSpecificUser(res, receiptID, userID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.post('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const newReceiptId = crypto.randomBytes(16).toString("hex");
+            const userID = req.params.userID;
+            var receiptObject = req.body;
+            receiptObject.receiptID = newReceiptId;
+            try {
+                const addedReceipt = yield this.Receipt.addSpecificReceipt(receiptObject, userID);
+                const updatedUser = yield this.User.addReceiptID(newReceiptId, userID);
+                res.send(addedReceipt);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
         // ROUTES FOR USER
         router.get("/app/user", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All User');
@@ -107,41 +142,6 @@ class App {
             }
             catch (e) {
                 console.log('object creation failed');
-                console.error(e);
-            }
-        }));
-        //ROUTES FOR DEMONSTRATION 
-        router.get('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const userID = req.params.userID;
-                yield this.Receipt.getAllReceiptForSpecificUser(res, userID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.get('/app/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const receiptID = req.params.receiptID;
-            const userID = req.params.userID;
-            console.log("get specific receipt ", receiptID);
-            try {
-                yield this.Receipt.getSpecificReceiptForSpecificUser(res, receiptID, userID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.post('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const newReceiptId = crypto.randomBytes(16).toString("hex");
-            const userID = req.params.userID;
-            var receiptObject = req.body;
-            receiptObject.receiptID = newReceiptId;
-            try {
-                const addedReceipt = yield this.Receipt.addSpecificReceipt(receiptObject, userID);
-                const updatedUser = yield this.User.addReceiptID(newReceiptId, userID);
-                res.send(addedReceipt);
-            }
-            catch (e) {
                 console.error(e);
             }
         }));

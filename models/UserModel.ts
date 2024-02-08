@@ -64,7 +64,17 @@ class UserModel {
     
     try {
       const user = await query.exec();
-      response.json(user)
+      response.json(user);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  public async returnSpecificUser(response: any, userID: string) {
+    const query = this.model.findOne({"userID": userID});
+    
+    try {
+      const user = await query.exec();
+      return user
     } catch (e) {
       console.log(e)
     }
