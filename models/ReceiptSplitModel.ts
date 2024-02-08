@@ -17,7 +17,6 @@ class ReceiptSplitModel {
           receiptSplitID: String,
           receiptSplitAmount: Number,
           receiptTargetID: String ,
-
         }, { collection: "receiptSplits" });
     }
 
