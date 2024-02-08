@@ -23,13 +23,9 @@ class ReceiptModel {
             receiptName: String,
             receiptTotalAmount: Number,
             date: Date,
-            receiptUsersList: [{ userID: String }],
+            receiptUsersList: [String],
             receiptOwnerID: String,
-            receiptSplitList: [{
-                    receiptSplitID: String,
-                    receiptSplitAmount: Number,
-                    receiptTargetID: { userID: String },
-                }],
+            receiptSplitList: [String],
             receiptItemsList: [String]
         }, { collection: "receipts" });
     }
@@ -44,9 +40,22 @@ class ReceiptModel {
             }
         });
     }
-    getAllReceiptForSpecificUser(response, userID) {
+    getAllReceipt(response) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Getting all receipts");
+            const query = this.model.find({});
+            try {
+                const receiptList = yield query.exec();
+                response.json(receiptList);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getAllReceiptForSpecificUser(response, userID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Getting all receipts for this user");
             const query = this.model.find({ receiptOwnerID: userID });
             try {
                 const receiptList = yield query.exec();
@@ -58,12 +67,12 @@ class ReceiptModel {
         });
     }
     // get a specific receipt
-    getSpecificReceiptForSpecificUser(response, receiptID, userID) {
+    getSpecificReceipt(response, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.find({ "receiptID": receiptID, "receiptOwnerID": userID });
+            const query = this.model.find({ "receiptID": receiptID });
             try {
                 const receipt = yield query.exec();
-                response.json(receipt);
+                response.json({ "receipt": receipt });
             }
             catch (e) {
                 console.log(e);
@@ -91,14 +100,9 @@ class ReceiptModel {
             console.log("adding to split list");
             const query = this.model.findOneAndUpdate({ receiptID: receiptID }, {
                 $push: {
-                    receiptSplitList: {
-                        receiptSplitID: receiptSplitID,
-                        receiptSplitAmount: receiptSplitAmount,
-                        receiptTargetID: { userID: receiptTargetID },
-                    },
-                    receiptUsersList: {
-                        userID: receiptTargetID
-                    }
+                    //FIX THIS: add a query to add into split, call it after calling this function
+                    receiptSplitList: receiptSplitID,
+                    receiptUsersList: receiptTargetID
                 }
             }, { new: true });
             try {

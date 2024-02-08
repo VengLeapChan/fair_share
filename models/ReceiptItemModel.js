@@ -25,13 +25,13 @@ class ReceiptItemModel {
             receiptItemQuantity: Number,
             receiptItemUnitPrice: Number,
             receiptItemTotalPrice: Number,
-        }, { collection: "groups" });
+        }, { collection: "items" });
     }
     createModel() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield Mongoose.connect(this.dbConnectionString);
-                this.model = Mongoose.model("Group", this.schema);
+                this.model = Mongoose.model("Item", this.schema);
             }
             catch (e) {
                 console.error(e);

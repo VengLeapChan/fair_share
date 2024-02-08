@@ -22,24 +22,13 @@ class UserModel {
             userID: String,
             username: String,
             userEmail: String,
-            userDebtsOwed: [
-                { debtID: String,
-                    loanAmount: Number,
-                    senderID: String,
-                    receiverID: String
-                }
-            ],
-            userDebtsOwedTo: [
-                { debtID: String,
-                    debtAmount: Number,
-                    receiverID: String,
-                    senderID: String }
-            ],
+            userDebtsOwed: [String],
+            userDebtsOwedTo: [String],
             userReceiptsList: [String],
             userBalance: Number,
-            userFriendRequestsSent: [{ requestID: String }],
-            userFriendRequestsReceived: [{ requestID: String }],
-            userGroupsList: [{ groupID: String }]
+            userFriendRequestsSent: [String],
+            userFriendRequestsReceived: [String],
+            userGroupsList: [String]
         }, { collection: "users" });
     }
     createModel() {
@@ -115,16 +104,12 @@ class UserModel {
             }
         });
     }
-    addDebtsOwed(response, receiverID, senderID, amount, debtID) {
+    addDebtsOwed(response, receiverID, senderID, amount, debtOwedID) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.findOneAndUpdate({ userID: receiverID }, {
                 $push: {
-                    userDebtsOwed: {
-                        debtID: debtID,
-                        loanAmount: amount,
-                        receiverID: receiverID,
-                        senderID: senderID
-                    }
+                    //Fix This: create a query in debtowed model that adds to it after this function is called
+                    userDebtsOwed: debtOwedID,
                 }
             }, { new: true });
             try {
@@ -136,16 +121,44 @@ class UserModel {
             }
         });
     }
-    addDebtsOwedTo(response, receiverID, senderID, amount, debtID) {
+    addDebtsOwedTo(response, receiverID, senderID, amount, debtOwedToID) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.findOneAndUpdate({ userID: senderID }, {
                 $push: {
-                    userDebtsOwedTo: {
-                        debtID: debtID,
-                        debtAmount: amount,
-                        receiverID: receiverID,
-                        senderID: senderID
-                    }
+                    //Fix This: create a query in debtowedto model that adds to it after this function is called
+                    userDebtsOwedTo: debtOwedToID,
+                }
+            }, { new: true });
+            try {
+                return yield query.exec();
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+        });
+    }
+    addToFriendRequestSent(response, receiverID, senderID, friendRequestID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOneAndUpdate({ userID: senderID }, {
+                $push: {
+                    userFriendRequestsSent: friendRequestID,
+                }
+            }, { new: true });
+            try {
+                return yield query.exec();
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+        });
+    }
+    addToFriendRequestReceived(response, receiverID, senderID, friendRequestID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOneAndUpdate({ userID: receiverID }, {
+                $push: {
+                    userFriendRequestsReceived: friendRequestID,
                 }
             }, { new: true });
             try {

@@ -58,18 +58,17 @@ receiptsCollection.insertMany([
     receiptID: "1",
     receiptName: "Grocery Store",
     receiptTotalAmount: 5,
-    date: new Date,
+    date: new Date(),
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
-    receiptItemsList: [
-    ],
+    receiptItemsList: [],
   },
   {
     receiptID: "2",
     receiptName: "Trader Joe's",
     receiptTotalAmount: 7,
-    date: new Date,
+    date: new Date(),
     receiptUsersList: [],
     receiptOwnerID: "200",
     receiptSplitList: [],
@@ -79,7 +78,7 @@ receiptsCollection.insertMany([
     receiptID: "3",
     receiptName: "Safeway",
     receiptTotalAmount: 5,
-    date: new Date,
+    date: new Date(),
     receiptUsersList: [],
     receiptOwnerID: "300",
     receiptSplitList: [],
@@ -89,7 +88,7 @@ receiptsCollection.insertMany([
     receiptID: "4",
     receiptName: "Fred Meyer's",
     receiptTotalAmount: 5,
-    date: new Date,
+    date: new Date(),
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
@@ -99,7 +98,7 @@ receiptsCollection.insertMany([
     receiptID: "5",
     receiptName: "Crumble Cookie",
     receiptTotalAmount: 5,
-    date: new Date,
+    date: new Date(),
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
@@ -109,9 +108,11 @@ receiptsCollection.insertMany([
 
 // update owner's receipt ID
 receiptsCollection.find({}).forEach((receipt) => {
-  usersCollection.findOneAndUpdate({userID: receipt.receiptOwnerID}, {$push: {userReceiptsList : receipt.receiptID}})
-})
-
+  usersCollection.findOneAndUpdate(
+    { userID: receipt.receiptOwnerID },
+    { $push: { userReceiptsList: receipt.receiptID } }
+  );
+});
 
 db.createCollection("receiptItems");
 receiptItemsCollection = db.getCollection("receiptItems");
@@ -122,8 +123,8 @@ receiptItemsCollection.insertMany([
     receiptID: "1",
     receiptItemName: "Apple",
     receiptItemQuantity: 1,
-    receiptItemUnitPrice: 5.00,
-    receiptItemTotalPrice: 5.00,
+    receiptItemUnitPrice: 5.0,
+    receiptItemTotalPrice: 5.0,
   },
 
   {
@@ -167,13 +168,16 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 4.99,
     receiptItemTotalPrice: 4.99,
-  }
-])
+  },
+]);
 
 receiptItemsCollection.find({}).forEach((item) => {
   const { receiptID, receiptItemID } = item;
-  receiptsCollection.findOneAndUpdate({ receiptID: receiptID }, { $push: { receiptItemsList: receiptItemID } });
-})
+  receiptsCollection.findOneAndUpdate(
+    { receiptID: receiptID },
+    { $push: { receiptItemsList: receiptItemID } }
+  );
+});
 
 db.createCollection("friendRequests");
 friendRequestCollection = db.getCollection("friendRequests");
@@ -182,26 +186,38 @@ friendRequestCollection.deleteMany({});
 friendRequestCollection.insertMany([
   {
     requestID: "1",
-    senderID: { userID: "100" },
-    receiverID: { userID: "300" },
+    friendRequestSenderID: "100",
+    friendRequestReceiverID: "300",
     status: "pending",
   },
   {
     requestID: "2",
-    senderID: { userID: "100" },
-    receiverID: { userID: "200" },
+    friendRequestSenderID: "100",
+    friendRequestReceiverID: "200",
     status: "pending",
   },
 ]);
 
 friendRequestCollection.find({}).map((FR) => {
-  console.log(FR.senderID.userID);
+  console.log(FR.friendRequestSenderID.userID);
   usersCollection.findOneAndUpdate(
-    { userID: FR.senderID.userID },
+    { userID: FR.friendRequestSenderID },
     { $push: { userFriendRequestsSent: { requestID: FR.requestID } } }
   );
   usersCollection.findOneAndUpdate(
-    { userID: FR.receiverID.userID },
+    { userID: FR.friendRequestReceiverID },
     { $push: { userFriendRequestsReceived: { requestID: FR.requestID } } }
   );
-})
+});
+
+db.createCollection("debtOwed");
+debtOwedCollection = db.getCollection("debtOwed");
+debtOwedCollection.deleteMany({});
+
+db.createCollection("debtOwedTo");
+debtOwedToCollection = db.getCollection("debtOwedTo");
+debtOwedToCollection.deleteMany({});
+
+db.createCollection("groups");
+groupsCollection = db.getCollection("groups");
+groupsCollection.deleteMany({});

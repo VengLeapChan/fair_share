@@ -44,17 +44,34 @@ class App {
         console.error(e)
       }
     })
+    
+    router.get('/app/user/:userID/receipt/:receiptID', async( req, res) => {
 
-    router.get('/app/user/:userID/receipt/:receiptID', async (req, res) => {
-      const receiptID = req.params.receiptID;
       const userID = req.params.userID;
-      console.log("get specific receipt ", receiptID)
+      const receiptID = req.params.receiptID;
+
+      console.log("getting receipt: ", receiptID, " from user: ", userID);
+
       try {
-        await this.Receipt.getSpecificReceiptForSpecificUser(res, receiptID, userID);
+
+        const user = await this.User.returnSpecificUser(res, userID);
+        const userReceiptsList = user.userReceiptsList;
+        const foundReceipt = userReceiptsList.includes(receiptID);
+
+        if(foundReceipt){
+          this.Receipt.getSpecificReceipt(res, receiptID);
+        } else {
+
+          res.json("This user does not have that receipt.")
+        }
+
       } catch (e) {
-        console.error(e)
+
+        console.log(e);
+        throw e;
       }
-    })
+
+    }); 
 
     router.post('/app/user/:userID/receipt', async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
@@ -65,6 +82,7 @@ class App {
       
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
+        // i think u wanted to send updated user instead
         const updatedUser = await this.User.addReceiptID(newReceiptId, userID)
         res.send(addedReceipt);
       } catch (e) {
@@ -108,7 +126,7 @@ class App {
 
       const receiptSplitID = id;
       const receiptSplitAmount = jsonObj.receiptSplitAmount;
-      const receiptTargetID = jsonObj.receiptTargetID.userID;
+      const receiptTargetID = jsonObj.receiptTargetID;
 
       try {
         await this.Receipt.addSplitsItem(res, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID);
@@ -136,17 +154,22 @@ class App {
     });
 
     router.post("/app/friendRequest", async (req, res) => {
+
       console.log("Create Friend Request");
       const newFriendRequest = req.body;
-      console.log(newFriendRequest);
+
       const id = crypto.randomBytes(16).toString("hex");
       newFriendRequest.requestID = id;
+      const senderId = newFriendRequest.friendRequestSenderID;
+      const receiverId = newFriendRequest.friendRequestReceiverID;
+      
 
       const doc = new this.FriendRequest.model(newFriendRequest);
 
       try {
-        // save it in the db 
         await doc.save();
+        this.User.addToFriendRequestReceived(res, receiverId, senderId, newFriendRequest.requestID)
+        this.User.addToFriendRequestSent(res, receiverId, senderId, newFriendRequest.requestID)
         res.send('{"id":"' + id + '"}');
       }
       catch (e) {
@@ -154,6 +177,41 @@ class App {
         console.error(e);
       }
     })
+
+    router.get('/app/receipt/:receiptID', async( req, res) => {
+
+      const receiptID = req.params.receiptID;
+
+      console.log("getting receipt: ", receiptID);
+
+      try {
+
+        await this.Receipt.getSpecificReceipt(res, receiptID);
+
+      } catch (e) {
+
+        console.log(e);
+        throw e;
+      }
+
+    }); 
+
+    router.get('/app/receipt', async( req, res) => {
+
+
+      console.log("getting all receipt: ");
+
+      try {
+
+        await this.Receipt.getAllReceipt(res);
+
+      } catch (e) {
+
+        console.log(e);
+        throw e;
+      }
+
+    }); 
 
 
     this.expressApp.use('/', router);

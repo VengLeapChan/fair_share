@@ -20,14 +20,14 @@ class ReceiptItemModel {
       receiptItemQuantity: Number,
       receiptItemUnitPrice: Number,
       receiptItemTotalPrice: Number,
-    }, {collection: "groups"} 
+    }, {collection: "items"} 
     )
   }
 
   public async createModel(){
     try {
       await Mongoose.connect(this.dbConnectionString);
-      this.model = Mongoose.model<IReceiptItemModel>("Group", this.schema);
+      this.model = Mongoose.model<IReceiptItemModel>("Item", this.schema);
     } catch (e) {
       console.error(e);
     }

@@ -20,11 +20,7 @@ class ReceiptModel {
       date: Date,
       receiptUsersList: [String],
       receiptOwnerID: String,
-      receiptSplitList: [{
-        receiptSplitID: String,
-        receiptSplitAmount: Number,
-        receiptTargetID: { userID: String },
-      }],
+      receiptSplitList: [String],
       receiptItemsList: [String]
     }, { collection: "receipts" }
     )
@@ -39,8 +35,19 @@ class ReceiptModel {
     }
   }
 
-  public async getAllReceiptForSpecificUser(response: any, userID: string) {
+  public async getAllReceipt(response: any) {
     console.log("Getting all receipts")
+    const query = this.model.find({});
+    try {
+      const receiptList = await query.exec();
+      response.json(receiptList);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public async getAllReceiptForSpecificUser(response: any, userID: string) {
+    console.log("Getting all receipts for this user")
     const query = this.model.find({receiptOwnerID: userID});
     try {
       const receiptList = await query.exec();
@@ -51,11 +58,11 @@ class ReceiptModel {
   }
 
   // get a specific receipt
-  public async getSpecificReceiptForSpecificUser(response: any, receiptID: string, userID: string) {
-    const query = this.model.find({ "receiptID": receiptID, "receiptOwnerID": userID });
+  public async getSpecificReceipt(response: any, receiptID: string) {
+    const query = this.model.find({ "receiptID": receiptID });
     try {
-      const receipt: any = await query.exec();
-      response.json(receipt);
+      const receipt = await query.exec();
+      response.json({ "receipt": receipt });
     } catch (e) {
       console.log(e)
     }
@@ -81,14 +88,9 @@ class ReceiptModel {
       { receiptID: receiptID },
       {
         $push: {
-          receiptSplitList: {
-            receiptSplitID: receiptSplitID,
-            receiptSplitAmount: receiptSplitAmount,
-            receiptTargetID: { userID: receiptTargetID },
-          },
-          receiptUsersList: {
-            userID: receiptTargetID
-          }
+          //FIX THIS: add a query to add into split, call it after calling this function
+          receiptSplitList: receiptSplitID,
+          receiptUsersList: receiptTargetID
         }
       },
       { new: true }
