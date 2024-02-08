@@ -67,6 +67,34 @@ class App {
       }
     });
 
+    router.get('/app/user/:userID/:receiptID', async( req, res) => {
+
+      const userID = req.params.userID;
+      const receiptID = req.params.receiptID;
+
+      console.log("getting receipt: ", receiptID, " from user: ", userID);
+
+      try {
+
+        const user = await this.User.returnSpecificUser(res, userID);
+        const userReceiptsList = user.userReceiptsList;
+        const foundReceipt = userReceiptsList.find((receipt: any) => receipt.receiptID === receiptID);
+
+        if(foundReceipt){
+          this.Receipt.getSpecificReceipt(res, receiptID);
+        } else {
+
+          res.json("This user does not have that receipt.")
+        }
+
+      } catch (e) {
+
+        console.log(e);
+        throw e;
+      }
+
+    }); 
+
     // ROUTES FOR RECEIPT
     router.get('/app/receipt', async (req, res) => {
       try {

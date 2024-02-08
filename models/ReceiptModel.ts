@@ -67,6 +67,7 @@ class ReceiptModel {
     }
   }
 
+
   public async addSpecificReceipt(response: any, newReceiptData: any) {
     console.log("Adding a receipt");
     try {
