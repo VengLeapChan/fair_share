@@ -20,10 +20,10 @@ class FriendRequestModel {
     createSchema() {
         this.schema = new Mongoose.Schema({
             requestID: String,
-            sender: { userID: String },
-            receiver: { userID: String },
+            senderID: { userID: String },
+            receiverID: { userID: String },
             status: String,
-        }, { collection: "friendRequest" });
+        }, { collection: "friendRequests" });
     }
     createModel() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -16,22 +16,22 @@ class ReceiptModel {
     this.schema = new Mongoose.Schema({
       receiptID: String,
       receiptName: String,
-      totalAmount: Number,
+      receiptTotalAmount: Number,
       date: Date,
-      receiptSplitUsersList: [{ userID: String }],
-      ownerID: { userID: String },
+      receiptUsersList: [{ userID: String }],
+      receiptOwnerID: { userID: String },
       receiptSplitList: [{
         receiptSplitID: String,
         receiptSplitAmount: Number,
-        receiptSplitUserID: { userID: String },
+        receiptTargetID: { userID: String },
       }],
-      itemsList: [
+      receiptItemsList: [
         {
           itemID: String,
           itemName: String,
-          quantity: Number,
-          unitPrice: Number,
-          totalPrice: Number,
+          itemQuantity: Number,
+          itemUnitPrice: Number,
+          itemTotalPrice: Number,
         }
       ]
     }, { collection: "receipts" }
@@ -78,7 +78,7 @@ class ReceiptModel {
     }
   }
 
-  public async addSplitsItem(response: any, receiptSplitID: string, receiptSplitAmount: number, receiptSplitUserID: string, receiptID: string) {
+  public async addSplitsItem(response: any, receiptSplitID: string, receiptSplitAmount: number, receiptTargetID: string, receiptID: string) {
     console.log("adding to split list");
     const query = this.model.findOneAndUpdate(
       { receiptID: receiptID },
@@ -87,7 +87,10 @@ class ReceiptModel {
           receiptSplitList: {
             receiptSplitID: receiptSplitID,
             receiptSplitAmount: receiptSplitAmount,
-            targetID: { userID: receiptSplitUserID },
+            receiptTargetID: { userID: receiptTargetID },
+          },
+          receiptUsersList: {
+            userID: receiptTargetID
           }
         }
       },

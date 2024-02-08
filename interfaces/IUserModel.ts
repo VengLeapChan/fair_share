@@ -3,28 +3,28 @@ import Mongoose from "mongoose";
 interface IUserModel extends Mongoose.Document {
   userID: string,
   username: string,
-  email: string,
-  debtsOwed: [
+  userEmail: string,
+  userDebtsOwed: [
     {
     debtID: string,
-    amount: number,
-    debtorID: string,
-    creditorID: string
+    loanAmount: number,
+    senderID: string,
+    receiverID: string
   }
   ],
-  debtsOwedTo: [
+  userDebtsOwedTo: [
     {
     debtID: string,
-    amount: number,
+    debtAmount: number,
     receiverID: string,
     senderID: string
   }
   ],
-receiptsList: [{receiptID: string}],
-balance: number,
-friendRequestsSent: [{requestID: string}],
-friendRequestsReceived: [{requestId: string}],
-groupsList: [{groupID: string}]
+userReceiptsList: [{receiptID: string}],
+userBalance: number,
+userFriendRequestsSent: [{requestID: string}],
+userFriendRequestsReceived: [{requestId: string}],
+userGroupsList: [{groupID: string}]
 }
 
 export {IUserModel};

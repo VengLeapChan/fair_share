@@ -90,7 +90,7 @@ class App {
             try {
                 const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
                 console.log(addedReceipt);
-                yield this.User.addReceiptID(res, id, addedReceipt.ownerID.userID);
+                yield this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID);
             }
             catch (e) {
                 console.error(e);
@@ -120,8 +120,7 @@ class App {
             jsonObj.receiptID = id;
             try {
                 const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
-                console.log(addedReceipt);
-                yield this.User.addReceiptID(res, id, addedReceipt.ownerID.userID);
+                yield this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID);
             }
             catch (e) {
                 console.error(e);
@@ -132,13 +131,13 @@ class App {
             const userID = req.params.userID;
             const receiptID = req.params.receiptID;
             var jsonObj = req.body;
-            const splitID = id;
-            const splitAmount = jsonObj.splitAmount;
-            const targetID = jsonObj.targetID.userID;
+            const receiptSplitID = id;
+            const receiptSplitAmount = jsonObj.receiptSplitAmount;
+            const receiptTargetID = jsonObj.receiptTargetID.userID;
             try {
-                yield this.Receipt.addSplitsItem(res, splitID, splitAmount, targetID, receiptID);
-                yield this.User.addDebtsOwed(res, userID, targetID, splitAmount, splitID);
-                yield this.User.addDebtsOwedTo(res, userID, targetID, splitAmount, splitID);
+                yield this.Receipt.addSplitsItem(res, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID);
+                yield this.User.addDebtsOwed(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
+                yield this.User.addDebtsOwedTo(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
                 res.json({ message: "Split item added successfully." });
             }
             catch (e) {
@@ -149,7 +148,7 @@ class App {
         // ROUTES FOR FRIENDS
         router.get("/app/friendRequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Query All Friend Requests');
-            const friendRequests = yield this.FriendRequest.retrieveAllFriendRequests(res);
+            yield this.FriendRequest.retrieveAllFriendRequests(res);
         }));
         router.get("/app/friendRequest/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log('Get Friend Request By ID');
@@ -159,8 +158,9 @@ class App {
         router.post("/app/friendRequest", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log("Create Friend Request");
             const newFriendRequest = req.body;
+            console.log(newFriendRequest);
             const id = crypto.randomBytes(16).toString("hex");
-            newFriendRequest.userID = id;
+            newFriendRequest.requestID = id;
             const doc = new this.FriendRequest.model(newFriendRequest);
             try {
                 // save it in the db 

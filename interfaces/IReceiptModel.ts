@@ -3,25 +3,25 @@ import Mongoose from "mongoose";
 interface IReceiptModel extends Mongoose.Document {
   receiptID: string,
   receiptName: string,
-  totalAmount: number,
+  receiptTotalAmount: number,
   date: Date,
-  receiptSplitUsersList: [{ userID: string }],
-  owner: { userID: string },
+  receiptUsersList: [{ userID: string }],
+  receiptOwnerID: { userID: string },
   receiptSplitList: [
     {
       receiptSplitID: string,
       receiptSplitAmount: number,
-      receiptSplitUserID: { userID: string },
+      receiptTargetID: { userID: string },
     }
   ],
-  itemsList:
+  receiptItemsList:
   [
     {
       itemID: string,
       itemName: string,
-      quantity: number,
-      unitPrice: number,
-      totalPrice: number,
+      itemQuantity: number,
+      itemUnitPrice: number,
+      itemTotalPrice: number,
     }
   ],
 }

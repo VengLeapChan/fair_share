@@ -16,24 +16,25 @@ class UserModel {
     this.schema = new Mongoose.Schema({
       userID: String,
       username: String,
-      email: String,
-      debtsOwed: [
+      userEmail: String,
+      userDebtsOwed: [
         {debtID: String,
-        amount: Number,
+        loanAmount: Number,
+        senderID: String,
+        receiverID: String
+        }
+      ],
+      userDebtsOwedTo: [
+        {debtID: String,
+        debtAmount: Number,
         receiverID: String,
         senderID: String}
       ],
-      debtsOwedTo: [
-        {debtID: String,
-        amount: Number,
-        receiverID: String,
-        senderID: String}
-      ],
-    receiptsList: [{receiptID: String}],
-    balance: Number,
-    friendRequestsSent: [{requestID: String}],
-    friendRequestsReceived: [{requestID: String}],
-    groupsList: [{groupID: String}]
+    userReceiptsList: [{receiptID: String}],
+    userBalance: Number,
+    userFriendRequestsSent: [{requestID: String}],
+    userFriendRequestsReceived: [{requestID: String}],
+    userGroupsList: [{groupID: String}]
     }, {collection: "users"} 
     )
   }
@@ -96,7 +97,7 @@ class UserModel {
     const query = this.model.findOneAndUpdate(
       {userID: userID}, 
       {$push: {
-        receiptsList: {
+        userReceiptsList: {
           receiptID: receiptID
         },
       }
@@ -116,9 +117,9 @@ class UserModel {
       { userID: receiverID },
       {
         $push: {
-          debtsOwed: {
+          userDebtsOwed: {
             debtID: debtID,
-            amount: amount,
+            loanAmount: amount,
             receiverID: receiverID,
             senderID: senderID
           }
@@ -141,9 +142,9 @@ class UserModel {
       { userID: senderID },
       {
         $push: {
-          debtsOwedTo: {
+          userDebtsOwedTo: {
             debtID: debtID,
-            amount: amount,
+            debtAmount: amount,
             receiverID: receiverID,
             senderID: senderID
           }

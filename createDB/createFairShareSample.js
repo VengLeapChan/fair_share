@@ -14,38 +14,38 @@ usersCollection.insertMany([
   {
     userID: "1",
     username: "leapvchan",
-    email: "leapvchan@gmail.com",
-    debtsOwed: [],
-    debtsOwedTo: [],
-    receiptsList: [],
-    balance: 0,
-    friendRequestsSent: [],
-    friendRequestsReceived: [],
-    groupsList: [],
+    userEmail: "leapvchan@gmail.com",
+    userDebtsOwed: [],
+    userDebtsOwedTo: [],
+    userReceiptsList: [],
+    userBalance: 0,
+    userFriendRequestsSent: [],
+    userFriendRequestsReceived: [],
+    userGroupsList: [],
   },
   {
     userID: "2",
     username: "summerxia",
-    email: "summer@gmail.com",
-    debtsOwed: [],
-    debtsOwedTo: [],
-    receiptsList: [],
-    balance: 0,
-    friendRequestsSent: [],
-    friendRequestsReceived: [],
-    groupsList: [],
+    userEmail: "summer@gmail.com",
+    userDebtsOwed: [],
+    userDebtsOwedTo: [],
+    userReceiptsList: [],
+    userBalance: 0,
+    userFriendRequestsSent: [],
+    userFriendRequestsReceived: [],
+    userGroupsList: [],
   },
   {
     userID: "3",
     username: "robertWidjaja",
-    email: "robertWidjaja@gmail.com",
-    debtsOwed: [],
-    debtsOwedTo: [],
-    receiptsList: [],
-    balance: 0,
-    friendRequestsSent: [],
-    friendRequestsReceived: [],
-    groupsList: [],
+    userEmail: "robertWidjaja@gmail.com",
+    userDebtsOwed: [],
+    userDebtsOwedTo: [],
+    userReceiptsList: [],
+    userBalance: 0,
+    userFriendRequestsSent: [],
+    userFriendRequestsReceived: [],
+    userGroupsList: [],
   },
 ]);
 
@@ -58,65 +58,74 @@ receiptsCollection.insertMany([
   {
     receiptID: "1",
     receiptName: "Carmelo's Taco",
-    totalAmount: 5,
+    receiptTotalAmount: 5,
     date: Date,
-    usersList: [],
-    ownerID: { userID: "1" },
-    splitList: [],
-    itemsList: [
+    receiptUsersList: [],
+    receiptOwnerID: { userID: "1" },
+    receiptSplitList: [],
+    receiptItemsList: [
       {
         itemID: "1",
         itemName: "Apple",
-        quantity: 1,
-        unitPrice: 5,
-        totalPrice: 5,
+        itemQuantity: 1,
+        itemUnitPrice: 5,
+        itemTotalPrice: 5,
       },
     ],
   },
   {
     receiptID: "2",
     receiptName: "Trader Joe's",
-    totalAmount: 7,
+    receiptTotalAmount: 7,
     date: Date,
-    usersList: [],
-    ownerID: { userID: "2" },
-    splitList: [],
-    itemsList: [
+    receiptUsersList: [],
+    receiptOwnerID: { userID: "2" },
+    receiptSplitList: [],
+    receiptItemsList: [
       {
         itemID: "2",
         itemName: "Kiwi",
-        quantity: 1,
-        unitPrice: 7,
-        totalPrice: 7,
+        itemQuantity: 1,
+        itemUnitPrice: 7,
+        itemTotalPrice: 7,
       },
     ],
   },
   {
     receiptID: "3",
     receiptName: "Safeway",
-    totalAmount: 7,
+    receiptTotalAmount: 5,
     date: Date,
-    usersList: [],
-    ownerID: { userID: "3" },
-    splitList: [],
-    itemsList: [
+    receiptUsersList: [],
+    receiptOwnerID: { userID: "3" },
+    receiptSplitList: [],
+    receiptItemsList: [
       {
         itemID: "3",
         itemName: "Grapes",
-        quantity: 10,
-        unitPrice: 0.5,
-        totalPrice: 5,
+        itemQuantity: 10,
+        itemUnitPrice: 0.5,
+        itemTotalPrice: 5,
       },
     ],
   },
 ]);
 
 // update owner's receipt ID
-usersCollection.findOneAndUpdate({userID: "1"}, {$push: {receiptsList: {receiptID: "1"}}});
+usersCollection.findOneAndUpdate(
+  { userID: "1" },
+  { $push: { userReceiptsList: { receiptID: "1" } } }
+);
 
-usersCollection.findOneAndUpdate({userID: "2"}, {$push: {receiptsList: {receiptID: "2"}}});
+usersCollection.findOneAndUpdate(
+  { userID: "2" },
+  { $push: { userReceiptsList: { receiptID: "2" } } }
+);
 
-usersCollection.findOneAndUpdate({userID: "3"}, {$push: {receiptsList: {receiptID: "3"}}});
+usersCollection.findOneAndUpdate(
+  { userID: "3" },
+  { $push: { userReceiptsList: { receiptID: "3" } } }
+);
 
 db.createCollection("friendRequests");
 friendRequestCollection = db.getCollection("friendRequests");
@@ -137,10 +146,22 @@ friendRequestCollection.insertMany([
   },
 ]);
 
-usersCollection.findOneAndUpdate({userID: "1"}, {$push: {friendRequestsSent: {requestID: "1"}}})
+usersCollection.findOneAndUpdate(
+  { userID: "1" },
+  { $push: { userFriendRequestsSent: { requestID: "1" } } }
+);
 
-usersCollection.findOneAndUpdate({userID: "3"}, {$push: {friendRequestsReceived: {requestID: "1"}}})
+usersCollection.findOneAndUpdate(
+  { userID: "3" },
+  { $push: { userFriendRequestsReceived: { requestID: "1" } } }
+);
 
-usersCollection.findOneAndUpdate({userID: "1"}, {$push: {friendRequestsSent: {requestID: "2"}}})
+usersCollection.findOneAndUpdate(
+  { userID: "1" },
+  { $push: { userFriendRequestsSent: { requestID: "2" } } }
+);
 
-usersCollection.findOneAndUpdate({userID: "2"}, {$push: {friendRequestsReceived: {requestID: "2"}}})
+usersCollection.findOneAndUpdate(
+  { userID: "2" },
+  { $push: { userFriendRequestsReceived: { requestID: "2" } } }
+);

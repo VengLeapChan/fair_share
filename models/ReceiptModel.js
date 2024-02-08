@@ -21,22 +21,22 @@ class ReceiptModel {
         this.schema = new Mongoose.Schema({
             receiptID: String,
             receiptName: String,
-            totalAmount: Number,
+            receiptTotalAmount: Number,
             date: Date,
-            receiptSplitUsersList: [{ userID: String }],
-            ownerID: { userID: String },
+            receiptUsersList: [{ userID: String }],
+            receiptOwnerID: { userID: String },
             receiptSplitList: [{
                     receiptSplitID: String,
                     receiptSplitAmount: Number,
-                    receiptSplitUserID: { userID: String },
+                    receiptTargetID: { userID: String },
                 }],
-            itemsList: [
+            receiptItemsList: [
                 {
                     itemID: String,
                     itemName: String,
-                    quantity: Number,
-                    unitPrice: Number,
-                    totalPrice: Number,
+                    itemQuantity: Number,
+                    itemUnitPrice: Number,
+                    itemTotalPrice: Number,
                 }
             ]
         }, { collection: "receipts" });
@@ -90,7 +90,7 @@ class ReceiptModel {
             }
         });
     }
-    addSplitsItem(response, receiptSplitID, receiptSplitAmount, receiptSplitUserID, receiptID) {
+    addSplitsItem(response, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("adding to split list");
             const query = this.model.findOneAndUpdate({ receiptID: receiptID }, {
@@ -98,7 +98,10 @@ class ReceiptModel {
                     receiptSplitList: {
                         receiptSplitID: receiptSplitID,
                         receiptSplitAmount: receiptSplitAmount,
-                        targetID: { userID: receiptSplitUserID },
+                        receiptTargetID: { userID: receiptTargetID },
+                    },
+                    receiptUsersList: {
+                        userID: receiptTargetID
                     }
                 }
             }, { new: true });
