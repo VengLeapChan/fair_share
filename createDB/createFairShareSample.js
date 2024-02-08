@@ -182,34 +182,26 @@ friendRequestCollection.deleteMany({});
 friendRequestCollection.insertMany([
   {
     requestID: "1",
-    senderID: { userID: "1" },
-    receiverID: { userID: "3" },
+    senderID: { userID: "100" },
+    receiverID: { userID: "300" },
     status: "pending",
   },
   {
     requestID: "2",
-    senderID: { userID: "1" },
-    receiverID: { userID: "2" },
+    senderID: { userID: "100" },
+    receiverID: { userID: "200" },
     status: "pending",
   },
 ]);
 
-usersCollection.findOneAndUpdate(
-  { userID: "1" },
-  { $push: { userFriendRequestsSent: { requestID: "1" } } }
-);
-
-usersCollection.findOneAndUpdate(
-  { userID: "3" },
-  { $push: { userFriendRequestsReceived: { requestID: "1" } } }
-);
-
-usersCollection.findOneAndUpdate(
-  { userID: "1" },
-  { $push: { userFriendRequestsSent: { requestID: "2" } } }
-);
-
-usersCollection.findOneAndUpdate(
-  { userID: "2" },
-  { $push: { userFriendRequestsReceived: { requestID: "2" } } }
-);
+friendRequestCollection.find({}).map((FR) => {
+  console.log(FR.senderID.userID);
+  usersCollection.findOneAndUpdate(
+    { userID: FR.senderID.userID },
+    { $push: { userFriendRequestsSent: { requestID: FR.requestID } } }
+  );
+  usersCollection.findOneAndUpdate(
+    { userID: FR.receiverID.userID },
+    { $push: { userFriendRequestsReceived: { requestID: FR.requestID } } }
+  );
+})

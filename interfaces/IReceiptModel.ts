@@ -5,7 +5,7 @@ interface IReceiptModel extends Mongoose.Document {
   receiptName: string,
   receiptTotalAmount: number,
   date: Date,
-  receiptUsersList: [{ userID: string }],
+  receiptUsersList: [string],
   receiptOwnerID: string,
   receiptSplitList: [
     {
