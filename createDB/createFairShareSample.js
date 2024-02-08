@@ -12,7 +12,7 @@ usersCollection.deleteMany({});
 
 usersCollection.insertMany([
   {
-    userID: "1",
+    userID: "100",
     username: "leapvchan",
     userEmail: "leapvchan@gmail.com",
     userDebtsOwed: [],
@@ -24,7 +24,7 @@ usersCollection.insertMany([
     userGroupsList: [],
   },
   {
-    userID: "2",
+    userID: "200",
     username: "summerxia",
     userEmail: "summer@gmail.com",
     userDebtsOwed: [],
@@ -36,7 +36,7 @@ usersCollection.insertMany([
     userGroupsList: [],
   },
   {
-    userID: "3",
+    userID: "300",
     username: "robertWidjaja",
     userEmail: "robertWidjaja@gmail.com",
     userDebtsOwed: [],
@@ -50,82 +50,130 @@ usersCollection.insertMany([
 ]);
 
 db.createCollection("receipts");
-
 receiptsCollection = db.getCollection("receipts");
 receiptsCollection.deleteMany({});
 
 receiptsCollection.insertMany([
   {
     receiptID: "1",
-    receiptName: "Carmelo's Taco",
+    receiptName: "Grocery Store",
     receiptTotalAmount: 5,
-    date: Date,
+    date: new Date,
     receiptUsersList: [],
-    receiptOwnerID: { userID: "1" },
+    receiptOwnerID: "100",
     receiptSplitList: [],
     receiptItemsList: [
-      {
-        itemID: "1",
-        itemName: "Apple",
-        itemQuantity: 1,
-        itemUnitPrice: 5,
-        itemTotalPrice: 5,
-      },
     ],
   },
   {
     receiptID: "2",
     receiptName: "Trader Joe's",
     receiptTotalAmount: 7,
-    date: Date,
+    date: new Date,
     receiptUsersList: [],
-    receiptOwnerID: { userID: "2" },
+    receiptOwnerID: "200",
     receiptSplitList: [],
-    receiptItemsList: [
-      {
-        itemID: "2",
-        itemName: "Kiwi",
-        itemQuantity: 1,
-        itemUnitPrice: 7,
-        itemTotalPrice: 7,
-      },
-    ],
+    receiptItemsList: [],
   },
   {
     receiptID: "3",
     receiptName: "Safeway",
     receiptTotalAmount: 5,
-    date: Date,
+    date: new Date,
     receiptUsersList: [],
-    receiptOwnerID: { userID: "3" },
+    receiptOwnerID: "300",
     receiptSplitList: [],
-    receiptItemsList: [
-      {
-        itemID: "3",
-        itemName: "Grapes",
-        itemQuantity: 10,
-        itemUnitPrice: 0.5,
-        itemTotalPrice: 5,
-      },
-    ],
+    receiptItemsList: [],
+  },
+  {
+    receiptID: "4",
+    receiptName: "Fred Meyer's",
+    receiptTotalAmount: 5,
+    date: new Date,
+    receiptUsersList: [],
+    receiptOwnerID: "100",
+    receiptSplitList: [],
+    receiptItemsList: [],
+  },
+  {
+    receiptID: "5",
+    receiptName: "Crumble Cookie",
+    receiptTotalAmount: 5,
+    date: new Date,
+    receiptUsersList: [],
+    receiptOwnerID: "100",
+    receiptSplitList: [],
+    receiptItemsList: [],
   },
 ]);
 
 // update owner's receipt ID
-usersCollection.findOneAndUpdate(
-  { userID: "1" },
-  { $push: { userReceiptsList: { receiptID: "1" } } }
-);
+receiptsCollection.find({}).forEach((receipt) => {
+  usersCollection.findOneAndUpdate({userID: receipt.receiptOwnerID}, {$push: {userReceiptsList : receipt.receiptID}})
+})
 
-usersCollection.findOneAndUpdate(
-  { userID: "2" },
-  { $push: { userReceiptsList: { receiptID: "2" } } }
-);
 
-usersCollection.findOneAndUpdate(
-  { userID: "3" },
-  { $push: { userReceiptsList: { receiptID: "3" } } }
-);
+db.createCollection("receiptItems");
+receiptItemsCollection = db.getCollection("receiptItems");
+receiptItemsCollection.deleteMany({});
+receiptItemsCollection.insertMany([
+  {
+    receiptItemID: "10",
+    receiptID: "1",
+    receiptItemName: "Apple",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 5.00,
+    receiptItemTotalPrice: 5.00,
+  },
+
+  {
+    receiptItemID: "11",
+    receiptID: "4",
+    receiptItemName: "Banana",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 2.22,
+    receiptItemTotalPrice: 2.22,
+  },
+
+  {
+    receiptItemID: "12",
+    receiptID: "5",
+    receiptItemName: "Orange",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 4.32,
+    receiptItemTotalPrice: 4.32,
+  },
+
+  {
+    receiptItemID: "13",
+    receiptID: "5",
+    receiptItemName: "Grapes",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 9.99,
+    receiptItemTotalPrice: 9.99,
+  },
+  {
+    receiptItemID: "14",
+    receiptID: "1",
+    receiptItemName: "Raisins",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 7.52,
+    receiptItemTotalPrice: 7.52,
+  },
+  {
+    receiptItemID: "15",
+    receiptID: "3",
+    receiptItemName: "Curry Cubes",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 4.99,
+    receiptItemTotalPrice: 4.99,
+  }
+])
+
+receiptItemsCollection.find({}).forEach((item) => {
+  const { receiptID, receiptItemID } = item;
+  receiptsCollection.findOneAndUpdate({ receiptID: receiptID }, { $push: { receiptItemsList: receiptItemID } });
+})
 
 db.createCollection("friendRequests");
 friendRequestCollection = db.getCollection("friendRequests");

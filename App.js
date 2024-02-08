@@ -64,68 +64,6 @@ class App {
                 console.error(e);
             }
         }));
-        // ROUTES FOR RECEIPT
-        router.get('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.Receipt.getAllReceipt(res);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.get('/app/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const receiptID = req.params.receiptID;
-            console.log("get specific receipt ", receiptID);
-            try {
-                yield this.Receipt.getSpecificReceipt(res, receiptID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.post('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = crypto.randomBytes(16).toString("hex");
-            var jsonObj = req.body;
-            jsonObj.receiptID = id;
-            try {
-                const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
-                console.log(addedReceipt);
-                yield this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.get('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.Receipt.getAllReceipt(res);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.get('/app/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const receiptID = req.params.receiptID;
-            console.log("get specific receipt ", receiptID);
-            try {
-                yield this.Receipt.getSpecificReceipt(res, receiptID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
-        router.post('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const id = crypto.randomBytes(16).toString("hex");
-            var jsonObj = req.body;
-            jsonObj.receiptID = id;
-            try {
-                const addedReceipt = yield this.Receipt.addSpecificReceipt(res, jsonObj);
-                yield this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID);
-            }
-            catch (e) {
-                console.error(e);
-            }
-        }));
         router.post('/app/:userID/:receiptID/splitItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = crypto.randomBytes(16).toString("hex");
             const userID = req.params.userID;
@@ -169,6 +107,41 @@ class App {
             }
             catch (e) {
                 console.log('object creation failed');
+                console.error(e);
+            }
+        }));
+        //ROUTES FOR DEMONSTRATION 
+        router.get('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userID = req.params.userID;
+                yield this.Receipt.getAllReceiptForSpecificUser(res, userID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.get('/app/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const receiptID = req.params.receiptID;
+            const userID = req.params.userID;
+            console.log("get specific receipt ", receiptID);
+            try {
+                yield this.Receipt.getSpecificReceiptForSpecificUser(res, receiptID, userID);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.post('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const newReceiptId = crypto.randomBytes(16).toString("hex");
+            const userID = req.params.userID;
+            var receiptObject = req.body;
+            receiptObject.receiptID = newReceiptId;
+            try {
+                const addedReceipt = yield this.Receipt.addSpecificReceipt(receiptObject, userID);
+                const updatedUser = yield this.User.addReceiptID(newReceiptId, userID);
+                res.send(addedReceipt);
+            }
+            catch (e) {
                 console.error(e);
             }
         }));

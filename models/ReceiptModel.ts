@@ -19,21 +19,13 @@ class ReceiptModel {
       receiptTotalAmount: Number,
       date: Date,
       receiptUsersList: [{ userID: String }],
-      receiptOwnerID: { userID: String },
+      receiptOwnerID: String,
       receiptSplitList: [{
         receiptSplitID: String,
         receiptSplitAmount: Number,
         receiptTargetID: { userID: String },
       }],
-      receiptItemsList: [
-        {
-          itemID: String,
-          itemName: String,
-          itemQuantity: Number,
-          itemUnitPrice: Number,
-          itemTotalPrice: Number,
-        }
-      ]
+      receiptItemsList: [String]
     }, { collection: "receipts" }
     )
   }
@@ -47,9 +39,9 @@ class ReceiptModel {
     }
   }
 
-  public async getAllReceipt(response: any) {
+  public async getAllReceiptForSpecificUser(response: any, userID: string) {
     console.log("Getting all receipts")
-    const query = this.model.find({});
+    const query = this.model.find({receiptOwnerID: userID});
     try {
       const receiptList = await query.exec();
       response.json({ "receiptList": receiptList });
@@ -57,18 +49,23 @@ class ReceiptModel {
       console.log(e)
     }
   }
-  public async getSpecificReceipt(response: any, receiptID: string) {
-    const query = this.model.find({ "receiptID": receiptID });
+
+  // get a specific receipt
+  public async getSpecificReceiptForSpecificUser(response: any, receiptID: string, userID: string) {
+    const query = this.model.find({ "receiptID": receiptID, "receiptOwnerID": userID });
     try {
-      const receipt = await query.exec();
-      response.json({ "receipt": receipt });
+      const receipt: any = await query.exec();
+      response.json(receipt);
     } catch (e) {
       console.log(e)
     }
   }
 
-  public async addSpecificReceipt(response: any, newReceiptData: any) {
+  public async addSpecificReceipt(newReceiptData: any, userID: string) {
     console.log("Adding a receipt");
+    newReceiptData.receiptOwnerID = userID;
+    const newDate = new Date();
+    newReceiptData.date = newDate;
     try {
       const newReceipt = new this.model(newReceiptData);
       const savedReceipt = await newReceipt.save();

@@ -30,7 +30,7 @@ class UserModel {
         receiverID: String,
         senderID: String}
       ],
-    userReceiptsList: [{receiptID: String}],
+    userReceiptsList: [String],
     userBalance: Number,
     userFriendRequestsSent: [{requestID: String}],
     userFriendRequestsReceived: [{requestID: String}],
@@ -69,16 +69,7 @@ class UserModel {
       console.log(e)
     }
   }
-  // public async addUser(response: any, newUser: IUserModel) {
-  //   try {
-  //     const user = new this.model(newUser);
-  //     await user.save();
-  //     response.json({ message: "User added successfully", user });
-  //   } catch (e) {
-  //     console.error(e);
-  //     response.status(500).json({ error: "Error adding user" });
-  //   }
-  // }
+
 
   public async retreiveAllUsersCount(response: any) {
     const query = this.model.find({});
@@ -92,22 +83,14 @@ class UserModel {
     }
   }
 
-  public async addReceiptID(response: any, receiptID: string, userID: string){
+  public async addReceiptID(receiptID: string, userID: string){
     // query to find user based on userID and updated the receiptList 
     const query = this.model.findOneAndUpdate(
-      {userID: userID}, 
-      {$push: {
-        userReceiptsList: {
-          receiptID: receiptID
-        },
-      }
-    },  
-    { new:true } );
+      {userID: userID}, {$push: {userReceiptsList: receiptID}},  { new:true } );
     try {
       const user = await query.exec();
-      response.json(user);
+      return user;
     } catch (e) {
-      console.log(e);
     }
   }
 

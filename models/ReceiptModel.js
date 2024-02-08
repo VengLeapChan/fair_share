@@ -24,21 +24,13 @@ class ReceiptModel {
             receiptTotalAmount: Number,
             date: Date,
             receiptUsersList: [{ userID: String }],
-            receiptOwnerID: { userID: String },
+            receiptOwnerID: String,
             receiptSplitList: [{
                     receiptSplitID: String,
                     receiptSplitAmount: Number,
                     receiptTargetID: { userID: String },
                 }],
-            receiptItemsList: [
-                {
-                    itemID: String,
-                    itemName: String,
-                    itemQuantity: Number,
-                    itemUnitPrice: Number,
-                    itemTotalPrice: Number,
-                }
-            ]
+            receiptItemsList: [String]
         }, { collection: "receipts" });
     }
     createModel() {
@@ -52,10 +44,10 @@ class ReceiptModel {
             }
         });
     }
-    getAllReceipt(response) {
+    getAllReceiptForSpecificUser(response, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Getting all receipts");
-            const query = this.model.find({});
+            const query = this.model.find({ receiptOwnerID: userID });
             try {
                 const receiptList = yield query.exec();
                 response.json({ "receiptList": receiptList });
@@ -65,21 +57,25 @@ class ReceiptModel {
             }
         });
     }
-    getSpecificReceipt(response, receiptID) {
+    getSpecificReceiptForSpecificUser(response, receiptID, userID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.find({ "receiptID": receiptID });
+            const query = this.model.find({ "receiptID": receiptID, "receiptOwnerID": userID });
             try {
                 const receipt = yield query.exec();
-                response.json({ "receipt": receipt });
+                console.log(receipt);
+                response.json(receipt);
             }
             catch (e) {
                 console.log(e);
             }
         });
     }
-    addSpecificReceipt(response, newReceiptData) {
+    addSpecificReceipt(newReceiptData, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a receipt");
+            newReceiptData.receiptOwnerID = userID;
+            const newDate = new Date();
+            newReceiptData.date = newDate;
             try {
                 const newReceipt = new this.model(newReceiptData);
                 const savedReceipt = yield newReceipt.save();

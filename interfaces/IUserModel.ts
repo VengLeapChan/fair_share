@@ -20,7 +20,7 @@ interface IUserModel extends Mongoose.Document {
     senderID: string
   }
   ],
-userReceiptsList: [{receiptID: string}],
+userReceiptsList: [string],
 userBalance: number,
 userFriendRequestsSent: [{requestID: string}],
 userFriendRequestsReceived: [{requestId: string}],

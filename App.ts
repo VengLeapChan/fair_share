@@ -35,26 +35,60 @@ class App {
   private routes(): void {
     let router = express.Router();
 
-    // ROUTES FOR USER
+     //ROUTES FOR DEMONSTRATION 
+     router.get('/app/:userID/receipt', async (req, res) => {
+      try {
+        const userID = req.params.userID;
+        await this.Receipt.getAllReceiptForSpecificUser(res, userID);
+      } catch (e) {
+        console.error(e)
+      }
+    })
 
+    router.get('/app/:userID/receipt/:receiptID', async (req, res) => {
+      const receiptID = req.params.receiptID;
+      const userID = req.params.userID;
+      console.log("get specific receipt ", receiptID)
+      try {
+        await this.Receipt.getSpecificReceiptForSpecificUser(res, receiptID, userID);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    router.post('/app/:userID/receipt', async (req, res) => {
+      const newReceiptId: string = crypto.randomBytes(16).toString("hex");
+      const userID: string = req.params.userID;
+      var receiptObject = req.body;
+
+      receiptObject.receiptID = newReceiptId;
+      
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
+        const updatedUser = await this.User.addReceiptID(newReceiptId, userID)
+        res.send(addedReceipt);
+
+      } catch (e) {
+        console.error(e);
+
+      }
+    });
+
+    // ROUTES FOR USER
     router.get("/app/user", async (req, res) => {
       console.log('Query All User');
       await this.User.retreiveAllUsers(res);
     })
-
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
       await this.User.retreiveSpecificUser(res, id);
     })
-
     router.post('/app/user/', async (req, res) => {
       console.log("Adding a user");
       const id = crypto.randomBytes(16).toString("hex");
       console.log(req.body);
-
       var jsonObj = req.body;
-
       jsonObj.userID = id;
       const doc = new this.User.model(jsonObj);
       try {
@@ -64,79 +98,6 @@ class App {
       catch (e) {
         console.log('object creation failed');
         console.error(e);
-      }
-    });
-
-    // ROUTES FOR RECEIPT
-    router.get('/app/receipt', async (req, res) => {
-      try {
-        await this.Receipt.getAllReceipt(res);
-      } catch (e) {
-        console.error(e)
-      }
-    })
-
-    router.get('/app/receipt/:receiptID', async (req, res) => {
-
-      const receiptID = req.params.receiptID;
-      console.log("get specific receipt ", receiptID)
-      try {
-        await this.Receipt.getSpecificReceipt(res, receiptID)
-      } catch (e) {
-        console.error(e)
-      }
-    })
-    router.post('/app/receipt', async (req, res) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      var jsonObj = req.body;
-
-      jsonObj.receiptID = id;
-
-      try {
-        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
-        console.log(addedReceipt);
-        await this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID)
-
-      } catch (e) {
-        console.error(e);
-
-      }
-    });
-
-
-    router.get('/app/receipt', async (req, res) => {
-      try {
-        await this.Receipt.getAllReceipt(res);
-      } catch (e) {
-        console.error(e)
-      }
-    })
-
-    router.get('/app/receipt/:receiptID', async (req, res) => {
-
-      const receiptID = req.params.receiptID;
-      console.log("get specific receipt ", receiptID)
-      try {
-        await this.Receipt.getSpecificReceipt(res, receiptID)
-      } catch (e) {
-        console.error(e)
-      }
-    })
-    router.post('/app/receipt', async (req, res) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      var jsonObj = req.body;
-
-      jsonObj.receiptID = id;
-
-      try {
-        const addedReceipt = await this.Receipt.addSpecificReceipt(res, jsonObj);
-        await this.User.addReceiptID(res, id, addedReceipt.receiptOwnerID.userID)
-
-      } catch (e) {
-        console.error(e);
-
       }
     });
 
@@ -165,7 +126,6 @@ class App {
 
 
     // ROUTES FOR FRIENDS
-
     router.get("/app/friendRequest", async (req, res) => {
       console.log('Query All Friend Requests');
       await this.FriendRequest.retrieveAllFriendRequests(res);
@@ -196,6 +156,8 @@ class App {
         console.error(e);
       }
     })
+
+   
 
 
     this.expressApp.use('/', router);
