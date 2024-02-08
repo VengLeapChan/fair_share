@@ -57,12 +57,12 @@ class ReceiptModel {
             }
         });
     }
+    // get a specific receipt
     getSpecificReceiptForSpecificUser(response, receiptID, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.find({ "receiptID": receiptID, "receiptOwnerID": userID });
             try {
                 const receipt = yield query.exec();
-                console.log(receipt);
                 response.json(receipt);
             }
             catch (e) {
