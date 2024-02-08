@@ -36,7 +36,7 @@ class App {
     let router = express.Router();
 
      //ROUTES FOR DEMONSTRATION 
-     router.get('/app/:userID/receipt', async (req, res) => {
+     router.get('/app/user/:userID/receipt', async (req, res) => {
       try {
         const userID = req.params.userID;
         await this.Receipt.getAllReceiptForSpecificUser(res, userID);
@@ -45,7 +45,7 @@ class App {
       }
     })
 
-    router.get('/app/:userID/receipt/:receiptID', async (req, res) => {
+    router.get('/app/user/:userID/receipt/:receiptID', async (req, res) => {
       const receiptID = req.params.receiptID;
       const userID = req.params.userID;
       console.log("get specific receipt ", receiptID)
@@ -56,7 +56,7 @@ class App {
       }
     })
 
-    router.post('/app/:userID/receipt', async (req, res) => {
+    router.post('/app/user/:userID/receipt', async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
       const userID: string = req.params.userID;
       var receiptObject = req.body;
@@ -67,10 +67,8 @@ class App {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
         const updatedUser = await this.User.addReceiptID(newReceiptId, userID)
         res.send(addedReceipt);
-
       } catch (e) {
         console.error(e);
-
       }
     });
 
@@ -156,8 +154,6 @@ class App {
         console.error(e);
       }
     })
-
-   
 
 
     this.expressApp.use('/', router);
