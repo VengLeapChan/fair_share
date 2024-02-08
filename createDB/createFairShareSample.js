@@ -218,6 +218,10 @@ db.createCollection("debtOwedTo");
 debtOwedToCollection = db.getCollection("debtOwedTo");
 debtOwedToCollection.deleteMany({});
 
+db.createCollection("receiptSplits");
+receiptSplitCollection = db.getCollection("receiptSplits");
+receiptSplitCollection.deleteMany({});
+
 db.createCollection("groups");
 groupsCollection = db.getCollection("groups");
 groupsCollection.deleteMany({});
