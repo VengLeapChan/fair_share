@@ -38,6 +38,21 @@ class ReceiptItemModel {
             }
         });
     }
+    addReceiptItem(newReceiptItemData, userID, receiptID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("add Receipt Item to Receipt Item Collection");
+            newReceiptItemData.receiptOwnerID = userID;
+            console.log(newReceiptItemData);
+            try {
+                const newReceiptItem = new this.model(newReceiptItemData);
+                const savedReceiptItem = yield newReceiptItem.save();
+                return savedReceiptItem;
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }
 exports.ReceiptItemModel = ReceiptItemModel;
 //# sourceMappingURL=ReceiptItemModel.js.map

@@ -35,17 +35,6 @@ class ReceiptModel {
     }
   }
 
-  public async getAllReceipt(response: any) {
-    console.log("Getting all receipts")
-    const query = this.model.find({});
-    try {
-      const receiptList = await query.exec();
-      response.json(receiptList);
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   public async getAllReceiptForSpecificUser(response: any, userID: string) {
     console.log("Getting all receipts for this user")
     const query = this.model.find({receiptOwnerID: userID});
@@ -68,6 +57,19 @@ class ReceiptModel {
     }
   }
 
+  public async addItemToReceipt(newReceiptItemId:string, receiptID:string){
+    const query = this.model.findOneAndUpdate(
+      {receiptID: receiptID}, {$push: {receiptItemsList: newReceiptItemId}},  { new:true } );
+    try {
+      const receipt = await query.exec();
+      return receipt;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  
+
   public async addSpecificReceipt(newReceiptData: any, userID: string) {
     console.log("Adding a receipt");
     newReceiptData.receiptOwnerID = userID;
@@ -82,6 +84,24 @@ class ReceiptModel {
     }
   }
 
+  public async getAllReceipt(response: any) {
+    console.log("Getting all receipts")
+    const query = this.model.find({});
+    try {
+      const receiptList = await query.exec();
+      response.json(receiptList);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
+
+
+
+
+
+  
   public async addSplitsItem(response: any, receiptSplitID: string, receiptSplitAmount: number, receiptTargetID: string, receiptID: string) {
     console.log("adding to split list");
     const query = this.model.findOneAndUpdate(

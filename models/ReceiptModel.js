@@ -40,19 +40,6 @@ class ReceiptModel {
             }
         });
     }
-    getAllReceipt(response) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("Getting all receipts");
-            const query = this.model.find({});
-            try {
-                const receiptList = yield query.exec();
-                response.json(receiptList);
-            }
-            catch (e) {
-                console.log(e);
-            }
-        });
-    }
     getAllReceiptForSpecificUser(response, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Getting all receipts for this user");
@@ -79,6 +66,18 @@ class ReceiptModel {
             }
         });
     }
+    addItemToReceipt(newReceiptItemId, receiptID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = this.model.findOneAndUpdate({ receiptID: receiptID }, { $push: { receiptItemsList: newReceiptItemId } }, { new: true });
+            try {
+                const receipt = yield query.exec();
+                return receipt;
+            }
+            catch (e) {
+                console.error(e);
+            }
+        });
+    }
     addSpecificReceipt(newReceiptData, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a receipt");
@@ -89,6 +88,19 @@ class ReceiptModel {
                 const newReceipt = new this.model(newReceiptData);
                 const savedReceipt = yield newReceipt.save();
                 return savedReceipt; // Return the saved receipt instead of sending a response
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
+    getAllReceipt(response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Getting all receipts");
+            const query = this.model.find({});
+            try {
+                const receiptList = yield query.exec();
+                response.json(receiptList);
             }
             catch (e) {
                 console.log(e);

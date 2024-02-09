@@ -17,9 +17,11 @@ class UserModel {
       userID: String,
       username: String,
       userEmail: String,
+      //User Receipt List: All the Receipt Owned By the User
+      userReceiptsList: [String],
+
       userDebtsOwed: [String],
       userDebtsOwedTo: [String],
-      userReceiptsList: [String],
       userBalance: Number,
       userFriendRequestsSent: [String],
       userFriendRequestsReceived: [String],
@@ -92,6 +94,17 @@ class UserModel {
     } catch (e) {
     }
   }
+
+
+
+
+
+
+
+
+
+
+  
 
   public async addDebtsOwed(response: any, receiverID: string, senderID: string, amount: number, debtOwedID: string){
     

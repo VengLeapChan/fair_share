@@ -18,7 +18,6 @@ class DebtOwedModel {
           loanAmount: Number,
           debtOwedSenderID: String,
           debtOwedReceiverID: String
-
         }, { collection: "debtOwed" });
     }
 

@@ -14,6 +14,7 @@ const express = require("express");
 const UserModel_1 = require("./models/UserModel");
 const ReceiptModel_1 = require("./models/ReceiptModel");
 const FriendRequestModel_1 = require("./models/FriendRequestModel");
+const ReceiptItemModel_1 = require("./models/ReceiptItemModel");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 class App {
@@ -22,6 +23,7 @@ class App {
         this.middleware();
         this.routes();
         this.User = new UserModel_1.UserModel(mongoDBConnection);
+        this.ReceiptItem = new ReceiptItemModel_1.ReceiptItemModel(mongoDBConnection);
         this.Receipt = new ReceiptModel_1.ReceiptModel(mongoDBConnection);
         this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
     }
@@ -39,6 +41,7 @@ class App {
     routes() {
         let router = express.Router();
         //ROUTES FOR DEMONSTRATION 
+        // Get All Receipt For A User
         router.get('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const userID = req.params.userID;
@@ -48,6 +51,7 @@ class App {
                 console.error(e);
             }
         }));
+        // Get Specific Receipt
         router.get('/app/user/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userID = req.params.userID;
             const receiptID = req.params.receiptID;
@@ -68,6 +72,7 @@ class App {
                 throw e;
             }
         }));
+        // Add A Receipt
         router.post('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptId = crypto.randomBytes(16).toString("hex");
             const userID = req.params.userID;
@@ -75,9 +80,26 @@ class App {
             receiptObject.receiptID = newReceiptId;
             try {
                 const addedReceipt = yield this.Receipt.addSpecificReceipt(receiptObject, userID);
-                // i think u wanted to send updated user instead
                 const updatedUser = yield this.User.addReceiptID(newReceiptId, userID);
                 res.send(addedReceipt);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        // add receipt item
+        router.post('/app/user/:userID/receipt/:receiptID/receiptItem', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const newReceiptItemId = crypto.randomBytes(16).toString("hex");
+            const receiptID = req.params.receiptID;
+            const userID = req.params.userID;
+            var receiptItemObject = req.body;
+            receiptItemObject.receiptID = receiptID;
+            receiptItemObject.receiptItemID = newReceiptItemId;
+            try {
+                const addedReceiptItem = yield this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
+                const updatedReceipt = yield this.Receipt.addItemToReceipt(newReceiptItemId, receiptID);
+                console.log(updatedReceipt);
+                res.send(addedReceiptItem);
             }
             catch (e) {
                 console.error(e);

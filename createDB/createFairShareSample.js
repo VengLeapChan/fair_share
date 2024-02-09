@@ -15,9 +15,9 @@ usersCollection.insertMany([
     userID: "100",
     username: "leapvchan",
     userEmail: "leapvchan@gmail.com",
+    userReceiptsList: [],
     userDebtsOwed: [],
     userDebtsOwedTo: [],
-    userReceiptsList: [],
     userBalance: 0,
     userFriendRequestsSent: [],
     userFriendRequestsReceived: [],
@@ -27,9 +27,10 @@ usersCollection.insertMany([
     userID: "200",
     username: "summerxia",
     userEmail: "summer@gmail.com",
+    userReceiptsList: [],
+
     userDebtsOwed: [],
     userDebtsOwedTo: [],
-    userReceiptsList: [],
     userBalance: 0,
     userFriendRequestsSent: [],
     userFriendRequestsReceived: [],
@@ -39,9 +40,10 @@ usersCollection.insertMany([
     userID: "300",
     username: "robertWidjaja",
     userEmail: "robertWidjaja@gmail.com",
+    userReceiptsList: [],
+
     userDebtsOwed: [],
     userDebtsOwedTo: [],
-    userReceiptsList: [],
     userBalance: 0,
     userFriendRequestsSent: [],
     userFriendRequestsReceived: [],
@@ -179,49 +181,51 @@ receiptItemsCollection.find({}).forEach((item) => {
   );
 });
 
-db.createCollection("friendRequests");
-friendRequestCollection = db.getCollection("friendRequests");
-friendRequestCollection.deleteMany({});
 
-friendRequestCollection.insertMany([
-  {
-    requestID: "1",
-    friendRequestSenderID: "100",
-    friendRequestReceiverID: "300",
-    status: "pending",
-  },
-  {
-    requestID: "2",
-    friendRequestSenderID: "100",
-    friendRequestReceiverID: "200",
-    status: "pending",
-  },
-]);
 
-friendRequestCollection.find({}).map((FR) => {
-  console.log(FR.friendRequestSenderID.userID);
-  usersCollection.findOneAndUpdate(
-    { userID: FR.friendRequestSenderID },
-    { $push: { userFriendRequestsSent: { requestID: FR.requestID } } }
-  );
-  usersCollection.findOneAndUpdate(
-    { userID: FR.friendRequestReceiverID },
-    { $push: { userFriendRequestsReceived: { requestID: FR.requestID } } }
-  );
-});
+// db.createCollection("friendRequests");
+// friendRequestCollection = db.getCollection("friendRequests");
+// friendRequestCollection.deleteMany({});
 
-db.createCollection("debtOwed");
-debtOwedCollection = db.getCollection("debtOwed");
-debtOwedCollection.deleteMany({});
+// friendRequestCollection.insertMany([
+//   {
+//     requestID: "1000",
+//     friendRequestSenderID: "100",
+//     friendRequestReceiverID: "300",
+//     status: "pending",
+//   },
+//   {
+//     requestID: "2000",
+//     friendRequestSenderID: "100",
+//     friendRequestReceiverID: "200",
+//     status: "pending",
+//   },
+// ]);
 
-db.createCollection("debtOwedTo");
-debtOwedToCollection = db.getCollection("debtOwedTo");
-debtOwedToCollection.deleteMany({});
+// friendRequestCollection.find({}).map((FR) => {
+//   console.log(FR.friendRequestSenderID.userID);
+//   usersCollection.findOneAndUpdate(
+//     { userID: FR.friendRequestSenderID },
+//     { $push: { userFriendRequestsSent: { requestID: FR.requestID } } }
+//   );
+//   usersCollection.findOneAndUpdate(
+//     { userID: FR.friendRequestReceiverID },
+//     { $push: { userFriendRequestsReceived: { requestID: FR.requestID } } }
+//   );
+// });
 
-db.createCollection("receiptSplits");
-receiptSplitCollection = db.getCollection("receiptSplits");
-receiptSplitCollection.deleteMany({});
+// db.createCollection("debtOwed");
+// debtOwedCollection = db.getCollection("debtOwed");
+// debtOwedCollection.deleteMany({});
 
-db.createCollection("groups");
-groupsCollection = db.getCollection("groups");
-groupsCollection.deleteMany({});
+// db.createCollection("debtOwedTo");
+// debtOwedToCollection = db.getCollection("debtOwedTo");
+// debtOwedToCollection.deleteMany({});
+
+// db.createCollection("receiptSplits");
+// receiptSplitCollection = db.getCollection("receiptSplits");
+// receiptSplitCollection.deleteMany({});
+
+// db.createCollection("groups");
+// groupsCollection = db.getCollection("groups");
+// groupsCollection.deleteMany({});

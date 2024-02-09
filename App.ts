@@ -2,6 +2,7 @@ import * as express from 'express';
 import { UserModel } from "./models/UserModel";
 import { ReceiptModel } from './models/ReceiptModel';
 import { FriendRequestModel } from './models/FriendRequestModel';
+import {ReceiptItemModel} from './models/ReceiptItemModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
 
@@ -10,12 +11,14 @@ class App {
   public User: UserModel;
   public Receipt: ReceiptModel;
   public FriendRequest: FriendRequestModel;
+  public ReceiptItem: ReceiptItemModel;
 
   constructor(mongoDBConnection: string) {
     this.expressApp = express();
     this.middleware();
     this.routes();
     this.User = new UserModel(mongoDBConnection);
+    this.ReceiptItem = new ReceiptItemModel(mongoDBConnection);
     this.Receipt = new ReceiptModel(mongoDBConnection);
     this.FriendRequest = new FriendRequestModel(mongoDBConnection);
   }
@@ -36,7 +39,8 @@ class App {
     let router = express.Router();
 
      //ROUTES FOR DEMONSTRATION 
-     router.get('/app/user/:userID/receipt', async (req, res) => {
+     // Get All Receipt For A User
+    router.get('/app/user/:userID/receipt', async (req, res) => {
       try {
         const userID = req.params.userID;
         await this.Receipt.getAllReceiptForSpecificUser(res, userID);
@@ -45,6 +49,7 @@ class App {
       }
     })
     
+    // Get Specific Receipt
     router.get('/app/user/:userID/receipt/:receiptID', async( req, res) => {
 
       const userID = req.params.userID;
@@ -73,6 +78,7 @@ class App {
 
     }); 
 
+    // Add A Receipt
     router.post('/app/user/:userID/receipt', async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
       const userID: string = req.params.userID;
@@ -82,7 +88,6 @@ class App {
       
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
-        // i think u wanted to send updated user instead
         const updatedUser = await this.User.addReceiptID(newReceiptId, userID)
         res.send(addedReceipt);
       } catch (e) {
@@ -90,6 +95,31 @@ class App {
       }
     });
 
+    // add receipt item
+    router.post('/app/user/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
+      const newReceiptItemId: string = crypto.randomBytes(16).toString("hex");
+      const receiptID = req.params.receiptID;
+      const userID: string = req.params.userID;
+
+      var receiptItemObject = req.body;
+      receiptItemObject.receiptID = receiptID; 
+      receiptItemObject.receiptItemID = newReceiptItemId;
+      
+      try {
+        const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
+        const updatedReceipt = await this.Receipt.addItemToReceipt(newReceiptItemId, receiptID);
+        console.log(updatedReceipt);
+        res.send(addedReceiptItem);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+
+
+
+
+    
     // ROUTES FOR USER
     router.get("/app/user", async (req, res) => {
       console.log('Query All User');

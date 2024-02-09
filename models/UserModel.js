@@ -22,9 +22,10 @@ class UserModel {
             userID: String,
             username: String,
             userEmail: String,
+            //User Receipt List: All the Receipt Owned By the User
+            userReceiptsList: [String],
             userDebtsOwed: [String],
             userDebtsOwedTo: [String],
-            userReceiptsList: [String],
             userBalance: Number,
             userFriendRequestsSent: [String],
             userFriendRequestsReceived: [String],
