@@ -96,11 +96,6 @@ class ReceiptModel {
   }
 
 
-
-
-
-
-
   
   public async addSplitsItem(response: any, receiptSplitID: string, receiptSplitAmount: number, receiptTargetID: string, receiptID: string) {
     console.log("adding to split list");
