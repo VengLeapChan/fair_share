@@ -21,7 +21,6 @@ class ReceiptModel {
       receiptUsersList: [String],
       receiptOwnerID: String,
       receiptSplitList: [String],
-      receiptItemsList: [String]
     }, { collection: "receipts" }
     )
   }
@@ -47,26 +46,26 @@ class ReceiptModel {
   }
 
   // get a specific receipt
-  public async getSpecificReceipt(response: any, receiptID: string) {
-    const query = this.model.find({ "receiptID": receiptID });
+  public async getSpecificReceipt(response: any, userID:string, receiptID: string) {
+    const query = this.model.find({receiptOwnerID: userID, receiptID: receiptID});
     try {
       const receipt = await query.exec();
-      response.json({ "receipt": receipt });
+      return receipt;
     } catch (e) {
       console.log(e)
     }
   }
 
-  public async addItemToReceipt(newReceiptItemId:string, receiptID:string){
-    const query = this.model.findOneAndUpdate(
-      {receiptID: receiptID}, {$push: {receiptItemsList: newReceiptItemId}},  { new:true } );
-    try {
-      const receipt = await query.exec();
-      return receipt;
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  // public async addItemToReceipt(newReceiptItemId:string, receiptID:string){
+  //   const query = this.model.findOneAndUpdate(
+  //     {receiptID: receiptID}, {$push: {receiptItemsList: newReceiptItemId}},  { new:true } );
+  //   try {
+  //     const receipt = await query.exec();
+  //     return receipt;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
 
   
 

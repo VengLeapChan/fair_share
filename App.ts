@@ -49,7 +49,7 @@ class App {
       }
     })
     
-    // Get Specific Receipt
+    // Get Specific Receipt -- need to change
     router.get('/app/user/:userID/receipt/:receiptID', async( req, res) => {
 
       const userID = req.params.userID;
@@ -59,12 +59,10 @@ class App {
 
       try {
 
-        const user = await this.User.returnSpecificUser(res, userID);
-        const userReceiptsList = user.userReceiptsList;
-        const foundReceipt = userReceiptsList.includes(receiptID);
+        const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
 
-        if(foundReceipt){
-          this.Receipt.getSpecificReceipt(res, receiptID);
+        if(receipt){
+          res.send(receipt);
         } else {
 
           res.json("This user does not have that receipt.")
@@ -88,7 +86,6 @@ class App {
       
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
-        const updatedUser = await this.User.addReceiptID(newReceiptId, userID)
         res.send(addedReceipt);
       } catch (e) {
         console.error(e);
@@ -107,8 +104,6 @@ class App {
       
       try {
         const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
-        const updatedReceipt = await this.Receipt.addItemToReceipt(newReceiptItemId, receiptID);
-        console.log(updatedReceipt);
         res.send(addedReceiptItem);
       } catch (e) {
         console.error(e);
@@ -121,10 +116,10 @@ class App {
 
     
     // ROUTES FOR USER
-    router.get("/app/user", async (req, res) => {
-      console.log('Query All User');
-      await this.User.retreiveAllUsers(res);
-    })
+    // router.get("/app/user", async (req, res) => {
+    //   console.log('Query All User');
+    //   await this.User.retreiveAllUsers(res);
+    // })
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
@@ -147,84 +142,67 @@ class App {
       }
     });
 
-    router.post('/app/:userID/:receiptID/splitItems', async (req, res) => {
-      const id = crypto.randomBytes(16).toString("hex");
+    // router.post('/app/:userID/:receiptID/splitItems', async (req, res) => {
+    //   const id = crypto.randomBytes(16).toString("hex");
 
-      const userID = req.params.userID;
-      const receiptID = req.params.receiptID;
-      var jsonObj = req.body;
+    //   const userID = req.params.userID;
+    //   const receiptID = req.params.receiptID;
+    //   var jsonObj = req.body;
 
-      const receiptSplitID = id;
-      const receiptSplitAmount = jsonObj.receiptSplitAmount;
-      const receiptTargetID = jsonObj.receiptTargetID;
+    //   const receiptSplitID = id;
+    //   const receiptSplitAmount = jsonObj.receiptSplitAmount;
+    //   const receiptTargetID = jsonObj.receiptTargetID;
 
-      try {
-        await this.Receipt.addSplitsItem(res, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID);
-        await this.User.addDebtsOwed(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
-        await this.User.addDebtsOwedTo(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
+    //   try {
+    //     await this.Receipt.addSplitsItem(res, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID);
+    //     await this.User.addDebtsOwed(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
+    //     await this.User.addDebtsOwedTo(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
 
-        res.json({ message: "Split item added successfully." });
-      } catch (e) {
-        console.error(e);
-        throw e;
-      }
-    });
+    //     res.json({ message: "Split item added successfully." });
+    //   } catch (e) {
+    //     console.error(e);
+    //     throw e;
+    //   }
+    // });
 
 
-    // ROUTES FOR FRIENDS
-    router.get("/app/friendRequest", async (req, res) => {
-      console.log('Query All Friend Requests');
-      await this.FriendRequest.retrieveAllFriendRequests(res);
-    });
+    // // ROUTES FOR FRIENDS
+    // router.get("/app/friendRequest", async (req, res) => {
+    //   console.log('Query All Friend Requests');
+    //   await this.FriendRequest.retrieveAllFriendRequests(res);
+    // });
 
-    router.get("/app/friendRequest/:id", async (req, res) => {
-      console.log('Get Friend Request By ID');
-      const id = req.params.id;
-      await this.FriendRequest.retrieveSpecificFriendRequest(res, id);
-    });
+    // router.get("/app/friendRequest/:id", async (req, res) => {
+    //   console.log('Get Friend Request By ID');
+    //   const id = req.params.id;
+    //   await this.FriendRequest.retrieveSpecificFriendRequest(res, id);
+    // });
 
-    router.post("/app/friendRequest", async (req, res) => {
+    // router.post("/app/friendRequest", async (req, res) => {
 
-      console.log("Create Friend Request");
-      const newFriendRequest = req.body;
+    //   console.log("Create Friend Request");
+    //   const newFriendRequest = req.body;
 
-      const id = crypto.randomBytes(16).toString("hex");
-      newFriendRequest.requestID = id;
-      const senderId = newFriendRequest.friendRequestSenderID;
-      const receiverId = newFriendRequest.friendRequestReceiverID;
+    //   const id = crypto.randomBytes(16).toString("hex");
+    //   newFriendRequest.requestID = id;
+    //   const senderId = newFriendRequest.friendRequestSenderID;
+    //   const receiverId = newFriendRequest.friendRequestReceiverID;
       
 
-      const doc = new this.FriendRequest.model(newFriendRequest);
+    //   const doc = new this.FriendRequest.model(newFriendRequest);
 
-      try {
-        await doc.save();
-        this.User.addToFriendRequestReceived(res, receiverId, senderId, newFriendRequest.requestID)
-        this.User.addToFriendRequestSent(res, receiverId, senderId, newFriendRequest.requestID)
-        res.send('{"id":"' + id + '"}');
-      }
-      catch (e) {
-        console.log('object creation failed');
-        console.error(e);
-      }
-    })
+    //   try {
+    //     await doc.save();
+    //     this.User.addToFriendRequestReceived(res, receiverId, senderId, newFriendRequest.requestID)
+    //     this.User.addToFriendRequestSent(res, receiverId, senderId, newFriendRequest.requestID)
+    //     res.send('{"id":"' + id + '"}');
+    //   }
+    //   catch (e) {
+    //     console.log('object creation failed');
+    //     console.error(e);
+    //   }
+    // })
 
-    router.get('/app/receipt/:receiptID', async( req, res) => {
-
-      const receiptID = req.params.receiptID;
-
-      console.log("getting receipt: ", receiptID);
-
-      try {
-
-        await this.Receipt.getSpecificReceipt(res, receiptID);
-
-      } catch (e) {
-
-        console.log(e);
-        throw e;
-      }
-
-    }); 
 
     router.get('/app/receipt', async( req, res) => {
 

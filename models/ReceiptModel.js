@@ -26,7 +26,6 @@ class ReceiptModel {
             receiptUsersList: [String],
             receiptOwnerID: String,
             receiptSplitList: [String],
-            receiptItemsList: [String]
         }, { collection: "receipts" });
     }
     createModel() {
@@ -54,30 +53,28 @@ class ReceiptModel {
         });
     }
     // get a specific receipt
-    getSpecificReceipt(response, receiptID) {
+    getSpecificReceipt(response, userID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.find({ "receiptID": receiptID });
+            const query = this.model.find({ receiptOwnerID: userID, receiptID: receiptID });
             try {
                 const receipt = yield query.exec();
-                response.json({ "receipt": receipt });
+                return receipt;
             }
             catch (e) {
                 console.log(e);
             }
         });
     }
-    addItemToReceipt(newReceiptItemId, receiptID) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.findOneAndUpdate({ receiptID: receiptID }, { $push: { receiptItemsList: newReceiptItemId } }, { new: true });
-            try {
-                const receipt = yield query.exec();
-                return receipt;
-            }
-            catch (e) {
-                console.error(e);
-            }
-        });
-    }
+    // public async addItemToReceipt(newReceiptItemId:string, receiptID:string){
+    //   const query = this.model.findOneAndUpdate(
+    //     {receiptID: receiptID}, {$push: {receiptItemsList: newReceiptItemId}},  { new:true } );
+    //   try {
+    //     const receipt = await query.exec();
+    //     return receipt;
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // }
     addSpecificReceipt(newReceiptData, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a receipt");

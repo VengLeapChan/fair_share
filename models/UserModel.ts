@@ -18,7 +18,6 @@ class UserModel {
       username: String,
       userEmail: String,
       //User Receipt List: All the Receipt Owned By the User
-      userReceiptsList: [String],
 
       userDebtsOwed: [String],
       userDebtsOwedTo: [String],
@@ -61,10 +60,12 @@ class UserModel {
     }
   }
   public async returnSpecificUser(response: any, userID: string) {
+  
     const query = this.model.findOne({"userID": userID});
     
     try {
       const user = await query.exec();
+      console.log("returning specific user successfully");
       return user
     } catch (e) {
       console.log(e)
@@ -84,16 +85,16 @@ class UserModel {
     }
   }
 
-  public async addReceiptID(receiptID: string, userID: string){
-    // query to find user based on userID and updated the receiptList 
-    const query = this.model.findOneAndUpdate(
-      {userID: userID}, {$push: {userReceiptsList: receiptID}},  { new:true } );
-    try {
-      const user = await query.exec();
-      return user;
-    } catch (e) {
-    }
-  }
+  // public async addReceiptID(receiptID: string, userID: string){
+  //   // query to find user based on userID and updated the receiptList 
+  //   const query = this.model.findOneAndUpdate(
+  //     {userID: userID}, {$push: {userReceiptsList: receiptID}},  { new:true } );
+  //   try {
+  //     const user = await query.exec();
+  //     return user;
+  //   } catch (e) {
+  //   }
+  // }
 
 
 

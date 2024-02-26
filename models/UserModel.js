@@ -23,7 +23,6 @@ class UserModel {
             username: String,
             userEmail: String,
             //User Receipt List: All the Receipt Owned By the User
-            userReceiptsList: [String],
             userDebtsOwed: [String],
             userDebtsOwedTo: [String],
             userBalance: Number,
@@ -72,6 +71,7 @@ class UserModel {
             const query = this.model.findOne({ "userID": userID });
             try {
                 const user = yield query.exec();
+                console.log("returning specific user successfully");
                 return user;
             }
             catch (e) {
@@ -93,18 +93,16 @@ class UserModel {
             }
         });
     }
-    addReceiptID(receiptID, userID) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // query to find user based on userID and updated the receiptList 
-            const query = this.model.findOneAndUpdate({ userID: userID }, { $push: { userReceiptsList: receiptID } }, { new: true });
-            try {
-                const user = yield query.exec();
-                return user;
-            }
-            catch (e) {
-            }
-        });
-    }
+    // public async addReceiptID(receiptID: string, userID: string){
+    //   // query to find user based on userID and updated the receiptList 
+    //   const query = this.model.findOneAndUpdate(
+    //     {userID: userID}, {$push: {userReceiptsList: receiptID}},  { new:true } );
+    //   try {
+    //     const user = await query.exec();
+    //     return user;
+    //   } catch (e) {
+    //   }
+    // }
     addDebtsOwed(response, receiverID, senderID, amount, debtOwedID) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.findOneAndUpdate({ userID: receiverID }, {

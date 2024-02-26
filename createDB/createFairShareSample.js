@@ -15,7 +15,6 @@ usersCollection.insertMany([
     userID: "100",
     username: "leapvchan",
     userEmail: "leapvchan@gmail.com",
-    userReceiptsList: [],
     userDebtsOwed: [],
     userDebtsOwedTo: [],
     userBalance: 0,
@@ -27,7 +26,6 @@ usersCollection.insertMany([
     userID: "200",
     username: "summerxia",
     userEmail: "summer@gmail.com",
-    userReceiptsList: [],
 
     userDebtsOwed: [],
     userDebtsOwedTo: [],
@@ -40,7 +38,6 @@ usersCollection.insertMany([
     userID: "300",
     username: "robertWidjaja",
     userEmail: "robertWidjaja@gmail.com",
-    userReceiptsList: [],
 
     userDebtsOwed: [],
     userDebtsOwedTo: [],
@@ -64,7 +61,6 @@ receiptsCollection.insertMany([
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
-    receiptItemsList: [],
   },
   {
     receiptID: "2",
@@ -74,7 +70,6 @@ receiptsCollection.insertMany([
     receiptUsersList: [],
     receiptOwnerID: "200",
     receiptSplitList: [],
-    receiptItemsList: [],
   },
   {
     receiptID: "3",
@@ -84,7 +79,6 @@ receiptsCollection.insertMany([
     receiptUsersList: [],
     receiptOwnerID: "300",
     receiptSplitList: [],
-    receiptItemsList: [],
   },
   {
     receiptID: "4",
@@ -94,7 +88,6 @@ receiptsCollection.insertMany([
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
-    receiptItemsList: [],
   },
   {
     receiptID: "5",
@@ -104,17 +97,16 @@ receiptsCollection.insertMany([
     receiptUsersList: [],
     receiptOwnerID: "100",
     receiptSplitList: [],
-    receiptItemsList: [],
   },
 ]);
 
 // update owner's receipt ID
-receiptsCollection.find({}).forEach((receipt) => {
-  usersCollection.findOneAndUpdate(
-    { userID: receipt.receiptOwnerID },
-    { $push: { userReceiptsList: receipt.receiptID } }
-  );
-});
+// receiptsCollection.find({}).forEach((receipt) => {
+//   usersCollection.findOneAndUpdate(
+//     { userID: receipt.receiptOwnerID },
+//     { $push: { userReceiptsList: receipt.receiptID } }
+//   );
+// });
 
 db.createCollection("receiptItems");
 receiptItemsCollection = db.getCollection("receiptItems");
@@ -173,13 +165,13 @@ receiptItemsCollection.insertMany([
   },
 ]);
 
-receiptItemsCollection.find({}).forEach((item) => {
-  const { receiptID, receiptItemID } = item;
-  receiptsCollection.findOneAndUpdate(
-    { receiptID: receiptID },
-    { $push: { receiptItemsList: receiptItemID } }
-  );
-});
+// receiptItemsCollection.find({}).forEach((item) => {
+//   const { receiptID, receiptItemID } = item;
+//   receiptsCollection.findOneAndUpdate(
+//     { receiptID: receiptID },
+//     { $push: { receiptItemsList: receiptItemID } }
+//   );
+// });
 
 
 
