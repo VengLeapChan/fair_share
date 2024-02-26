@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": [
+      "ES2015",
+      "es2018",
+      "dom",
+      "ES6"
+    ],
+    "target": "es6",
+    "moduleResolution": "node",
+    "rootDir": "./",
+    "sourceMap": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "includes": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
