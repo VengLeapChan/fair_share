@@ -40,6 +40,7 @@ class App {
 
      //ROUTES FOR DEMONSTRATION 
      // Get All Receipt For A User
+     // Needs to make test 
     router.get('/app/user/:userID/receipt', async (req, res) => {
       try {
         const userID = req.params.userID;
@@ -49,7 +50,8 @@ class App {
       }
     })
     
-    // Get Specific Receipt -- need to change
+    // Get Specific Receipt
+    // Needs to make test 
     router.get('/app/user/:userID/receipt/:receiptID', async( req, res) => {
 
       const userID = req.params.userID;
@@ -58,18 +60,13 @@ class App {
       console.log("getting receipt: ", receiptID, " from user: ", userID);
 
       try {
-
         const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
-
         if(receipt){
           res.send(receipt);
         } else {
-
           res.json("This user does not have that receipt.")
         }
-
       } catch (e) {
-
         console.log(e);
         throw e;
       }

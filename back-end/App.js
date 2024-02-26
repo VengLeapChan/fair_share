@@ -42,6 +42,7 @@ class App {
         let router = express.Router();
         //ROUTES FOR DEMONSTRATION 
         // Get All Receipt For A User
+        // Needs to make test 
         router.get('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const userID = req.params.userID;
@@ -51,7 +52,8 @@ class App {
                 console.error(e);
             }
         }));
-        // Get Specific Receipt -- need to change
+        // Get Specific Receipt
+        // Needs to make test 
         router.get('/app/user/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userID = req.params.userID;
             const receiptID = req.params.receiptID;
