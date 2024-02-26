@@ -8,7 +8,6 @@ interface IReceiptModel extends Mongoose.Document {
   receiptUsersList: [string],
   receiptOwnerID: string,
   receiptSplitList: [string],
-  receiptItemsList:[string],
 }
 
 export { IReceiptModel };

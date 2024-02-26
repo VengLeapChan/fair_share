@@ -6,7 +6,6 @@ interface IUserModel extends Mongoose.Document {
   userEmail: string,
   userDebtsOwed: [string],
   userDebtsOwedTo: [string],
-  userReceiptsList: [string],
   userBalance: number,
   userFriendRequestsSent: [string],
   userFriendRequestsReceived: [string],
