@@ -1,3 +1,0 @@
-load ('createDB/createFairShareSample.js');
-load ('createDB/dropAllCollections.js');
-load('createDB/createAdminUser.js');
