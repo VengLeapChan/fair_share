@@ -12,7 +12,6 @@
 }
 
 
-
 .small-screen-buttons {
   display: none;
 }
@@ -36,18 +35,6 @@
     display: block;
     margin-bottom: 16px;
   }
-}
-
-
-
-
-.top-mid-container {
-  position: fixed;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 100;
 }
 
 
