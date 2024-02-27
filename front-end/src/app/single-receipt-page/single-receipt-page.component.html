@@ -1,14 +1,35 @@
-<mat-card class="example-card container">
+<mat-card class="container my-5">
   <mat-card-header>
-    <mat-card-title>{{receipt.receiptName}}</mat-card-title>
-    <mat-card-subtitle>{{receipt.date | date}}</mat-card-subtitle>
+    <mat-card-title>{{ receipt.receiptName }}</mat-card-title>
+    <mat-card-title>{{ receipt.receiptTotalAmount | currency }}</mat-card-title>
+    <mat-card-subtitle>{{ receipt.date | date }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
+    <table mat-table [dataSource]="dataSource" class="">
+      <ng-container matColumnDef="receiptItemName">
+        <th mat-header-cell *matHeaderCellDef>Item Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.receiptItemName }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="receiptItemQuantity">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.receiptItemQuantity | currency }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="receiptItemUnitPrice">
+        <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.receiptItemUnitPrice | currency }}</td>
+      </ng-container>
+      <ng-container matColumnDef="receiptItemTotalPrice">
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let element">{{ element.receiptItemTotalPrice | currency }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button>LIKE</button>

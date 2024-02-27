@@ -47,11 +47,11 @@
             <input type="number" id="itemQuantity{{i}}" name="itemQuantity{{i}}" class="form-control" [(ngModel)]="item.receiptItemQuantity" (input)="calculateTotalPrice(item)" required>
           </div>
           <div class="col">
-            <label for="itemUnitPrice{{i}}">Unit Price:</label>
+            <label for="itemUnitPrice{{i}}">Unit Price ($):</label>
             <input type="number" id="itemUnitPrice{{i}}" name="itemUnitPrice{{i}}" class="form-control" [(ngModel)]="item.receiptItemUnitPrice" (input)="calculateTotalPrice(item)" required>
           </div>
           <div class="col">
-            <label for="itemTotalPrice{{i}}">Total Price:</label>
+            <label for="itemTotalPrice{{i}}">Total Price ($):</label>
             <input type="number" id="itemTotalPrice{{i}}" name="itemTotalPrice{{i}}" class="form-control" [(ngModel)]="item.receiptItemTotalPrice" readonly>
           </div>
           <hr>

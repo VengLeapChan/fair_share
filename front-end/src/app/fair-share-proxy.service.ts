@@ -33,4 +33,9 @@ export class FairShareProxyService {
   getReceiptItems(receiptID: string) {
     return this.httpClient.get<any>( this.hostUrl + 'app/user/' + this.userID + '/receipt/' + receiptID + '/receiptItems' );
   }
+
+  deleteReceipt(receiptID: string) {
+    return this.httpClient.delete(this.hostUrl + 'app/user/' + this.userID + '/receipt/' + receiptID);
+    
+  }
 }

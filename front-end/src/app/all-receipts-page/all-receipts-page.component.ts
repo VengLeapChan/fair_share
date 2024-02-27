@@ -14,9 +14,20 @@ export class AllReceiptsPageComponent {
   dataSource = new MatTableDataSource<any>();
 
   constructor(private fairShareProxyService: FairShareProxyService, router: Router) {
-    fairShareProxyService.getAllReceipts().subscribe( (result: any) => 
+    this.fairShareProxyService.getAllReceipts().subscribe( (result: [any]) => 
     {
-      this.dataSource = new MatTableDataSource<any>(result.receiptList);
+      this.dataSource = new MatTableDataSource<any>(result);
+    });
+  }
+
+  onDelete(receiptID:string) {
+    this.fairShareProxyService.deleteReceipt(receiptID).subscribe({
+      next: () => {
+        this.fairShareProxyService.getAllReceipts().subscribe( (result: [any]) => 
+    {
+      this.dataSource = new MatTableDataSource<any>(result);
+    });
+      }
     });
   }
 
