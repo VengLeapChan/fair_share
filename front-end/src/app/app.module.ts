@@ -42,7 +42,7 @@ import {MatCardModule} from '@angular/material/card';
     MatTableModule,
     MatButtonModule,
     HttpClientModule,
-    MatCardModule,
+    MatCardModule
   ],
   providers: [FairShareProxyService, provideAnimationsAsync()],
   bootstrap: [AppComponent]

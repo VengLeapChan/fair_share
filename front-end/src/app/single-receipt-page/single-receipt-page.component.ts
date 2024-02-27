@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FairShareProxyService } from '../fair-share-proxy.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-single-receipt-page',
@@ -16,8 +17,12 @@ export class SingleReceiptPageComponent {
   displayedColumns: string[] = ['receiptItemName', 'receiptItemQuantity', 'receiptItemUnitPrice', 'receiptItemTotalPrice'];
   dataSource = new MatTableDataSource<any>();
 
-  constructor(private fairShareProxyService: FairShareProxyService, private route: ActivatedRoute) {
-    this.receiptID = route.snapshot.params['receiptID'];
+  constructor(
+    private fairShareProxyService: FairShareProxyService, 
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService,
+    private router: Router) {
+    this.receiptID = activatedRoute.snapshot.params['receiptID'];
     fairShareProxyService.getASingleReceipt(this.receiptID).subscribe( (result: any) => 
     {
       this.receipt = result; 
@@ -25,6 +30,15 @@ export class SingleReceiptPageComponent {
     fairShareProxyService.getReceiptItems(this.receiptID).subscribe ((result) => {
       console.log(result);
       this.dataSource = result;
+    })
+  }
+
+  onDelete(receiptID:string) {
+    this.fairShareProxyService.deleteReceipt(receiptID).subscribe({
+      next: () => {
+        this.toastr.success("You have deleted receipt with ID: " + receiptID, "Successfully Deleted Receipt!")
+        this.router.navigate(['/receipt']);
+      }
     })
   }
 
