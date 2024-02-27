@@ -10,6 +10,11 @@ import { CreateNewReceiptPageComponent } from './create-new-receipt-page/create-
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import {MatButtonModule} from '@angular/material/button';
+import {HttpClientModule } from '@angular/common/http';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -22,7 +27,11 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
+    MatButtonModule,
+    HttpClientModule,
+    MatCardModule,
   ],
   providers: [FairShareProxyService, provideAnimationsAsync()],
   bootstrap: [AppComponent]
