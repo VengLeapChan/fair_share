@@ -1,6 +1,6 @@
 <mat-card class="container my-5">
   <mat-card-header class="justify-content-center text-center">
-    <mat-card-title>{{ receipt.receiptName }}</mat-card-title>
+    <mat-card-title>{{ receipt.receiptName + " Receipt"}}</mat-card-title>
     <mat-card-title>{{ receipt.receiptTotalAmount | currency }}</mat-card-title>
     <mat-card-subtitle>{{ receipt.date | date }}</mat-card-subtitle>
   </mat-card-header>
@@ -20,11 +20,15 @@
       </ng-container>
       <ng-container matColumnDef="receiptItemUnitPrice">
         <th mat-header-cell *matHeaderCellDef>Unit Price</th>
-        <td mat-cell *matCellDef="let element">{{ element.receiptItemUnitPrice | currency }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.receiptItemUnitPrice | currency }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="receiptItemTotalPrice">
         <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let element">{{ element.receiptItemTotalPrice | currency }}</td>
+        <td mat-cell *matCellDef="let element">
+          {{ element.receiptItemTotalPrice | currency }}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -32,7 +36,11 @@
     </table>
   </mat-card-content>
   <mat-card-actions class="d-flex justify-content-between">
-    <button mat-button [routerLink]="'/receipt'">Back To All Receipts <mat-icon>keyboard_backspace</mat-icon></button>
-    <button mat-button class="text-danger">Delete<mat-icon>delete_sweep</mat-icon></button>
+    <button mat-button [routerLink]="'/receipt'">
+      Back To All Receipts <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <button mat-button class="text-danger">
+      Delete<mat-icon>delete_sweep</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
