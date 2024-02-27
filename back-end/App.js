@@ -33,8 +33,8 @@ class App {
         this.expressApp.use((req, res, next) => {
             // Set the Access-Control-Allow-Origin header to allow all domains to access resources
             res.header("Access-Control-Allow-Origin", "*");
-            // Set the Access-Control-Allow-Headers to specify which headers can be used in the actual request
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             next();
         });
     }
@@ -97,6 +97,18 @@ class App {
             try {
                 const addedReceipt = yield this.Receipt.addSpecificReceipt(receiptObject, userID);
                 res.send(addedReceipt);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        // delete A specific receipt 
+        router.delete("/app/user/:userID/receipt/:receiptID", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const userID = req.params.userID;
+            const receiptID = req.params.receiptID;
+            console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
+            try {
+                yield this.Receipt.deleteOneReceiptForASpecificUser(res, userID, receiptID);
             }
             catch (e) {
                 console.error(e);
