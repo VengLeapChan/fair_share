@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FairShareProxyService } from './fair-share-proxy.service';
@@ -10,6 +11,9 @@ import { CreateNewReceiptPageComponent } from './create-new-receipt-page/create-
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { timeout } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,16 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    HttpClientModule, 
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      progressBar: true,
+      progressAnimation: 'increasing',
+      preventDuplicates: true
+    })
   ],
   providers: [FairShareProxyService, provideAnimationsAsync()],
   bootstrap: [AppComponent]

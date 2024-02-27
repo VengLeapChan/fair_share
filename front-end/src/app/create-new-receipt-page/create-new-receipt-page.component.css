@@ -1,0 +1,54 @@
+.buttons-container {
+  position: fixed;
+  bottom: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center; 
+}
+
+.buttons-container button {
+  margin: 0 5px;
+}
+
+
+
+.small-screen-buttons {
+  display: none;
+}
+
+.small-screen-button {
+  font-size: 20px;
+  margin: 0 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .buttons-container .btn {
+    display: none;
+  }
+
+  .small-screen-buttons {
+    display: block;
+    margin-bottom: 16px;
+  }
+}
+
+
+
+
+.top-mid-container {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 100;
+}
+
+
+
