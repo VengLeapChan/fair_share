@@ -60,7 +60,6 @@ class UserModel {
     }
   }
   public async returnSpecificUser(response: any, userID: string) {
-  
     const query = this.model.findOne({"userID": userID});
     
     try {

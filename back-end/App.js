@@ -68,8 +68,24 @@ class App {
                 }
             }
             catch (e) {
-                console.log(e);
+                console.error(e);
                 throw e;
+            }
+        }));
+        // retreiveItems of a specific receipt
+        router.get('/app/user/:userID/receipt/:receiptID/receiptItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const receiptID = req.params.receiptID;
+            const userID = req.params.userID;
+            try {
+                const receipt = yield this.Receipt.getSpecificReceipt(res, userID, receiptID);
+                if (receipt) {
+                    const items = yield this.ReceiptItem.retreiveItems(receiptID);
+                    res.send(items);
+                }
+                res.json("This user does not have that receipt.");
+            }
+            catch (e) {
+                console.error(e);
             }
         }));
         // Add A Receipt

@@ -25,7 +25,7 @@ class ReceiptItemModel {
             receiptItemQuantity: Number,
             receiptItemUnitPrice: Number,
             receiptItemTotalPrice: Number,
-        }, { collection: "items" });
+        }, { collection: "receiptItems" });
     }
     createModel() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,6 +50,20 @@ class ReceiptItemModel {
             }
             catch (e) {
                 console.log(e);
+            }
+        });
+    }
+    retreiveItems(receiptID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("retreiving list of items for a specific receipt");
+            const query = this.model.find({ receiptID: receiptID });
+            try {
+                const items = yield query.exec();
+                console.log(items);
+                return items;
+            }
+            catch (e) {
+                console.error(e);
             }
         });
     }
