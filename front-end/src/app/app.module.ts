@@ -13,6 +13,10 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatIconModule } from '@angular/material/icon';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { MatTableModule } from '@angular/material/table';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +38,11 @@ import { ToastrModule } from 'ngx-toastr';
       progressBar: true,
       progressAnimation: 'increasing',
       preventDuplicates: true
-    })
+    }),
+    MatTableModule,
+    MatButtonModule,
+    HttpClientModule,
+    MatCardModule,
   ],
   providers: [FairShareProxyService, provideAnimationsAsync()],
   bootstrap: [AppComponent]

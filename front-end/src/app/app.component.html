@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top custom-navbar-bg">
   <div class="container">
-    <a class="navbar-brand d-flex justify-content-center align-items-center" href="#">
+    <a class="navbar-brand d-flex justify-content-center align-items-center" [routerLink]="''">
       <img src="../assets/fairsharelogo.png" alt="Fair Share Logo" style="max-width: 150px; height: auto; max-height: 100px; margin-left: 12px;">
     </a>
     <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
@@ -9,15 +9,15 @@
     <div class="collapse navbar-collapse" [ngClass]="{ 'show': isNavbarCollapsed }">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-end">
         <li class="nav-item">
-          <a class="nav-link me-3" href="/receipts">Receipts</a>
+          <a class="nav-link me-3" [routerLink]="'/receipt'">Receipts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-3" href="/createReceipt">Create Receipt</a>
+          <a class="nav-link me-3" [routerLink]="'/createReceipt'">Create Receipt</a>
         </li>
       </ul>
       <ul class="navbar-nav text-end">
         <li class="nav-item">
-          <a class="nav-link" href="#"><mat-icon>logout</mat-icon></a>
+          <a class="nav-link" [routerLink]="''"><mat-icon>logout</mat-icon></a>
         </li>
       </ul>
     </div>
@@ -26,6 +26,6 @@
 
 
 
-<div class="container">
+<div class="container my-auto ">
   <router-outlet />
 </div>

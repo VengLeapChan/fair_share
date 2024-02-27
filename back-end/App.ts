@@ -67,11 +67,31 @@ class App {
           res.json("This user does not have that receipt.")
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         throw e;
       }
 
     }); 
+
+    // retreiveItems of a specific receipt
+    router.get('/app/user/:userID/receipt/:receiptID/receiptItems', async (req, res) => {
+      const receiptID = req.params.receiptID;
+      const userID = req.params.userID;
+
+      try {
+        const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
+
+        if (receipt) {
+          const items = await this.ReceiptItem.retreiveItems(receiptID);
+          res.send(items);
+        }
+
+        res.json("This user does not have that receipt.")
+
+      } catch (e) {
+        console.error(e);
+      }
+    })
 
     // Add A Receipt
     router.post('/app/user/:userID/receipt', async (req, res) => {

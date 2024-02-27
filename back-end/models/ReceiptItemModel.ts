@@ -20,7 +20,7 @@ class ReceiptItemModel {
       receiptItemQuantity: Number,
       receiptItemUnitPrice: Number,
       receiptItemTotalPrice: Number,
-    }, {collection: "items"} 
+    }, {collection: "receiptItems"} 
     )
   }
 
@@ -44,7 +44,20 @@ class ReceiptItemModel {
       } catch (e) {
         console.log(e)
       }
-  
+  }
+
+  public async retreiveItems(receiptID: string) {
+    console.log("retreiving list of items for a specific receipt");
+    const query = this.model.find({receiptID: receiptID});
+
+    try {
+      const items = await query.exec();
+      console.log(items);
+      return items; 
+
+    } catch (e) {
+      console.error(e);
+    }
   }
 
 }
