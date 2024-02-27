@@ -78,6 +78,7 @@ class ReceiptModel {
     addSpecificReceipt(newReceiptData, userID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a receipt");
+            console.log("addspecificreceipt", newReceiptData);
             newReceiptData.receiptOwnerID = userID;
             const newDate = new Date();
             newReceiptData.date = newDate;

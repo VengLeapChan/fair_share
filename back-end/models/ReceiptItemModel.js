@@ -42,7 +42,7 @@ class ReceiptItemModel {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("add Receipt Item to Receipt Item Collection");
             newReceiptItemData.receiptOwnerID = userID;
-            console.log("this is newReceiptData", newReceiptItemData);
+            console.log("this is addReceiptItem", newReceiptItemData);
             try {
                 const newReceiptItem = new this.model(newReceiptItemData);
                 const savedReceiptItem = yield newReceiptItem.save();

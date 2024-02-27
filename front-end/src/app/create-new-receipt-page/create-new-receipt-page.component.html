@@ -4,7 +4,7 @@
     <div class="col-md-10">
       <div class="receipt-name mb-2 d-flex flex-column">
         <label for="receiptName" style="text-align: center; font-size: 24px; margin-bottom: 10px;">Receipt Name:</label>
-        <input type="text" id="receiptName" name="receiptName" class="form-control text-" [(ngModel)]="newReceiptData.name" required>
+        <input type="text" id="receiptName" name="receiptName" class="form-control text-" [(ngModel)]="newReceiptData.receiptName" required>
       </div>
     </div>
     <div class="col-md-2">
@@ -14,7 +14,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">$</span> 
           </div>
-          <input type="number" id="receiptAmount" name="receiptAmount" [(ngModel)]="newReceiptData.amount" class="form-control text-center" readonly> <!-- Added form-control and text-center -->
+          <input type="number" id="receiptAmount" name="receiptAmount" [(ngModel)]="newReceiptData.receiptTotalAmount" class="form-control text-center" readonly> <!-- Added form-control and text-center -->
         </div>
       </div>
     </div>
@@ -31,11 +31,11 @@
       <form #receiptForm="ngForm" (submit)="onSubmit()">
         <div class="form-group" style="display: none;">
           <label for="receiptName">Receipt Name:</label>
-          <input type="text" id="receiptName" name="receiptName" class="form-control bigger-height" [(ngModel)]="newReceiptData.name" required>
+          <input type="text" id="receiptName" name="receiptName" class="form-control bigger-height" [(ngModel)]="newReceiptData.receiptName" required>
         </div>        
         <div class="form-group" style="display: none;">
           <label for="receiptAmount">Receipt Amount:</label>
-          <input type="number" id="receiptAmount" name="receiptAmount" class="form-control" [value]="newReceiptData.amount" readonly>
+          <input type="number" id="receiptAmount" name="receiptAmount" class="form-control" [value]="newReceiptData.receiptTotalAmount" readonly>
         </div>
         <div *ngFor="let item of newReceiptData.items; let i = index" class="form-row align-items-center mb-3">
           <div class="col">

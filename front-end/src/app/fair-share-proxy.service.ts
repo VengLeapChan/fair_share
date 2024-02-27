@@ -22,7 +22,6 @@ export class FairShareProxyService {
     return this.httpClient.post(url, newReceiptItemData);
   }
 
-
   getAllReceipts() {
     return this.httpClient.get<any>( this.hostUrl + 'app/user/' + this.userID + '/receipt');
   }
