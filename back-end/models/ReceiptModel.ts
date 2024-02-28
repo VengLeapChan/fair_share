@@ -50,7 +50,7 @@ class ReceiptModel {
     const query = this.model.deleteOne({receiptOwnerID: userID, receiptID: receiptID});
     try {
       const res = await query.exec();
-      response.json(res);
+      response.status(200).json(res);
     } catch (e) {
       console.log(e)
     }

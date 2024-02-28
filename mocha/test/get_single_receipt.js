@@ -45,7 +45,7 @@ describe('Test to get specific receipt for a user', function () {
             .get('/app/user/100/receipt/999')
             .end(function (err, res) {
                 expect(err).to.be.null;
-                expect(res).to.have.status(200);
+                expect(res).to.have.status(404);
                 expect(res.body).to.equal("This user does not have that receipt.");
             });
     });

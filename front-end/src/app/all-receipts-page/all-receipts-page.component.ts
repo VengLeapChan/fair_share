@@ -28,7 +28,7 @@ export class AllReceiptsPageComponent {
   onDelete(receiptID:string) {
     this.fairShareProxyService.deleteReceipt(receiptID).subscribe({
       next: () => {
-        this.toastr.success("You have deleted receipt with ID: " + receiptID, "Successfully Deleted Receipt!")
+        this.toastr.success("You have deleted receipt with ID.", "Successfully Deleted Receipt!")
         this.fairShareProxyService.getAllReceipts().subscribe( (result: [any]) => 
     {
       this.dataSource = new MatTableDataSource<any>(result);

@@ -36,7 +36,7 @@ export class SingleReceiptPageComponent {
   onDelete(receiptID:string) {
     this.fairShareProxyService.deleteReceipt(receiptID).subscribe({
       next: () => {
-        this.toastr.success("You have deleted receipt with ID: " + receiptID, "Successfully Deleted Receipt!")
+        this.toastr.success("You have deleted receipt a receipt.", "Successfully Deleted Receipt!")
         this.router.navigate(['/receipt']);
       }
     })

@@ -64,7 +64,7 @@ class App {
                     res.send(receipt);
                 }
                 else {
-                    res.json("This user does not have that receipt.");
+                    res.status(404).json("This user does not have that receipt.");
                 }
             }
             catch (e) {
