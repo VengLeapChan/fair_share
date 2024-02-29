@@ -16,6 +16,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule} from '@angular/material/button';
 import { MatCardModule} from '@angular/material/card';
+import { LogInPageComponent } from './log-in-page/log-in-page.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { MatCardModule} from '@angular/material/card';
     SingleReceiptPageComponent,
     CreateNewReceiptPageComponent,
     WelcomePageComponent,
+    LogInPageComponent,
   ],
   imports: [
     BrowserModule,
