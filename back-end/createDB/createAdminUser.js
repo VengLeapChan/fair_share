@@ -3,7 +3,7 @@ db = db.getSiblingDB("admin");
 
 // create an admin user
 db.createUser({
-  user: "dbAdmin",
+  user: "anotherAdmin",
   pwd: "test",
   roles: ["readWriteAnyDatabase", "dbAdminAnyDatabase", "clusterAdmin"],
 });
