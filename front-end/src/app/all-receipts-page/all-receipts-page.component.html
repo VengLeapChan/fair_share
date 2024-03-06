@@ -1,41 +1,50 @@
-<div class="container my-5">
-  <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="receiptName">
-      <th mat-header-cell *matHeaderCellDef>Receipt Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.receiptName }}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-    <ng-container matColumnDef="receiptTotalAmount">
-      <th mat-header-cell *matHeaderCellDef>Total</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.receiptTotalAmount | currency }}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date | date }}</td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" [routerLink]="['/receipt/' + element.receiptID]">
-          <mat-icon>pageview</mat-icon>
-        </button>
-      </td>
-      <td mat-footer-cell *matFooterCellDef>
-        <button mat-button color="primary" [routerLink]="'/createReceipt'">
-          Add A New Receipt <mat-icon>add</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+<mat-card class="container my-5">
+  <mat-card-header class="justify-content-center text-center">
+    <mat-card-title>All Receipts</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="dataSource" class="">
+      <ng-container matColumnDef="receiptName">
+        <th mat-header-cell *matHeaderCellDef>Receipt Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.receiptName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="receiptTotalAmount">
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.receiptTotalAmount | currency }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.date | date }}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            class="text-danger"
+            (click)="onDelete(element.receiptID)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="black"
+            [routerLink]="['/receipt/' + element.receiptID]"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-  </table>
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card-content>
+  <mat-card-actions class="d-flex justify-content-end">
+    <button mat-button color="primary" [routerLink]="'/createReceipt'">
+      New Receipt<mat-icon>add</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

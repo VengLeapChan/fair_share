@@ -39,7 +39,18 @@ class ReceiptModel {
     const query = this.model.find({receiptOwnerID: userID});
     try {
       const receiptList = await query.exec();
-      response.json({ "receiptList": receiptList });
+      response.json(receiptList);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  public async deleteOneReceiptForASpecificUser(response: any, userID: string, receiptID:string) {
+    console.log("Deleting A Receipt with ID: " + receiptID)
+    const query = this.model.deleteOne({receiptOwnerID: userID, receiptID: receiptID});
+    try {
+      const res = await query.exec();
+      response.status(200).json(res);
     } catch (e) {
       console.log(e)
     }
@@ -47,7 +58,7 @@ class ReceiptModel {
 
   // get a specific receipt
   public async getSpecificReceipt(response: any, userID:string, receiptID: string) {
-    const query = this.model.find({receiptOwnerID: userID, receiptID: receiptID});
+    const query = this.model.findOne({receiptOwnerID: userID, receiptID: receiptID});
     try {
       const receipt = await query.exec();
       return receipt;
@@ -56,18 +67,7 @@ class ReceiptModel {
     }
   }
 
-  // public async addItemToReceipt(newReceiptItemId:string, receiptID:string){
-  //   const query = this.model.findOneAndUpdate(
-  //     {receiptID: receiptID}, {$push: {receiptItemsList: newReceiptItemId}},  { new:true } );
-  //   try {
-  //     const receipt = await query.exec();
-  //     return receipt;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
 
-  
 
   public async addSpecificReceipt(newReceiptData: any, userID: string) {
     console.log("Adding a receipt");
@@ -89,6 +89,7 @@ class ReceiptModel {
     const query = this.model.find({});
     try {
       const receiptList = await query.exec();
+      console.log(receiptList);
       response.json(receiptList);
     } catch (e) {
       console.log(e)

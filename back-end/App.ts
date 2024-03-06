@@ -29,8 +29,8 @@ class App {
     this.expressApp.use((req, res, next) => {
       // Set the Access-Control-Allow-Origin header to allow all domains to access resources
       res.header("Access-Control-Allow-Origin", "*");
-      // Set the Access-Control-Allow-Headers to specify which headers can be used in the actual request
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
       next();
     });
   }
@@ -64,7 +64,7 @@ class App {
         if(receipt){
           res.send(receipt);
         } else {
-          res.json("This user does not have that receipt.")
+          res.status(404).json("This user does not have that receipt.")
         }
       } catch (e) {
         console.error(e);
@@ -108,6 +108,20 @@ class App {
         console.error(e);
       }
     });
+
+    // delete A specific receipt 
+    router.delete("/app/user/:userID/receipt/:receiptID", async (req, res) => {
+      
+      const userID = req.params.userID;
+      const receiptID = req.params.receiptID;
+      console.log("Deleting Receipt wiht Receipt ID: " + receiptID); 
+      try {
+        await this.Receipt.deleteOneReceiptForASpecificUser(res, userID, receiptID);
+      } catch (e) {
+        console.error(e);
+      }
+
+    })
 
     // add receipt item
     router.post('/app/user/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
