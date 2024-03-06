@@ -35,6 +35,7 @@ class ReceiptModel {
   }
 
   public async getAllReceiptForSpecificUser(response: any, userID: string) {
+    console.log(this.dbConnectionString);
     console.log("Getting all receipts for this user")
     const query = this.model.find({receiptOwnerID: userID});
     try {

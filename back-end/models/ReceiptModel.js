@@ -41,6 +41,7 @@ class ReceiptModel {
     }
     getAllReceiptForSpecificUser(response, userID) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(this.dbConnectionString);
             console.log("Getting all receipts for this user");
             const query = this.model.find({ receiptOwnerID: userID });
             try {
