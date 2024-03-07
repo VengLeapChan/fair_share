@@ -141,21 +141,12 @@ class App {
       }
     });
 
-
-
-
-
-    
-    // ROUTES FOR USER
-    // router.get("/app/user", async (req, res) => {
-    //   console.log('Query All User');
-    //   await this.User.retreiveAllUsers(res);
-    // })
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
       await this.User.retreiveSpecificUser(res, id);
     })
+    
     router.post('/app/user/', async (req, res) => {
       console.log("Adding a user");
       const id = crypto.randomBytes(16).toString("hex");
@@ -173,29 +164,7 @@ class App {
       }
     });
 
-    // router.post('/app/:userID/:receiptID/splitItems', async (req, res) => {
-    //   const id = crypto.randomBytes(16).toString("hex");
-
-    //   const userID = req.params.userID;
-    //   const receiptID = req.params.receiptID;
-    //   var jsonObj = req.body;
-
-    //   const receiptSplitID = id;
-    //   const receiptSplitAmount = jsonObj.receiptSplitAmount;
-    //   const receiptTargetID = jsonObj.receiptTargetID;
-
-    //   try {
-    //     await this.Receipt.addSplitsItem(res, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID);
-    //     await this.User.addDebtsOwed(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
-    //     await this.User.addDebtsOwedTo(res, userID, receiptTargetID, receiptSplitAmount, receiptSplitID);
-
-    //     res.json({ message: "Split item added successfully." });
-    //   } catch (e) {
-    //     console.error(e);
-    //     throw e;
-    //   }
-    // });
-
+    
 
     // // ROUTES FOR FRIENDS
     // router.get("/app/friendRequest", async (req, res) => {
@@ -233,25 +202,6 @@ class App {
     //     console.error(e);
     //   }
     // })
-
-
-    router.get('/app/receipt', async( req, res) => {
-
-
-      console.log("getting all receipt: ");
-
-      try {
-
-        await this.Receipt.getAllReceipt(res);
-
-      } catch (e) {
-
-        console.log(e);
-        throw e;
-      }
-
-    }); 
-
 
     this.expressApp.use('/', router);
 

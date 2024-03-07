@@ -7,6 +7,7 @@ interface IReceiptItemModel extends Mongoose.Document {
   receiptItemQuantity: number,
   receiptItemUnitPrice: number,
   receiptItemTotalPrice: number,
+  userID: string
 }
 
 export {IReceiptItemModel};
