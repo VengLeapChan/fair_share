@@ -59,7 +59,7 @@ receiptsCollection.insertMany([
     receiptTotalAmount: 5,
     date: new Date(),
     receiptUsersList: [],
-    receiptOwnerID: "100",
+    userID: "100",
     receiptSplitList: [],
   },
   {
@@ -68,7 +68,7 @@ receiptsCollection.insertMany([
     receiptTotalAmount: 7,
     date: new Date(),
     receiptUsersList: [],
-    receiptOwnerID: "200",
+    userID: "200",
     receiptSplitList: [],
   },
   {
@@ -77,7 +77,7 @@ receiptsCollection.insertMany([
     receiptTotalAmount: 5,
     date: new Date(),
     receiptUsersList: [],
-    receiptOwnerID: "300",
+    userID: "300",
     receiptSplitList: [],
   },
   {
@@ -86,7 +86,7 @@ receiptsCollection.insertMany([
     receiptTotalAmount: 5,
     date: new Date(),
     receiptUsersList: [],
-    receiptOwnerID: "100",
+    userID: "100",
     receiptSplitList: [],
   },
   {
@@ -95,7 +95,7 @@ receiptsCollection.insertMany([
     receiptTotalAmount: 5,
     date: new Date(),
     receiptUsersList: [],
-    receiptOwnerID: "100",
+    userID: "100",
     receiptSplitList: [],
   },
 ]);
@@ -119,6 +119,7 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 5.0,
     receiptItemTotalPrice: 5.0,
+    userID: "100",
   },
 
   {
@@ -128,6 +129,7 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 2.22,
     receiptItemTotalPrice: 2.22,
+    userID: "100",
   },
 
   {
@@ -137,6 +139,7 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 4.32,
     receiptItemTotalPrice: 4.32,
+    userID: "100",
   },
 
   {
@@ -146,6 +149,7 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 9.99,
     receiptItemTotalPrice: 9.99,
+    userID: "100",
   },
   {
     receiptItemID: "14",
@@ -154,6 +158,7 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 7.52,
     receiptItemTotalPrice: 7.52,
+    userID: "100",
   },
   {
     receiptItemID: "15",
@@ -162,16 +167,10 @@ receiptItemsCollection.insertMany([
     receiptItemQuantity: 1,
     receiptItemUnitPrice: 4.99,
     receiptItemTotalPrice: 4.99,
+    userID: "300",
   },
 ]);
 
-// receiptItemsCollection.find({}).forEach((item) => {
-//   const { receiptID, receiptItemID } = item;
-//   receiptsCollection.findOneAndUpdate(
-//     { receiptID: receiptID },
-//     { $push: { receiptItemsList: receiptItemID } }
-//   );
-// });
 
 
 

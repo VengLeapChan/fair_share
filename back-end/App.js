@@ -214,8 +214,7 @@ class App {
             }
         }));
         this.expressApp.use('/', router);
-        //this.expressApp.use('/', express.static(__dirname+'/pages'));
-        this.expressApp.use('/', express.static(__dirname + '/angularDist'));
+        this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
     }
 }
 exports.App = App;

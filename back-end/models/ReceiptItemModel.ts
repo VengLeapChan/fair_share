@@ -20,6 +20,7 @@ class ReceiptItemModel {
       receiptItemQuantity: Number,
       receiptItemUnitPrice: Number,
       receiptItemTotalPrice: Number,
+      userID: Number
     }, {collection: "receiptItems"} 
     )
   }
@@ -36,6 +37,8 @@ class ReceiptItemModel {
   public async addReceiptItem(newReceiptItemData: any, userID: string, receiptID: string) {
     console.log("add Receipt Item to Receipt Item Collection")
     newReceiptItemData.receiptOwnerID = userID;
+    newReceiptItemData.receiptID = receiptID;
+
     console.log("this is addReceiptItem", newReceiptItemData);
       try {
         const newReceiptItem = new this.model(newReceiptItemData);
@@ -54,7 +57,6 @@ class ReceiptItemModel {
       const items = await query.exec();
       console.log(items);
       return items; 
-
     } catch (e) {
       console.error(e);
     }

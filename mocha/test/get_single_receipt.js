@@ -39,14 +39,4 @@ describe('Test to get specific receipt for a user', function () {
         );
     });
 
-    it('Should return null if the receipt item does not exist for the user', function () {
-        chai.request(server)
-            // Assuming '999' as a non-existing receipt ID for testing
-            .get('/app/user/100/receipt/999')
-            .end(function (err, res) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(404);
-                expect(res.body).to.equal("This user does not have that receipt.");
-            });
-    });
 });

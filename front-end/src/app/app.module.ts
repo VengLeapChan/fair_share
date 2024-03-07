@@ -46,7 +46,7 @@ import { LogInPageComponent } from './log-in-page/log-in-page.component';
     HttpClientModule,
     MatCardModule
   ],
-  providers: [FairShareProxyService, provideAnimationsAsync()],
+  providers: [FairShareProxyService, provideAnimationsAsync(),],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
