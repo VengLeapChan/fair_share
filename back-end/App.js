@@ -11,14 +11,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express = require("express");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const UserModel_1 = require("./models/UserModel");
 const ReceiptModel_1 = require("./models/ReceiptModel");
 const FriendRequestModel_1 = require("./models/FriendRequestModel");
 const ReceiptItemModel_1 = require("./models/ReceiptItemModel");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
+const GooglePassport_1 = require("./GooglePassport");
+const passport = require("passport");
 class App {
     constructor(mongoDBConnection) {
+        this.googlePassportObj = new GooglePassport_1.default();
         this.expressApp = express();
         this.middleware();
         this.routes();
@@ -27,19 +32,49 @@ class App {
         this.Receipt = new ReceiptModel_1.ReceiptModel(mongoDBConnection);
         this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
     }
+    // private middleware(): void {
+    //   this.expressApp.use(bodyParser.json());
+    //   this.expressApp.use(bodyParser.urlencoded({ extended: false }));
+    //   this.expressApp.use((req, res, next) => {
+    //     // Set the Access-Control-Allow-Origin header to allow all domains to access resources
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    //     next();
+    //   });
+    // }
+    // Configure Express middleware.
     middleware() {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(bodyParser.urlencoded({ extended: false }));
-        this.expressApp.use((req, res, next) => {
-            // Set the Access-Control-Allow-Origin header to allow all domains to access resources
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            next();
-        });
+        this.expressApp.use(session({ secret: 'keyboard cat' }));
+        this.expressApp.use(cookieParser());
+        this.expressApp.use(passport.initialize());
+        this.expressApp.use(passport.session());
+    }
+    validateAuth(req, res, next) {
+        if (req.isAuthenticated()) {
+            console.log("user is authenticated");
+            return next();
+        }
+        console.log("user is not authenticated");
+        res.redirect('/');
     }
     routes() {
         let router = express.Router();
+        router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+        router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+            console.log("successfully authenticated user and returned to callback page.");
+            console.log("redirecting to /8080");
+            res.redirect('/8080');
+        });
+        router.get('/app/user/info', this.validateAuth, (req, res) => {
+            console.log('Query All list');
+            console.log("user info:" + JSON.stringify(req.user));
+            console.log("user info:" + JSON.stringify(req.user.id));
+            console.log("user info:" + JSON.stringify(req.user.displayName));
+            res.json({ "username": req.user.displayName, "id": req.user.id });
+        });
         //ROUTES FOR DEMONSTRATION 
         // Get All Receipt For A User
         // Needs to make test 
@@ -214,6 +249,9 @@ class App {
             }
         }));
         this.expressApp.use('/', router);
+        this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
+        this.expressApp.use('/images', express.static(__dirname + '/img'));
+        this.expressApp.use('/', express.static(__dirname + '/angularDist'));
         this.expressApp.use('/', express.static(__dirname + '/pages'));
     }
 }

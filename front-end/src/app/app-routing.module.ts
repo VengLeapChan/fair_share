@@ -6,10 +6,10 @@ import { SingleReceiptPageComponent } from './single-receipt-page/single-receipt
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
 const routes: Routes = [
-  {path: "", component: WelcomePageComponent},
-  {path:"receipt", component: AllReceiptsPageComponent},
-  {path:"createReceipt", component: CreateNewReceiptPageComponent},
-  {path:"receipt/:receiptID", component: SingleReceiptPageComponent}
+  { path: "", component: WelcomePageComponent },
+  { path: "receipt", component: AllReceiptsPageComponent },
+  { path: "createReceipt", component: CreateNewReceiptPageComponent },
+  { path: "receipt/:receiptID", component: SingleReceiptPageComponent }
 ];
 
 @NgModule({
