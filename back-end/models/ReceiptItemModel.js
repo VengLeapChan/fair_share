@@ -25,6 +25,7 @@ class ReceiptItemModel {
             receiptItemQuantity: Number,
             receiptItemUnitPrice: Number,
             receiptItemTotalPrice: Number,
+            userID: Number
         }, { collection: "receiptItems" });
     }
     createModel() {
@@ -42,6 +43,7 @@ class ReceiptItemModel {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("add Receipt Item to Receipt Item Collection");
             newReceiptItemData.receiptOwnerID = userID;
+            newReceiptItemData.receiptID = receiptID;
             console.log("this is addReceiptItem", newReceiptItemData);
             try {
                 const newReceiptItem = new this.model(newReceiptItemData);

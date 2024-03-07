@@ -56,7 +56,7 @@ receiptsCollection.insertMany([
   {
     receiptID: "1",
     receiptName: "Grocery Store",
-    receiptTotalAmount: 5,
+    receiptTotalAmount: 12,
     date: new Date(),
     receiptUsersList: [],
     userID: "100",
@@ -65,7 +65,7 @@ receiptsCollection.insertMany([
   {
     receiptID: "2",
     receiptName: "Trader Joe's",
-    receiptTotalAmount: 7,
+    receiptTotalAmount: 15,
     date: new Date(),
     receiptUsersList: [],
     userID: "200",
@@ -74,7 +74,7 @@ receiptsCollection.insertMany([
   {
     receiptID: "3",
     receiptName: "Safeway",
-    receiptTotalAmount: 5,
+    receiptTotalAmount: 15,
     date: new Date(),
     receiptUsersList: [],
     userID: "300",
@@ -83,7 +83,7 @@ receiptsCollection.insertMany([
   {
     receiptID: "4",
     receiptName: "Fred Meyer's",
-    receiptTotalAmount: 5,
+    receiptTotalAmount: 11,
     date: new Date(),
     receiptUsersList: [],
     userID: "100",
@@ -127,8 +127,8 @@ receiptItemsCollection.insertMany([
     receiptID: "4",
     receiptItemName: "Banana",
     receiptItemQuantity: 1,
-    receiptItemUnitPrice: 2.22,
-    receiptItemTotalPrice: 2.22,
+    receiptItemUnitPrice: 11,
+    receiptItemTotalPrice: 11,
     userID: "100",
   },
 
@@ -156,8 +156,8 @@ receiptItemsCollection.insertMany([
     receiptID: "1",
     receiptItemName: "Raisins",
     receiptItemQuantity: 1,
-    receiptItemUnitPrice: 7.52,
-    receiptItemTotalPrice: 7.52,
+    receiptItemUnitPrice: 7,
+    receiptItemTotalPrice: 7,
     userID: "100",
   },
   {
@@ -165,9 +165,18 @@ receiptItemsCollection.insertMany([
     receiptID: "3",
     receiptItemName: "Curry Cubes",
     receiptItemQuantity: 1,
-    receiptItemUnitPrice: 4.99,
-    receiptItemTotalPrice: 4.99,
+    receiptItemUnitPrice: 15,
+    receiptItemTotalPrice: 15,
     userID: "300",
+  },
+  {
+    receiptItemID: "16",
+    receiptID: "2",
+    receiptItemName: "Chicken Katsu",
+    receiptItemQuantity: 1,
+    receiptItemUnitPrice: 15,
+    receiptItemTotalPrice: 15,
+    userID: "200",
   },
 ]);
 

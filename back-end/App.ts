@@ -68,7 +68,6 @@ class App {
         }
       } catch (e) {
         console.error(e);
-        throw e;
       }
 
     }); 
@@ -85,8 +84,10 @@ class App {
           const items = await this.ReceiptItem.retreiveItems(receiptID);
           res.send(items);
         }
-
-        res.json("This user does not have that receipt.")
+ 
+        else {
+          res.json("This user does not have that receipt.")
+        }
 
       } catch (e) {
         console.error(e);

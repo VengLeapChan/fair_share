@@ -24,7 +24,7 @@ class ReceiptModel {
             receiptTotalAmount: Number,
             date: Date,
             receiptUsersList: [String],
-            receiptOwnerID: String,
+            userID: String,
             receiptSplitList: [String],
         }, { collection: "receipts" });
     }
@@ -43,7 +43,7 @@ class ReceiptModel {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(this.dbConnectionString);
             console.log("Getting all receipts for this user");
-            const query = this.model.find({ receiptOwnerID: userID });
+            const query = this.model.find({ userID: userID });
             try {
                 const receiptList = yield query.exec();
                 response.json(receiptList);
@@ -56,7 +56,7 @@ class ReceiptModel {
     deleteOneReceiptForASpecificUser(response, userID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Deleting A Receipt with ID: " + receiptID);
-            const query = this.model.deleteOne({ receiptOwnerID: userID, receiptID: receiptID });
+            const query = this.model.deleteOne({ userID: userID, receiptID: receiptID });
             try {
                 const res = yield query.exec();
                 response.status(200).json(res);
@@ -69,7 +69,7 @@ class ReceiptModel {
     // get a specific receipt
     getSpecificReceipt(response, userID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = this.model.findOne({ receiptOwnerID: userID, receiptID: receiptID });
+            const query = this.model.findOne({ userID: userID, receiptID: receiptID });
             try {
                 const receipt = yield query.exec();
                 return receipt;
@@ -83,7 +83,7 @@ class ReceiptModel {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Adding a receipt");
             console.log("addspecificreceipt", newReceiptData);
-            newReceiptData.receiptOwnerID = userID;
+            newReceiptData.userID = userID;
             const newDate = new Date();
             newReceiptData.date = newDate;
             try {
@@ -93,39 +93,6 @@ class ReceiptModel {
             }
             catch (e) {
                 console.log(e);
-            }
-        });
-    }
-    getAllReceipt(response) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("Getting all receipts");
-            const query = this.model.find({});
-            try {
-                const receiptList = yield query.exec();
-                console.log(receiptList);
-                response.json(receiptList);
-            }
-            catch (e) {
-                console.log(e);
-            }
-        });
-    }
-    addSplitsItem(response, receiptSplitID, receiptSplitAmount, receiptTargetID, receiptID) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("adding to split list");
-            const query = this.model.findOneAndUpdate({ receiptID: receiptID }, {
-                $push: {
-                    //FIX THIS: add a query to add into split, call it after calling this function
-                    receiptSplitList: receiptSplitID,
-                    receiptUsersList: receiptTargetID
-                }
-            }, { new: true });
-            try {
-                return yield query.exec();
-            }
-            catch (e) {
-                console.log(e);
-                throw e;
             }
         });
     }
