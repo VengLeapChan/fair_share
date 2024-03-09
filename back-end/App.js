@@ -66,6 +66,16 @@ class App {
             console.log("redirecting to home");
             res.redirect('/#/');
         });
+        router.get('/app/logout', this.validateAuth, (req, res) => {
+            req.logout((err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Error logging out');
+                    return;
+                }
+                res.status(200).json({ success: true });
+            });
+        });
         router.get('/app/user/count', this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const count = yield this.User.retreiveAllUsersCount(res);
@@ -76,13 +86,18 @@ class App {
                 res.status(500).json({ error: 'An error occurred while retrieving user count' });
             }
         }));
+        router.get('/app/check-auth', this.validateAuth, (req, res) => {
+            res.status(200).json({ authenticated: true });
+        });
         //ROUTES FOR DEMONSTRATION 
         // Get All Receipt For A User
         // Needs to make test 
-        router.get('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get('/app/receipt', this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userId = userObject.id;
             try {
-                const userID = req.params.userID;
-                yield this.Receipt.getAllReceiptForSpecificUser(res, userID);
+                yield this.Receipt.getAllReceiptForSpecificUser(res, userId);
             }
             catch (e) {
                 console.error(e);
@@ -90,12 +105,14 @@ class App {
         }));
         // Get Specific Receipt
         // Needs to make test 
-        router.get('/app/user/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const userID = req.params.userID;
+        router.get('/app/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userId = userObject.id;
             const receiptID = req.params.receiptID;
-            console.log("getting receipt: ", receiptID, " from user: ", userID);
+            console.log("getting receipt: ", receiptID, " from user: ", userId);
             try {
-                const receipt = yield this.Receipt.getSpecificReceipt(res, userID, receiptID);
+                const receipt = yield this.Receipt.getSpecificReceipt(res, userId, receiptID);
                 if (receipt) {
                     res.send(receipt);
                 }
@@ -108,11 +125,13 @@ class App {
             }
         }));
         // retreiveItems of a specific receipt
-        router.get('/app/user/:userID/receipt/:receiptID/receiptItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get('/app/receipt/:receiptID/receiptItems', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const receiptID = req.params.receiptID;
-            const userID = req.params.userID;
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userId = userObject.id;
             try {
-                const receipt = yield this.Receipt.getSpecificReceipt(res, userID, receiptID);
+                const receipt = yield this.Receipt.getSpecificReceipt(res, userId, receiptID);
                 if (receipt) {
                     const items = yield this.ReceiptItem.retreiveItems(receiptID);
                     res.send(items);
@@ -126,9 +145,13 @@ class App {
             }
         }));
         // Add A Receipt
-        router.post('/app/user/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.post('/app/receipt', this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptId = crypto.randomBytes(16).toString("hex");
-            const userID = req.params.userID;
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userID = userObject.id;
+            console.log(profile);
+            console.log(userID);
             var receiptObject = req.body;
             receiptObject.receiptID = newReceiptId;
             try {
@@ -140,33 +163,43 @@ class App {
             }
         }));
         // delete A specific receipt 
-        router.delete("/app/user/:userID/receipt/:receiptID", (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const userID = req.params.userID;
+        router.delete("/app/receipt/:receiptID", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userId = userObject.id;
             const receiptID = req.params.receiptID;
             console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
             try {
-                yield this.Receipt.deleteOneReceiptForASpecificUser(res, userID, receiptID);
+                yield this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
             }
             catch (e) {
                 console.error(e);
             }
         }));
         // add receipt item
-        router.post('/app/user/:userID/receipt/:receiptID/receiptItem', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.post('/app/receipt/:receiptID/receiptItem', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptItemId = crypto.randomBytes(16).toString("hex");
             const receiptID = req.params.receiptID;
-            const userID = req.params.userID;
+            const profile = JSON.stringify(req.user);
+            const userObject = JSON.parse(profile);
+            const userId = userObject.id;
             var receiptItemObject = req.body;
             receiptItemObject.receiptID = receiptID;
             receiptItemObject.receiptItemID = newReceiptItemId;
+            receiptItemObject.userID = userId;
             try {
-                const addedReceiptItem = yield this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
+                const addedReceiptItem = yield this.ReceiptItem.addReceiptItem(receiptItemObject, userId, receiptID);
                 res.send(addedReceiptItem);
             }
             catch (e) {
                 console.error(e);
             }
         }));
+        // ROUTES FOR USER
+        // router.get("/app/user", async (req, res) => {
+        //   console.log('Query All User');
+        //   await this.User.retreiveAllUsers(res);
+        // })
         router.get("/app/user/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
             console.log("Query Single User");
             const id = req.params.id;
@@ -217,15 +250,21 @@ class App {
         //     console.error(e);
         //   }
         // })
+        router.get('/app/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            console.log("getting all receipt: ");
+            try {
+                yield this.Receipt.getAllReceipt(res);
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+        }));
         this.expressApp.use('/', router);
-<<<<<<< HEAD
-        this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
-=======
         this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
         this.expressApp.use('/images', express.static(__dirname + '/img'));
         this.expressApp.use('/', express.static(__dirname + '/angularDist/browser'));
         // this.expressApp.use('/', express.static(__dirname + '/pages'));
->>>>>>> c059c11af0c37ab3254657436683a5891c6ef9e4
     }
 }
 exports.App = App;

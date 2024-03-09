@@ -85,17 +85,17 @@ class ReceiptModel {
     }
   }
 
-  // public async getAllReceipt(response: any) {
-  //   console.log("Getting all receipts")
-  //   const query = this.model.find({});
-  //   try {
-  //     const receiptList = await query.exec();
-  //     console.log(receiptList);
-  //     response.json(receiptList);
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  public async getAllReceipt(response: any) {
+    console.log("Getting all receipts")
+    const query = this.model.find({});
+    try {
+      const receiptList = await query.exec();
+      console.log(receiptList);
+      response.json(receiptList);
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
 
   

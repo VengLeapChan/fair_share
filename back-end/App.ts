@@ -11,6 +11,8 @@ import * as crypto from 'crypto';
 import GooglePassportObj from './GooglePassport';
 import * as passport from 'passport';
 
+
+
 class App {
   public expressApp: express.Application;
   public User: UserModel;
@@ -74,6 +76,19 @@ class App {
       }
     );
 
+    router.get('/app/logout', this.validateAuth, (req, res) => {
+      req.logout((err) => {
+        if (err) {
+
+          console.error(err);
+          res.status(500).send('Error logging out');
+          return;
+        }
+     
+        res.status(200).json({ success: true });
+      });
+    });
+
     router.get('/app/user/count', this.validateAuth, async (req, res) => {
       try {
         const count = await this.User.retreiveAllUsersCount(res);
@@ -84,14 +99,25 @@ class App {
       }
     });
 
+    router.get('/app/check-auth', this.validateAuth, (req, res) => {
+      res.status(200).json({ authenticated: true });
+    });
+
 
     //ROUTES FOR DEMONSTRATION 
     // Get All Receipt For A User
     // Needs to make test 
-    router.get('/app/user/:userID/receipt', async (req, res) => {
+    router.get('/app/receipt', this.validateAuth, async (req, res) => {
+
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
+
+
       try {
-        const userID = req.params.userID;
-        await this.Receipt.getAllReceiptForSpecificUser(res, userID);
+        await this.Receipt.getAllReceiptForSpecificUser(res, userId);
       } catch (e) {
         console.error(e)
       }
@@ -99,15 +125,18 @@ class App {
 
     // Get Specific Receipt
     // Needs to make test 
-    router.get('/app/user/:userID/receipt/:receiptID', async (req, res) => {
+    router.get('/app/receipt/:receiptID', async (req, res) => {
 
-      const userID = req.params.userID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
       const receiptID = req.params.receiptID;
-
-      console.log("getting receipt: ", receiptID, " from user: ", userID);
+      console.log("getting receipt: ", receiptID, " from user: ", userId);
 
       try {
-        const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
+        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
         if (receipt) {
           res.send(receipt);
         } else {
@@ -120,12 +149,16 @@ class App {
     });
 
     // retreiveItems of a specific receipt
-    router.get('/app/user/:userID/receipt/:receiptID/receiptItems', async (req, res) => {
+    router.get('/app/receipt/:receiptID/receiptItems', async (req, res) => {
       const receiptID = req.params.receiptID;
-      const userID = req.params.userID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
 
       try {
-        const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
+        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
 
         if (receipt) {
           const items = await this.ReceiptItem.retreiveItems(receiptID);
@@ -142,12 +175,21 @@ class App {
     })
 
     // Add A Receipt
-    router.post('/app/user/:userID/receipt', async (req, res) => {
+    router.post('/app/receipt', this.validateAuth, async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
-      const userID: string = req.params.userID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userID = userObject.id;
+
+      console.log(profile);
+      console.log(userID)
+
       var receiptObject = req.body;
 
       receiptObject.receiptID = newReceiptId;
+
 
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
@@ -158,13 +200,17 @@ class App {
     });
 
     // delete A specific receipt 
-    router.delete("/app/user/:userID/receipt/:receiptID", async (req, res) => {
+    router.delete("/app/receipt/:receiptID", async (req, res) => {
 
-      const userID = req.params.userID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
       const receiptID = req.params.receiptID;
       console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
       try {
-        await this.Receipt.deleteOneReceiptForASpecificUser(res, userID, receiptID);
+        await this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
       } catch (e) {
         console.error(e);
       }
@@ -172,17 +218,22 @@ class App {
     })
 
     // add receipt item
-    router.post('/app/user/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
+    router.post('/app/receipt/:receiptID/receiptItem', async (req, res) => {
       const newReceiptItemId: string = crypto.randomBytes(16).toString("hex");
       const receiptID = req.params.receiptID;
-      const userID: string = req.params.userID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
 
       var receiptItemObject = req.body;
       receiptItemObject.receiptID = receiptID;
       receiptItemObject.receiptItemID = newReceiptItemId;
+      receiptItemObject.userID = userId;
 
       try {
-        const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
+        const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userId, receiptID);
         res.send(addedReceiptItem);
       } catch (e) {
         console.error(e);

@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv';
-import { App } from './App';
+const dotenv = require('dotenv');
+const { App } = require('./App');
 
 dotenv.config();
 
@@ -11,6 +11,6 @@ const mongoDBConnection = dbProtocol + dbUser + ':' + encodeURIComponent(dbPassw
 
 console.log("server db connection URL " + mongoDBConnection);
 
-let server: any = new App(mongoDBConnection);
+let server = new App(mongoDBConnection);
 server.expressApp.listen(port);
 console.log("server running in port " + port);

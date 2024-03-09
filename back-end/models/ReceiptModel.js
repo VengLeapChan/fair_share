@@ -96,6 +96,20 @@ class ReceiptModel {
             }
         });
     }
+    getAllReceipt(response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Getting all receipts");
+            const query = this.model.find({});
+            try {
+                const receiptList = yield query.exec();
+                console.log(receiptList);
+                response.json(receiptList);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
+    }
 }
 exports.ReceiptModel = ReceiptModel;
 //# sourceMappingURL=ReceiptModel.js.map

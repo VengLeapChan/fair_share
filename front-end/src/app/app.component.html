@@ -17,12 +17,22 @@
         </li>
       </ul>
       <ul class="navbar-nav text-end">
-
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="''"><mat-icon>logout</mat-icon></a>
-        </li>
-
+        <ng-container *ngIf="isUserAuthenticated; else logoutButton">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="''" (click)="logout()">
+              <i class="material-icons">logout</i> 
+            </a>
+          </li>
+        </ng-container>
+        <ng-template #logoutButton>
+          <li class="nav-item">
+            <a href="http://localhost:8080/auth/google" class="nav-link">
+              <i class="material-icons">login</i>
+            </a>
+          </li>
+        </ng-template>
       </ul>
+      
     </div>
   </div>
 </nav>

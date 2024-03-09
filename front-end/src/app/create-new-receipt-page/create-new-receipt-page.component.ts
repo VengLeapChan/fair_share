@@ -21,7 +21,7 @@ export class CreateNewReceiptPageComponent {
   onSubmit(): void {
     console.log('Add Receipt button clicked'); 
     console.log(this.newReceiptData);
-    this.fairShareProxyService.addReceipt(this.newReceiptData, '100').subscribe({
+    this.fairShareProxyService.addReceipt(this.newReceiptData).subscribe({
       next: (response) => {
         console.log('Receipt added successfully:', response);
         this.addReceiptItems(response.receiptID);
@@ -40,7 +40,7 @@ export class CreateNewReceiptPageComponent {
   addReceiptItems(receiptID: string): void {
 
     for (let item of this.newReceiptData.items) {
-      this.fairShareProxyService.addReceiptItem(item, '100', receiptID).subscribe({
+      this.fairShareProxyService.addReceiptItem(item, receiptID).subscribe({
         next: (response) => {
           console.log('Receipt item added successfully:', response);
         },
