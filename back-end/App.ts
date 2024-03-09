@@ -1,10 +1,15 @@
 import * as express from 'express';
+import * as session from 'express-session';
+import * as cookieParser from 'cookie-parser';
 import { UserModel } from "./models/UserModel";
 import { ReceiptModel } from './models/ReceiptModel';
 import { FriendRequestModel } from './models/FriendRequestModel';
-import {ReceiptItemModel} from './models/ReceiptItemModel';
+import { ReceiptItemModel } from './models/ReceiptItemModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
+
+import GooglePassportObj from './GooglePassport';
+import * as passport from 'passport';
 
 class App {
   public expressApp: express.Application;
@@ -12,8 +17,11 @@ class App {
   public Receipt: ReceiptModel;
   public FriendRequest: FriendRequestModel;
   public ReceiptItem: ReceiptItemModel;
+  public googlePassportObj: GooglePassportObj;
 
   constructor(mongoDBConnection: string) {
+    this.googlePassportObj = new GooglePassportObj();
+
     this.expressApp = express();
     this.middleware();
     this.routes();
@@ -23,9 +31,11 @@ class App {
     this.FriendRequest = new FriendRequestModel(mongoDBConnection);
   }
 
+  // Configure Express middleware.
   private middleware(): void {
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: false }));
+    this.expressApp.use(session({ secret: 'keyboard cat' }));
     this.expressApp.use((req, res, next) => {
       // Set the Access-Control-Allow-Origin header to allow all domains to access resources
       res.header("Access-Control-Allow-Origin", "*");
@@ -33,14 +43,51 @@ class App {
       res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
       next();
     });
+    this.expressApp.use(cookieParser());
+    this.expressApp.use(passport.initialize());
+    this.expressApp.use(passport.session());
   }
-
+  private validateAuth(req, res, next): void {
+    if (req.isAuthenticated()) {
+      console.log("user is authenticated");
+      console.log(JSON.stringify(req.user));
+      return next();
+    }
+    console.log("user is not authenticated");
+    res.redirect('/');
+  }
+  // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
 
-     //ROUTES FOR DEMONSTRATION 
-     // Get All Receipt For A User
-     // Needs to make test 
+    router.get('/auth/google',
+      passport.authenticate('google', { scope: ['profile'] }));
+
+    router.get('/auth/google/callback',
+      passport.authenticate('google',
+        { failureRedirect: '/' }
+      ),
+      (req, res) => {
+        console.log("successfully authenticated user and returned to callback page.");
+        console.log("redirecting to home");
+        res.redirect('/#/');
+      }
+    );
+
+    router.get('/app/user/count', this.validateAuth, async (req, res) => {
+      try {
+        const count = await this.User.retreiveAllUsersCount(res);
+        console.log('Query all users count: ' + count);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while retrieving user count' });
+      }
+    });
+
+
+    //ROUTES FOR DEMONSTRATION 
+    // Get All Receipt For A User
+    // Needs to make test 
     router.get('/app/user/:userID/receipt', async (req, res) => {
       try {
         const userID = req.params.userID;
@@ -49,10 +96,10 @@ class App {
         console.error(e)
       }
     })
-    
+
     // Get Specific Receipt
     // Needs to make test 
-    router.get('/app/user/:userID/receipt/:receiptID', async( req, res) => {
+    router.get('/app/user/:userID/receipt/:receiptID', async (req, res) => {
 
       const userID = req.params.userID;
       const receiptID = req.params.receiptID;
@@ -61,7 +108,7 @@ class App {
 
       try {
         const receipt = await this.Receipt.getSpecificReceipt(res, userID, receiptID);
-        if(receipt){
+        if (receipt) {
           res.send(receipt);
         } else {
           res.status(404).json("This user does not have that receipt.")
@@ -70,7 +117,7 @@ class App {
         console.error(e);
       }
 
-    }); 
+    });
 
     // retreiveItems of a specific receipt
     router.get('/app/user/:userID/receipt/:receiptID/receiptItems', async (req, res) => {
@@ -101,7 +148,7 @@ class App {
       var receiptObject = req.body;
 
       receiptObject.receiptID = newReceiptId;
-      
+
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
         res.send(addedReceipt);
@@ -112,10 +159,10 @@ class App {
 
     // delete A specific receipt 
     router.delete("/app/user/:userID/receipt/:receiptID", async (req, res) => {
-      
+
       const userID = req.params.userID;
       const receiptID = req.params.receiptID;
-      console.log("Deleting Receipt wiht Receipt ID: " + receiptID); 
+      console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
       try {
         await this.Receipt.deleteOneReceiptForASpecificUser(res, userID, receiptID);
       } catch (e) {
@@ -131,9 +178,9 @@ class App {
       const userID: string = req.params.userID;
 
       var receiptItemObject = req.body;
-      receiptItemObject.receiptID = receiptID; 
+      receiptItemObject.receiptID = receiptID;
       receiptItemObject.receiptItemID = newReceiptItemId;
-      
+
       try {
         const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userID, receiptID);
         res.send(addedReceiptItem);
@@ -142,6 +189,11 @@ class App {
       }
     });
 
+    // ROUTES FOR USER
+    // router.get("/app/user", async (req, res) => {
+    //   console.log('Query All User');
+    //   await this.User.retreiveAllUsers(res);
+    // })
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
@@ -188,7 +240,7 @@ class App {
     //   newFriendRequest.requestID = id;
     //   const senderId = newFriendRequest.friendRequestSenderID;
     //   const receiverId = newFriendRequest.friendRequestReceiverID;
-      
+
 
     //   const doc = new this.FriendRequest.model(newFriendRequest);
 
@@ -204,9 +256,31 @@ class App {
     //   }
     // })
 
+
+    router.get('/app/receipt', async (req, res) => {
+
+
+      console.log("getting all receipt: ");
+
+      try {
+
+        await this.Receipt.getAllReceipt(res);
+
+      } catch (e) {
+
+        console.log(e);
+        throw e;
+      }
+
+    });
+
+
     this.expressApp.use('/', router);
 
-    this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
+    this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
+    this.expressApp.use('/images', express.static(__dirname + '/img'));
+    this.expressApp.use('/', express.static(__dirname + '/angularDist/browser'));
+    // this.expressApp.use('/', express.static(__dirname + '/pages'));
   }
 }
 

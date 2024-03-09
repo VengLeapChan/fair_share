@@ -11,14 +11,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express = require("express");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const UserModel_1 = require("./models/UserModel");
 const ReceiptModel_1 = require("./models/ReceiptModel");
 const FriendRequestModel_1 = require("./models/FriendRequestModel");
 const ReceiptItemModel_1 = require("./models/ReceiptItemModel");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
+const GooglePassport_1 = require("./GooglePassport");
+const passport = require("passport");
 class App {
     constructor(mongoDBConnection) {
+        this.googlePassportObj = new GooglePassport_1.default();
         this.expressApp = express();
         this.middleware();
         this.routes();
@@ -27,9 +32,11 @@ class App {
         this.Receipt = new ReceiptModel_1.ReceiptModel(mongoDBConnection);
         this.FriendRequest = new FriendRequestModel_1.FriendRequestModel(mongoDBConnection);
     }
+    // Configure Express middleware.
     middleware() {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(bodyParser.urlencoded({ extended: false }));
+        this.expressApp.use(session({ secret: 'keyboard cat' }));
         this.expressApp.use((req, res, next) => {
             // Set the Access-Control-Allow-Origin header to allow all domains to access resources
             res.header("Access-Control-Allow-Origin", "*");
@@ -37,9 +44,38 @@ class App {
             res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             next();
         });
+        this.expressApp.use(cookieParser());
+        this.expressApp.use(passport.initialize());
+        this.expressApp.use(passport.session());
     }
+    validateAuth(req, res, next) {
+        if (req.isAuthenticated()) {
+            console.log("user is authenticated");
+            console.log(JSON.stringify(req.user));
+            return next();
+        }
+        console.log("user is not authenticated");
+        res.redirect('/');
+    }
+    // Configure API endpoints.
     routes() {
         let router = express.Router();
+        router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+        router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+            console.log("successfully authenticated user and returned to callback page.");
+            console.log("redirecting to home");
+            res.redirect('/#/');
+        });
+        router.get('/app/user/count', this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const count = yield this.User.retreiveAllUsersCount(res);
+                console.log('Query all users count: ' + count);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'An error occurred while retrieving user count' });
+            }
+        }));
         //ROUTES FOR DEMONSTRATION 
         // Get All Receipt For A User
         // Needs to make test 
@@ -182,7 +218,14 @@ class App {
         //   }
         // })
         this.expressApp.use('/', router);
+<<<<<<< HEAD
         this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
+=======
+        this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
+        this.expressApp.use('/images', express.static(__dirname + '/img'));
+        this.expressApp.use('/', express.static(__dirname + '/angularDist/browser'));
+        // this.expressApp.use('/', express.static(__dirname + '/pages'));
+>>>>>>> c059c11af0c37ab3254657436683a5891c6ef9e4
     }
 }
 exports.App = App;
