@@ -292,7 +292,6 @@ class App {
     //   const senderId = newFriendRequest.friendRequestSenderID;
     //   const receiverId = newFriendRequest.friendRequestReceiverID;
 
-
     //   const doc = new this.FriendRequest.model(newFriendRequest);
 
     //   try {
