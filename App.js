@@ -55,13 +55,13 @@ class App {
             return next();
         }
         console.log("user is not authenticated");
-        res.redirect('/');
+        res.redirect('/#/');
     }
     // Configure API endpoints.
     routes() {
         let router = express.Router();
         router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
-        router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+        router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/#/' }), (req, res) => {
             console.log("successfully authenticated user and returned to callback page.");
             console.log("redirecting to home");
             res.redirect('/#/');

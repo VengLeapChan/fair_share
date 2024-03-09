@@ -96,7 +96,6 @@ class ReceiptModel {
             }
         });
     }
-<<<<<<< HEAD
     getAllReceipt(response) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Getting all receipts");
@@ -111,8 +110,6 @@ class ReceiptModel {
             }
         });
     }
-=======
->>>>>>> cdf08bc4d5a55297572a63be6adb8f9f1d627e53
 }
 exports.ReceiptModel = ReceiptModel;
 //# sourceMappingURL=ReceiptModel.js.map
