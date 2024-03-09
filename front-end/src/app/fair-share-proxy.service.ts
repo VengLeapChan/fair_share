@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FairShareProxyService {
-  hostUrl:string = 'http://localhost:8080/';
+  hostUrl:string = 'https://fair-share.azurewebsites.net/';
 
   constructor(private httpClient: HttpClient) { }
 

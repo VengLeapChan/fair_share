@@ -245,6 +245,7 @@ class App {
     //   console.log('Query All User');
     //   await this.User.retreiveAllUsers(res);
     // })
+    
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
