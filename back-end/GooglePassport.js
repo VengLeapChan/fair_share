@@ -1,19 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const googleOauth2_1 = require("./googleOauth2");
-let passport = require('passport');
+const passport = require("passport");
 //let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 let GoogleStrategy = require('passport-google-oauth20-with-people-api').Strategy;
 // Creates a Passport configuration for Google
 class GooglePassport {
     constructor() {
-        this.clientId = googleOauth2_1.default.id;
-        this.secretId = googleOauth2_1.default.secret;
+        this.clientId = process.env.OAUTH_ID;
+        this.secretId = process.env.OAUTH_SECRET;
         passport.use(new GoogleStrategy({
             clientID: this.clientId,
             clientSecret: this.secretId,
             callbackURL: "/auth/google/callback"
-            //                profileFields: ['id', 'displayName', 'emails']
         }, (accessToken, refreshToken, profile, done) => {
             console.log("inside new password google strategy");
             process.nextTick(() => {

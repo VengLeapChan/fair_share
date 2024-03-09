@@ -8,18 +8,8 @@ import { ReceiptItemModel } from './models/ReceiptItemModel';
 import * as  bodyParser from "body-parser";
 import * as crypto from 'crypto';
 
-
 import GooglePassportObj from './GooglePassport';
 import * as passport from 'passport';
-
-declare global {
-  namespace Express {
-    interface User {
-      id: string,
-      displayName: string,
-    }
-  }
-}
 
 class App {
   public expressApp: express.Application;
@@ -41,33 +31,32 @@ class App {
     this.FriendRequest = new FriendRequestModel(mongoDBConnection);
   }
 
-  // private middleware(): void {
-  //   this.expressApp.use(bodyParser.json());
-  //   this.expressApp.use(bodyParser.urlencoded({ extended: false }));
-  //   this.expressApp.use((req, res, next) => {
-  //     // Set the Access-Control-Allow-Origin header to allow all domains to access resources
-  //     res.header("Access-Control-Allow-Origin", "*");
-  //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  //     next();
-  //   });
-  // }
   // Configure Express middleware.
   private middleware(): void {
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: false }));
     this.expressApp.use(session({ secret: 'keyboard cat' }));
+    this.expressApp.use((req, res, next) => {
+      // Set the Access-Control-Allow-Origin header to allow all domains to access resources
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+      next();
+    });
     this.expressApp.use(cookieParser());
     this.expressApp.use(passport.initialize());
     this.expressApp.use(passport.session());
   }
-
   private validateAuth(req, res, next): void {
-    if (req.isAuthenticated()) { console.log("user is authenticated"); return next(); }
+    if (req.isAuthenticated()) {
+      console.log("user is authenticated");
+      console.log(JSON.stringify(req.user));
+      return next();
+    }
     console.log("user is not authenticated");
     res.redirect('/');
   }
-
+  // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
 
@@ -80,17 +69,19 @@ class App {
       ),
       (req, res) => {
         console.log("successfully authenticated user and returned to callback page.");
-        console.log("redirecting to /8080");
-        res.redirect('/8080');
+        console.log("redirecting to home");
+        res.redirect('/#/');
       }
     );
 
-    router.get('/app/user/info', this.validateAuth, (req, res) => {
-      console.log('Query All list');
-      console.log("user info:" + JSON.stringify(req.user));
-      console.log("user info:" + JSON.stringify(req.user.id));
-      console.log("user info:" + JSON.stringify(req.user.displayName));
-      res.json({ "username": req.user.displayName, "id": req.user.id });
+    router.get('/app/user/count', this.validateAuth, async (req, res) => {
+      try {
+        const count = await this.User.retreiveAllUsersCount(res);
+        console.log('Query all users count: ' + count);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while retrieving user count' });
+      }
     });
 
 
@@ -313,8 +304,8 @@ class App {
 
     this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
     this.expressApp.use('/images', express.static(__dirname + '/img'));
-    this.expressApp.use('/', express.static(__dirname + '/angularDist'));
-    this.expressApp.use('/', express.static(__dirname + '/pages'));
+    this.expressApp.use('/', express.static(__dirname + '/angularDist/browser'));
+    // this.expressApp.use('/', express.static(__dirname + '/pages'));
   }
 }
 

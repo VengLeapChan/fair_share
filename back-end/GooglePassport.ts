@@ -1,6 +1,6 @@
-import googleAppAuth from './googleOauth2';
+import * as passport from 'passport';
+import * as dotenv from 'dotenv';
 
-let passport = require('passport');
 //let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 let GoogleStrategy = require('passport-google-oauth20-with-people-api').Strategy;
 
@@ -11,14 +11,13 @@ class GooglePassport {
     secretId: string;
 
     constructor() {
-        this.clientId = googleAppAuth.id;
-        this.secretId = googleAppAuth.secret;
+        this.clientId = process.env.OAUTH_ID;
+        this.secretId = process.env.OAUTH_SECRET;
 
         passport.use(new GoogleStrategy({
             clientID: this.clientId,
             clientSecret: this.secretId,
             callbackURL: "/auth/google/callback"
-            //                profileFields: ['id', 'displayName', 'emails']
         },
             (accessToken, refreshToken, profile, done) => {
                 console.log("inside new password google strategy");
