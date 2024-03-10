@@ -32,6 +32,7 @@ export class AppComponent implements OnInit{
         this.username = response.username;
         this.userEmail = response.userEmail[0].value;
         this.imageUrl = response.profileImage[0].value;
+        this.userID = response.userID;
       },
       (error) => {
         console.error('Error checking authentication status:', error);

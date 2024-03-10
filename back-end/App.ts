@@ -116,8 +116,9 @@ class App {
 
       const userEmail:string = userObject.emails;
       const displayName: string = userObject.displayName;
+      const userID: string = userObject.id;
       
-      res.status(200).json({ authenticated: true, username: displayName, userEmail: userEmail, profileImage: userObject.photos});
+      res.status(200).json({ authenticated: true, username: displayName, userEmail: userEmail, profileImage: userObject.photos, userID: userID});
     });
 
 
