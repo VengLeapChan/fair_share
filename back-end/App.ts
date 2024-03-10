@@ -239,7 +239,7 @@ class App {
     //Unprotected Routes
 
     //routes to go get a list of receipts
-    router.get('/app/:userID/receipt', async (req, res) => {
+    router.get('/app/userID/:userID/receipt', async (req, res) => {
       const userId = req.params.userID;
       try {
         await this.Receipt.getAllReceiptForSpecificUser(res, userId);
@@ -249,7 +249,7 @@ class App {
     })
 
     //routes to a single receipt
-    router.get('/app/:userID/receipt/:receiptID', async (req, res) => {
+    router.get('/app/userID/:userID/receipt/:receiptID', async (req, res) => {
       const userId = req.params.userID;
       const receiptID = req.params.receiptID;
       console.log("getting receipt: ", receiptID, " from user: ", userId);
@@ -267,7 +267,7 @@ class App {
     });
 
     //routes to post a new receipt 
-    router.post('/app/:userID/receipt', async (req, res) => {
+    router.post('/app/userID/:userID/receipt', async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
       const userID = req.params.userID;
       console.log("userID", userID);
@@ -283,7 +283,7 @@ class App {
     });
 
     //routes to post a new receipt item
-    router.post('/app/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
+    router.post('/app/userID/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
       const newReceiptItemId: string = crypto.randomBytes(16).toString("hex");
       const receiptID = req.params.receiptID;
       const userId = req.params.userID;
@@ -299,6 +299,17 @@ class App {
         console.error(e);
       }
     });
+
+    router.delete("/app/userID/:userID/receipt/:receiptID",this.validateAuth,async (req, res) => {
+      const userId = req.params.userID;
+      const receiptID = req.params.receiptID;
+      console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
+      try {
+        await this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
+      } catch (e) {
+        console.error(e);
+      }
+    })
 
     this.expressApp.use('/', router);
     this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));

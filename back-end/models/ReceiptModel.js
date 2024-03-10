@@ -70,6 +70,7 @@ class ReceiptModel {
     getSpecificReceipt(response, userID, receiptID) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = this.model.findOne({ userID: userID, receiptID: receiptID });
+            console.log("getting receipt: ", receiptID, " from user: ", userID);
             try {
                 const receipt = yield query.exec();
                 return receipt;
@@ -81,8 +82,7 @@ class ReceiptModel {
     }
     addSpecificReceipt(newReceiptData, userID) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Adding a receipt");
-            console.log("addspecificreceipt", newReceiptData);
+            console.log("Adding a receipt for " + userID);
             newReceiptData.userID = userID;
             const newDate = new Date();
             newReceiptData.date = newDate;
