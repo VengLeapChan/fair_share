@@ -88,13 +88,14 @@ class App {
 
     router.get('/app/logout', this.validateAuth, (req, res) => {
       req.logout((err) => {
-        if (err) {
 
+        console.log("Logging Out User");
+
+        if (err) {
           console.error(err);
           res.status(500).send('Error logging out');
           return;
         }
-     
         res.status(200).json({ success: true });
       });
     });
@@ -125,6 +126,7 @@ class App {
     // Needs to make test 
     router.get('/app/receipt', this.validateAuth, async (req, res) => {
 
+
       const profile: string = JSON.stringify(req.user);
       const userObject = JSON.parse(profile);
       const userId = userObject.id;
@@ -139,14 +141,11 @@ class App {
     // Get Specific Receipt
     // Needs to make test 
     router.get('/app/receipt/:receiptID', async (req, res) => {
-
       const profile: string = JSON.stringify(req.user);
-
       const userObject = JSON.parse(profile);
 
       const userId = userObject.id;
       const receiptID = req.params.receiptID;
-      console.log("getting receipt: ", receiptID, " from user: ", userId);
 
       try {
         const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
@@ -158,7 +157,6 @@ class App {
       } catch (e) {
         console.error(e);
       }
-
     });
 
     // retreiveItems of a specific receipt
@@ -177,11 +175,9 @@ class App {
           const items = await this.ReceiptItem.retreiveItems(receiptID);
           res.send(items);
         }
- 
         else {
           res.json("This user does not have that receipt.")
         }
-
       } catch (e) {
         console.error(e);
       }
@@ -191,18 +187,10 @@ class App {
     router.post('/app/receipt', this.validateAuth, async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
       const profile: string = JSON.stringify(req.user);
-
       const userObject = JSON.parse(profile);
-
       const userID = userObject.id;
-
-      console.log("userID", userID);
-
       var receiptObject = req.body;
-
       receiptObject.receiptID = newReceiptId;
-
-
       try {
         const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
         res.send(addedReceipt);
@@ -212,12 +200,9 @@ class App {
     });
 
     // delete A specific receipt 
-    router.delete("/app/receipt/:receiptID", async (req, res) => {
-
+    router.delete("/app/receipt/:receiptID",this.validateAuth,async (req, res) => {
       const profile: string = JSON.stringify(req.user);
-
       const userObject = JSON.parse(profile);
-
       const userId = userObject.id;
       const receiptID = req.params.receiptID;
       console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
@@ -226,19 +211,15 @@ class App {
       } catch (e) {
         console.error(e);
       }
-
     })
 
     // add receipt item
-    router.post('/app/receipt/:receiptID/receiptItem', async (req, res) => {
+    router.post('/app/receipt/:receiptID/receiptItem',this.validateAuth, async (req, res) => {
       const newReceiptItemId: string = crypto.randomBytes(16).toString("hex");
       const receiptID = req.params.receiptID;
       const profile: string = JSON.stringify(req.user);
-
       const userObject = JSON.parse(profile);
-
       const userId = userObject.id;
-
       var receiptItemObject = req.body;
       receiptItemObject.receiptID = receiptID;
       receiptItemObject.receiptItemID = newReceiptItemId;
@@ -252,33 +233,110 @@ class App {
       }
     });
 
+
+
+    //Unprotected Routes
+
+    //routes to go get a list of receipts
+    router.get('/app/:userID/receipt', async (req, res) => {
+      const userId = req.params.userID;
+      try {
+        await this.Receipt.getAllReceiptForSpecificUser(res, userId);
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    //routes to a single receipt
+    router.get('/app/:userID/receipt/:receiptID', async (req, res) => {
+      const userId = req.params.userID;
+      const receiptID = req.params.receiptID;
+      console.log("getting receipt: ", receiptID, " from user: ", userId);
+
+      try {
+        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
+        if (receipt) {
+          res.send(receipt);
+        } else {
+          res.status(404).json("This user does not have that receipt.")
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    //routes to post a new receipt 
+    router.post('/app/:userID/receipt', async (req, res) => {
+      const newReceiptId: string = crypto.randomBytes(16).toString("hex");
+      const userID = req.params.userID;
+      console.log("userID", userID);
+      var receiptObject = req.body;
+      receiptObject.receiptID = newReceiptId;
+
+      try {
+        const addedReceipt = await this.Receipt.addSpecificReceipt(receiptObject, userID);
+        res.send(addedReceipt);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    //routes to post a new receipt item
+    router.post('/app/:userID/receipt/:receiptID/receiptItem', async (req, res) => {
+      const newReceiptItemId: string = crypto.randomBytes(16).toString("hex");
+      const receiptID = req.params.receiptID;
+      const userId = req.params.userID;
+      var receiptItemObject = req.body;
+      receiptItemObject.receiptID = receiptID;
+      receiptItemObject.receiptItemID = newReceiptItemId;
+      receiptItemObject.userID = userId;
+
+      try {
+        const addedReceiptItem = await this.ReceiptItem.addReceiptItem(receiptItemObject, userId, receiptID);
+        res.send(addedReceiptItem);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    this.expressApp.use('/', router);
+    this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
+    this.expressApp.use('/images', express.static(__dirname + '/img'));
+    this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
+  }
+}
+
+export { App }
+
+
+
     // ROUTES FOR USER
     // router.get("/app/user", async (req, res) => {
     //   console.log('Query All User');
     //   await this.User.retreiveAllUsers(res);
     // })
-    router.get("/app/user/:id", async (req, res) => {
-      console.log("Query Single User");
-      const id = req.params.id;
-      await this.User.retreiveSpecificUser(res, id);
-    })
+    // router.get("/app/user/:id", async (req, res) => {
+    //   console.log("Query Single User");
+    //   const id = req.params.id;
+    //   await this.User.retreiveSpecificUser(res, id);
+    // })
     
-    router.post('/app/user/', async (req, res) => {
-      console.log("Adding a user");
-      const id = crypto.randomBytes(16).toString("hex");
-      console.log(req.body);
-      var jsonObj = req.body;
-      jsonObj.userID = id;
-      const doc = new this.User.model(jsonObj);
-      try {
-        await doc.save();
-        res.send('{"id":"' + id + '"}');
-      }
-      catch (e) {
-        console.log('object creation failed');
-        console.error(e);
-      }
-    });
+    // router.post('/app/user/', async (req, res) => {
+    //   console.log("Adding a user");
+    //   const id = crypto.randomBytes(16).toString("hex");
+    //   console.log(req.body);
+    //   var jsonObj = req.body;
+    //   jsonObj.userID = id;
+    //   const doc = new this.User.model(jsonObj);
+    //   try {
+    //     await doc.save();
+    //     res.send('{"id":"' + id + '"}');
+    //   }
+    //   catch (e) {
+    //     console.log('object creation failed');
+    //     console.error(e);
+    //   }
+    // });
 
     
 
@@ -317,33 +375,3 @@ class App {
     //     console.error(e);
     //   }
     // })
-
-
-    router.get('/app/receipt', async (req, res) => {
-
-
-      console.log("getting all receipt: ");
-
-      try {
-
-        await this.Receipt.getAllReceipt(res);
-
-      } catch (e) {
-
-        console.log(e);
-        throw e;
-      }
-
-    });
-
-
-    this.expressApp.use('/', router);
-
-    this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
-    this.expressApp.use('/images', express.static(__dirname + '/img'));
-    this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
-    // this.expressApp.use('/', express.static(__dirname + '/pages'));
-  }
-}
-
-export { App }

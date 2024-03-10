@@ -60,6 +60,7 @@ class ReceiptModel {
   // get a specific receipt
   public async getSpecificReceipt(response: any, userID:string, receiptID: string) {
     const query = this.model.findOne({userID: userID, receiptID: receiptID});
+    console.log("getting receipt: ", receiptID, " from user: ", userID);
     try {
       const receipt = await query.exec();
       return receipt;
@@ -71,8 +72,7 @@ class ReceiptModel {
 
 
   public async addSpecificReceipt(newReceiptData: any, userID: string) {
-    console.log("Adding a receipt");
-    console.log("addspecificreceipt", newReceiptData);
+    console.log("Adding a receipt for "+ userID);
     newReceiptData.userID = userID;
     const newDate = new Date();
     newReceiptData.date = newDate;
