@@ -1,7 +1,4 @@
 load ('createDB/createFairShareSample.js');
 load ('createDB/dropAllCollections.js');
 load('createDB/createAdminUser.js');
-<<<<<<< HEAD
 mongosh "mongodb+srv://dbAdmin:test@cluster0.bnbch4l.mongodb.net/?authSource=admin" --apiVersion 1 --username <username>
-=======
->>>>>>> cdf08bc4d5a55297572a63be6adb8f9f1d627e53
