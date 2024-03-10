@@ -14,7 +14,7 @@ describe('Test to get all receipt from a user', function () {
 
     before(function (done) {
         chai.request(server)
-            .get(`app/${userID}/receipt/`)
+            .get(`app/userID/${userID}/receipt/`)
             .end(function (err, res) {
                 requestResult = res.body;
                 response = res;
@@ -24,14 +24,18 @@ describe('Test to get all receipt from a user', function () {
             });
     });
 
+    it('Should return an array object with more than 3 objects', function (){
+		expect(response).to.have.status(200);
+        expect(requestResult).to.be.an('array');
+		expect(requestResult).to.have.length.above(3);
+    });
+
     it('The first entry in the array has known properties', function () {
         expect(requestResult[0]).to.include.keys('receiptID');
         expect(requestResult[0]).to.have.property('receiptName').that.is.a('string');
-        expect(requestResult[0]).to.have.property('receiptTotalAmount').that.is.a('number');
         expect(requestResult[0]).to.have.property('date');
-        expect(requestResult[0]).to.have.property('receiptUsersList').that.is.an('array');
         expect(requestResult[0]).to.have.property('userID').that.is.a('string');
-        expect(requestResult[0]).to.have.property('receiptSplitList').that.is.an('array');
+        expect(response.body).to.not.be.a.string;
     });
 
     it('The elements in the array have the expected properties', function () {

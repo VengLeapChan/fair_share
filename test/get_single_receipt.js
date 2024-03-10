@@ -15,7 +15,7 @@ describe('Test to get specific receipt for a user', function () {
 
     before(function (done) {
         chai.request(server)
-            .get(`app/${userID}/receipt/${receiptID}`)
+            .get(`app/userID/${userID}/receipt/${receiptID}`)
             .end(function (err, res) {
                 requestResult = res.body;
                 response = res;
@@ -42,6 +42,6 @@ describe('Test to get specific receipt for a user', function () {
     });
 
     //check individual value 
-    
+
 
 });
