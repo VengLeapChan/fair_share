@@ -41,4 +41,7 @@ describe('Test to get specific receipt for a user', function () {
         );
     });
 
+    //check individual value 
+    
+
 });

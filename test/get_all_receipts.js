@@ -50,4 +50,6 @@ describe('Test to get all receipt from a user', function () {
                 return true;
             });
     });
+
+    // check objs 
 });

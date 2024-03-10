@@ -44,4 +44,8 @@ describe('Test to post a new receipt', function () {
     expect(requestResult).to.have.property('userID').that.is.a('string');
     expect(requestResult).to.have.property('receiptSplitList').that.is.an('array');
   });
+
+  // after 
+
+  // new it 
 });
