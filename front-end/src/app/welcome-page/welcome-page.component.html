@@ -1,15 +1,22 @@
-<div class="p-5 my-5 bg-light rounded-3">
-  <div class="container-fluid py-5">
-    <h1 class="fs-1 fw-bold">Welcome to Fair Share!</h1>
-    <h2 class="pt-5">Keep track of all of expense you owe and are owed by creating receipts and tagging your friends.</h2>
+<div class="p-2 mt-5 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <ng-container *ngIf="isUserAuthenticated; else notAuthWelcome">
+      <h1 class="fs-1 fw-bold">Welcome Back to Fair Share, {{username}}!</h1>
+    </ng-container>
+    <ng-template #notAuthWelcome>
+      <h1 class="fs-1 fw-bold">Welcome to Fair Share!</h1>
+    </ng-template>
+    
+    <h2 class="pt-5">Keep track of all of expense by creating receipts!</h2>
+    <img src="./../../assets/receipt.png"/>
     <p>
-      <a [routerLink]="['/receipt']" class="btn btn-primary my-5" style="margin-right:16px" role="button">View Your Receipts Here</a>
+      <a [routerLink]="['/receipt']" class="btn btn-primary mb-1" style="margin-right:16px" role="button">View Your Receipts Here</a>
       
       <ng-container *ngIf="isUserAuthenticated; else loginButton">
-        <a (click)="logout()" class="btn btn-primary my-5" role="button">Logout</a>
+        <a (click)="logout()" class="btn btn-primary mb-1" role="button">Logout</a>
       </ng-container>
       <ng-template #loginButton>
-        <a href="https://fair-share.azurewebsites.net/auth/google" class="btn btn-primary my-5" role="button">Login</a>
+        <a href="https://fair-share.azurewebsites.net/auth/google" class="btn btn-primary mb-1" role="button">Login</a>
       </ng-template>
     </p>
   </div>

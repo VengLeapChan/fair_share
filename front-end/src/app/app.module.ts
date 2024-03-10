@@ -16,6 +16,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { MatCardModule } from '@angular/material/card';
     }),
     MatTableModule,
     MatButtonModule,
+    MatMenuModule,
     HttpClientModule,
     MatCardModule
   ],

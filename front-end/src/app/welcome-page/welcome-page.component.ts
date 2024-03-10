@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FairShareProxyService } from '../fair-share-proxy.service';
 import { Router } from '@angular/router';
 
@@ -10,15 +10,22 @@ import { Router } from '@angular/router';
 export class WelcomePageComponent implements OnInit{
   title = 'fair-share-angular';
   isUserAuthenticated: boolean = false;
-  user: any;
+  userID: any;
+  username: any; 
+  userEmail: any;
 
 
   constructor( private fairShareProxyService: FairShareProxyService, private router: Router) {}
 
   ngOnInit(): void {
     this.fairShareProxyService.checkAuth().subscribe(
-      (authenticated: boolean) => {
-        this.isUserAuthenticated = authenticated;
+      (response: any) => {
+        this.isUserAuthenticated = response.authenticated;
+        this.username = response.username;
+        this.userEmail = response.userEmail[0].value;
+
+        console.log(response.userEmail[0].value);
+        
       },
       (error) => {
         console.error('Error checking authentication status:', error);

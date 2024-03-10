@@ -14,6 +14,11 @@ export class AppComponent implements OnInit{
 
   isNavbarCollapsed = true;
 
+  userID: any;
+  username: any; 
+  userEmail: any;
+  imageUrl: any; 
+
   constructor( private fairShareProxyService: FairShareProxyService, private router: Router) {}
 
   toggleNavbar() {
@@ -22,8 +27,11 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.fairShareProxyService.checkAuth().subscribe(
-      (authenticated: boolean) => {
-        this.isUserAuthenticated = authenticated;
+      (response: any) => {
+        this.isUserAuthenticated = response.authenticated;
+        this.username = response.username;
+        this.userEmail = response.userEmail[0].value;
+        this.imageUrl = response.profileImage[0].value;
       },
       (error) => {
         console.error('Error checking authentication status:', error);

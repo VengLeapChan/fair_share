@@ -52,26 +52,36 @@ class App {
   private validateAuth(req, res, next): void {
     if (req.isAuthenticated()) {
       console.log("user is authenticated");
-      console.log(JSON.stringify(req.user));
       return next();
     }
     console.log("user is not authenticated");
-    res.redirect('/');
+    res.redirect('/#/');
   }
   // Configure API endpoints.
   private routes(): void {
     let router = express.Router();
 
     router.get('/auth/google',
-      passport.authenticate('google', { scope: ['profile'] }));
+      passport.authenticate('google', { scope: ['profile', 'email'] }));
 
     router.get('/auth/google/callback',
       passport.authenticate('google',
-        { failureRedirect: '/' }
+        { failureRedirect: '/#/' }
       ),
       (req, res) => {
         console.log("successfully authenticated user and returned to callback page.");
         console.log("redirecting to home");
+
+        const profile: string = JSON.stringify(req.user);
+        const userObject = JSON.parse(profile);
+  
+        const userEmail = userObject.emails;
+        const displayName: string = userObject.displayName;
+        const userID = userObject.id;
+  
+        console.log("User Email: " + userEmail[0].value);
+        console.log("User ID: " + userID);
+        console.log("Display Name: " + displayName);
         res.redirect('/#/');
       }
     );
@@ -100,7 +110,13 @@ class App {
     });
 
     router.get('/app/check-auth', this.validateAuth, (req, res) => {
-      res.status(200).json({ authenticated: true });
+      const profile: string = JSON.stringify(req.user);
+      const userObject = JSON.parse(profile);
+
+      const userEmail:string = userObject.emails;
+      const displayName: string = userObject.displayName;
+      
+      res.status(200).json({ authenticated: true, username: displayName, userEmail: userEmail, profileImage: userObject.photos});
     });
 
 
@@ -110,11 +126,8 @@ class App {
     router.get('/app/receipt', this.validateAuth, async (req, res) => {
 
       const profile: string = JSON.stringify(req.user);
-
       const userObject = JSON.parse(profile);
-
       const userId = userObject.id;
-
 
       try {
         await this.Receipt.getAllReceiptForSpecificUser(res, userId);
@@ -183,8 +196,7 @@ class App {
 
       const userID = userObject.id;
 
-      console.log(profile);
-      console.log(userID)
+      console.log("userID", userID);
 
       var receiptObject = req.body;
 
@@ -245,7 +257,6 @@ class App {
     //   console.log('Query All User');
     //   await this.User.retreiveAllUsers(res);
     // })
-    
     router.get("/app/user/:id", async (req, res) => {
       console.log("Query Single User");
       const id = req.params.id;
@@ -293,7 +304,6 @@ class App {
     //   const senderId = newFriendRequest.friendRequestSenderID;
     //   const receiverId = newFriendRequest.friendRequestReceiverID;
 
-
     //   const doc = new this.FriendRequest.model(newFriendRequest);
 
     //   try {
@@ -331,7 +341,7 @@ class App {
 
     this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
     this.expressApp.use('/images', express.static(__dirname + '/img'));
-    this.expressApp.use('/', express.static(__dirname + '/angularDist/browser'));
+    this.expressApp.use('/', express.static(__dirname + '/angularDist/fair-share-angular/browser'));
     // this.expressApp.use('/', express.static(__dirname + '/pages'));
   }
 }
