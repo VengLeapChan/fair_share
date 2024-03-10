@@ -99,7 +99,8 @@ class App {
             const userObject = JSON.parse(profile);
             const userEmail = userObject.emails;
             const displayName = userObject.displayName;
-            res.status(200).json({ authenticated: true, username: displayName, userEmail: userEmail, profileImage: userObject.photos });
+            const userID = userObject.id;
+            res.status(200).json({ authenticated: true, username: displayName, userEmail: userEmail, profileImage: userObject.photos, userID: userID });
         });
         //ROUTES FOR DEMONSTRATION 
         // Get All Receipt For A User
@@ -206,7 +207,7 @@ class App {
         }));
         //Unprotected Routes
         //routes to go get a list of receipts
-        router.get('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get('/app/userID/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.userID;
             try {
                 yield this.Receipt.getAllReceiptForSpecificUser(res, userId);
@@ -216,7 +217,7 @@ class App {
             }
         }));
         //routes to a single receipt
-        router.get('/app/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.get('/app/userID/:userID/receipt/:receiptID', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.userID;
             const receiptID = req.params.receiptID;
             console.log("getting receipt: ", receiptID, " from user: ", userId);
@@ -234,7 +235,7 @@ class App {
             }
         }));
         //routes to post a new receipt 
-        router.post('/app/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.post('/app/userID/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptId = crypto.randomBytes(16).toString("hex");
             const userID = req.params.userID;
             console.log("userID", userID);
@@ -249,7 +250,7 @@ class App {
             }
         }));
         //routes to post a new receipt item
-        router.post('/app/:userID/receipt/:receiptID/receiptItem', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.post('/app/userID/:userID/receipt/:receiptID/receiptItem', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptItemId = crypto.randomBytes(16).toString("hex");
             const receiptID = req.params.receiptID;
             const userId = req.params.userID;
@@ -260,6 +261,17 @@ class App {
             try {
                 const addedReceiptItem = yield this.ReceiptItem.addReceiptItem(receiptItemObject, userId, receiptID);
                 res.send(addedReceiptItem);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }));
+        router.delete("/app/userID/:userID/receipt/:receiptID", this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const userId = req.params.userID;
+            const receiptID = req.params.receiptID;
+            console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
+            try {
+                yield this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
             }
             catch (e) {
                 console.error(e);
