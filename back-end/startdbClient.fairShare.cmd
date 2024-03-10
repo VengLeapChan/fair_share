@@ -1,1 +1,0 @@
-mongosh --port 3000 --authenticationDatabase admin
