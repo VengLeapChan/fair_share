@@ -54,7 +54,7 @@ class App {
             return next();
         }
         console.log("user is not authenticated");
-        res.redirect('/#/');
+        res.redirect('/');
     }
     // Configure API endpoints.
     routes() {
@@ -71,7 +71,7 @@ class App {
             console.log("User Email: " + userEmail[0].value);
             console.log("User ID: " + userID);
             console.log("Display Name: " + displayName);
-            res.redirect('/#/');
+            res.redirect('/');
         });
         router.get('/app/logout', this.validateAuth, (req, res) => {
             req.logout((err) => {
