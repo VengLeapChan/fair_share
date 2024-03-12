@@ -82,7 +82,8 @@ class App {
         console.log("User Email: " + userEmail[0].value);
         console.log("User ID: " + userID);
         console.log("Display Name: " + displayName);
-        res.redirect('/#/');
+
+        res.redirect('/');
       }
     );
 
