@@ -237,7 +237,6 @@ class App {
 
 
     //Unprotected Routes
-
     //routes to go get a list of receipts
     router.get('/app/userID/:userID/receipt', async (req, res) => {
       const userId = req.params.userID;
@@ -253,7 +252,6 @@ class App {
       const userId = req.params.userID;
       const receiptID = req.params.receiptID;
       console.log("getting receipt: ", receiptID, " from user: ", userId);
-
       try {
         const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
         if (receipt) {
@@ -270,7 +268,6 @@ class App {
     router.post('/app/userID/:userID/receipt', async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
       const userID = req.params.userID;
-      console.log("userID", userID);
       var receiptObject = req.body;
       receiptObject.receiptID = newReceiptId;
 

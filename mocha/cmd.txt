@@ -1,3 +1,0 @@
-npm run test-specific -- test/get_all_receipts.js       
-npm run test-specific -- test/get_single_receipt.js 
-npm run test-specific -- test/post_new_receipt.js      
