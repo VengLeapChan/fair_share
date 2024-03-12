@@ -17,6 +17,7 @@
 
 .logoutBtn {
   background-color: #96B6C5;
+  width: 80%;
 }
 
-.logoutBtn:hover{ background-color: #ADC4CE;}
+.logoutBtn:hover{ background-color: #ADC4CE !important;}

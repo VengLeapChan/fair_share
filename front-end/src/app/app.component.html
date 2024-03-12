@@ -61,16 +61,18 @@
                 />
                 <h2 class="mb-0">Hi, {{ username }}!</h2>
             </div>
+            <div class="d-flex align-items-center justify-content-center p-0 m-0">
               <button
                 mat-menu-item
                 (click)="logout()"
                 [routerLink]="''"
-                class="d-flex align-bottom justify-content-center logoutBtn"
+                class="d-flex align-bottom justify-content-center logoutBtn rounded-pill"
               >
                 <span class="d-flex align-bottom justify-content-center"
                   >Logout <mat-icon>logout</mat-icon></span
                 >
               </button>
+            </div>
             </mat-menu>
           </li>
         </ng-container>
