@@ -50,7 +50,7 @@
               xPosition="before"
               class="bg-light rounded-4 p-0"
             >
-              <mat-card
+              <mat-card mat-menu-item
                 class="d-flex flex-column justify-content-center align-items-center p-3 gap-2"
               >
                 <h4 class="mb-0">{{ userEmail }}</h4>
@@ -60,18 +60,6 @@
                   class="profile-photo rounded-circle"
                 />
                 <h2 class="mb-0">Hi, {{ username }}!</h2>
-
-                <!-- <div
-                    mat-card-avatar
-                    [ngStyle]="{
-                      'background-image': 'url(' + imageUrl + ')',
-                      'background-size': 'cover',
-
-                    }"
-                  ></div>
-                  <mat-card-title>{{ username }}</mat-card-title>
-                  <mat-card-subtitle>{{ userEmail }}</mat-card-subtitle>
-                  <mat-card-subtitle>{{ userID }}</mat-card-subtitle> -->
               </mat-card>
               <button
                 mat-menu-item
