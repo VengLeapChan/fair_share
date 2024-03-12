@@ -55,7 +55,7 @@ class App {
       return next();
     }
     console.log("user is not authenticated");
-    res.redirect('/#/');
+    res.redirect('/');
   }
   // Configure API endpoints.
   private routes(): void {
