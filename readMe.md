@@ -1,4 +1,4 @@
-# Start Mongo DB::
+# Start Mongo DB:
 brew services start mongodb-community@7.0
 
 # Start MongoDB Shell: 
