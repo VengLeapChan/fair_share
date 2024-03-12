@@ -26,6 +26,10 @@
   padding: 10px 15px;
 }
 
+.btnColor {
+  background-color:#3a4664 ;
+}
+
 @media only screen and (max-width: 768px) {
   .buttons-container .btn {
     display: none;

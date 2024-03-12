@@ -45,9 +45,13 @@
             }">
             </button>
             <mat-menu #menu="matMenu" xPosition="before">
-              <mat-card class="example-card">
+              <mat-card class="profile-card" >
                 <mat-card-header>
-                  <div
+                  <img src="{{imageUrl}}" class="profile-photo"/>
+                  <h2>{{username}}</h2>
+                  <h4>{{userEmail}}</h4>
+                  <h4>{{userID}}</h4>
+                  <!-- <div
                     mat-card-avatar
                     [ngStyle]="{
                       'background-image': 'url(' + imageUrl + ')',
@@ -57,8 +61,9 @@
                   ></div>
                   <mat-card-title>{{ username }}</mat-card-title>
                   <mat-card-subtitle>{{ userEmail }}</mat-card-subtitle>
-                  <mat-card-subtitle>{{ userID }}</mat-card-subtitle>
-                </mat-card-header>
+                  <mat-card-subtitle>{{ userID }}</mat-card-subtitle> -->
+                </mat-card-header> 
+                
               </mat-card>
               <button mat-menu-item (click)="logout()" [routerLink]="''" class="d-flex align-bottom justify-content-center">
                 <span class="d-flex align-bottom justify-content-center">Logout  <mat-icon>logout</mat-icon></span>

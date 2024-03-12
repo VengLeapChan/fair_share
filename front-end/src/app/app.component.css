@@ -8,3 +8,11 @@
   border-bottom: 1px solid 	#3a4664;
 }
 
+.profile-card{
+  background-color: #F1F0E8;
+}
+
+.profile-photo{
+  width: 50px;
+  height: 50px;
+}
