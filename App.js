@@ -238,7 +238,6 @@ class App {
         router.post('/app/userID/:userID/receipt', (req, res) => __awaiter(this, void 0, void 0, function* () {
             const newReceiptId = crypto.randomBytes(16).toString("hex");
             const userID = req.params.userID;
-            console.log("userID", userID);
             var receiptObject = req.body;
             receiptObject.receiptID = newReceiptId;
             try {
