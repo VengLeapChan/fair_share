@@ -48,18 +48,18 @@
             <mat-menu
               #menu="matMenu"
               xPosition="before"
-              class="profile-card rounded-5"
+              class="bg-light rounded-5"
             >
               <mat-card
-                class="profile-card d-flex flex-column justify-content-center align-items-center p-3 gap-2"
+                class="d-flex flex-column justify-content-center align-items-center p-3 gap-2"
               >
-                <h5 class="mb-0">{{ userEmail }}</h5>
+                <h4 class="mb-0">{{ userEmail }}</h4>
                 <h5 class="m-0">{{ userID }}</h5>
                 <img
                   src="{{ imageUrl }}"
                   class="profile-photo rounded-circle"
                 />
-                <h2>{{ username }}</h2>
+                <h2>Hi, {{ username }}!</h2>
 
                 <!-- <div
                     mat-card-avatar

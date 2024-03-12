@@ -30,6 +30,10 @@
   background-color:#96B6C5 ;
 }
 
+.btnColor:hover {
+  background-color:#ADC4CE ;
+}
+
 @media only screen and (max-width: 768px) {
   .buttons-container .btn {
     display: none;

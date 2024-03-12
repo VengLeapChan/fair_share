@@ -13,10 +13,10 @@
       <a [routerLink]="['/receipt']" class="btn btn mt-3" style="margin-right:16px" role="button">View Your Receipts Here</a>
       
       <ng-container *ngIf="isUserAuthenticated; else loginButton">
-        <a (click)="logout()" class="btn btn mt-3" role="button">Logout</a>
+        <a (click)="logout()" class="btn btnColor mt-3" role="button">Logout</a>
       </ng-container>
       <ng-template #loginButton>
-        <a href="https://fair-share.azurewebsites.net/auth/google" class="btn btn mt-3" role="button">Login</a>
+        <a href="https://fair-share.azurewebsites.net/auth/google" class="btn btnColor mt-3" role="button">Login</a>
       </ng-template>
     </p>
   </div>
