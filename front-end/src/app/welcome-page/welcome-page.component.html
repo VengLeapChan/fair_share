@@ -10,7 +10,7 @@
     <h2 class="pt-2">Keep track of all of expense by creating receipts!</h2>
     <img src="./../../assets/receipt.png"/>
     <p>
-      <a [routerLink]="['/receipt']" class="btn btn mt-3" style="margin-right:16px" role="button">View Your Receipts Here</a>
+      <a [routerLink]="['/receipt']" class="btn btnColor mt-3" style="margin-right:16px" role="button">View Your Receipts Here</a>
       
       <ng-container *ngIf="isUserAuthenticated; else loginButton">
         <a (click)="logout()" class="btn btnColor mt-3" role="button">Logout</a>
