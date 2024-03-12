@@ -1,6 +1,4 @@
-<nav
-  class="navbar navbar-expand-lg navbar-light sticky-top custom-navbar-bg"
->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top custom-navbar-bg">
   <div class="container rounded-5">
     <a
       class="navbar-brand d-flex justify-content-center align-items-center"
@@ -37,21 +35,33 @@
       <ul class="navbar-nav text-end">
         <ng-container *ngIf="isUserAuthenticated; else logoutButton">
           <li class="nav-item">
-            <button mat-mini-fab [matMenuTriggerFor]="menu" [ngStyle]="{
-              'background-image': 'url(' + imageUrl + ')',
-              'background-size': 'contain',
-              'background-repeat': 'no-repeat',
-              'background-position': 'center'
-            }">
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <mat-card class="profile-card" >
-                <mat-card-header>
-                  <img src="{{imageUrl}}" class="profile-photo"/>
-                  <h2>{{username}}</h2>
-                  <h4>{{userEmail}}</h4>
-                  <h4>{{userID}}</h4>
-                  <!-- <div
+            <button
+              mat-mini-fab
+              [matMenuTriggerFor]="menu"
+              [ngStyle]="{
+                'background-image': 'url(' + imageUrl + ')',
+                'background-size': 'contain',
+                'background-repeat': 'no-repeat',
+                'background-position': 'center'
+              }"
+            ></button>
+            <mat-menu
+              #menu="matMenu"
+              xPosition="before"
+              class="profile-card rounded-5"
+            >
+              <mat-card
+                class="profile-card d-flex flex-column justify-content-center align-items-center p-3 gap-2"
+              >
+                <h5 class="mb-0">{{ userEmail }}</h5>
+                <h5 class="m-0">{{ userID }}</h5>
+                <img
+                  src="{{ imageUrl }}"
+                  class="profile-photo rounded-circle"
+                />
+                <h2>{{ username }}</h2>
+
+                <!-- <div
                     mat-card-avatar
                     [ngStyle]="{
                       'background-image': 'url(' + imageUrl + ')',
@@ -62,11 +72,16 @@
                   <mat-card-title>{{ username }}</mat-card-title>
                   <mat-card-subtitle>{{ userEmail }}</mat-card-subtitle>
                   <mat-card-subtitle>{{ userID }}</mat-card-subtitle> -->
-                </mat-card-header> 
-                
               </mat-card>
-              <button mat-menu-item (click)="logout()" [routerLink]="''" class="d-flex align-bottom justify-content-center">
-                <span class="d-flex align-bottom justify-content-center">Logout  <mat-icon>logout</mat-icon></span>
+              <button
+                mat-menu-item
+                (click)="logout()"
+                [routerLink]="''"
+                class="d-flex align-bottom justify-content-center"
+              >
+                <span class="d-flex align-bottom justify-content-center"
+                  >Logout <mat-icon>logout</mat-icon></span
+                >
               </button>
             </mat-menu>
           </li>
