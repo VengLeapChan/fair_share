@@ -14,3 +14,9 @@
   width: 75px;
   height: 75px;
 }
+
+.logoutBtn {
+  background-color: #96B6C5;
+}
+
+.logoutBtn:hover{ background-color: #ADC4CE;}

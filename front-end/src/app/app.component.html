@@ -48,9 +48,9 @@
             <mat-menu
               #menu="matMenu"
               xPosition="before"
-              class="bg-light rounded-4 p-0"
+              class="rounded-4 p-0"
             >
-              <mat-card mat-menu-item
+              <div
                 class="d-flex flex-column justify-content-center align-items-center p-3 gap-2"
               >
                 <h4 class="mb-0">{{ userEmail }}</h4>
@@ -60,12 +60,12 @@
                   class="profile-photo rounded-circle"
                 />
                 <h2 class="mb-0">Hi, {{ username }}!</h2>
-              </mat-card>
+            </div>
               <button
                 mat-menu-item
                 (click)="logout()"
                 [routerLink]="''"
-                class="d-flex align-bottom justify-content-center"
+                class="d-flex align-bottom justify-content-center logoutBtn"
               >
                 <span class="d-flex align-bottom justify-content-center"
                   >Logout <mat-icon>logout</mat-icon></span
