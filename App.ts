@@ -66,7 +66,7 @@ class App {
 
     router.get('/auth/google/callback',
       passport.authenticate('google',
-        { failureRedirect: '/#/' }
+        { failureRedirect: '/' }
       ),
       (req, res) => {
         console.log("successfully authenticated user and returned to callback page.");
