@@ -35,11 +35,10 @@ class ReceiptItemModel {
   }
 
   public async addReceiptItem(newReceiptItemData: any, userID: string, receiptID: string) {
-    console.log("add Receipt Item to Receipt Item Collection")
     newReceiptItemData.receiptOwnerID = userID;
     newReceiptItemData.receiptID = receiptID;
 
-    console.log("this is addReceiptItem", newReceiptItemData);
+    console.log("Receipt Item: "+ newReceiptItemData.receiptItemID +"is added to receipt: "+ newReceiptItemData.receiptID+ " ");
       try {
         const newReceiptItem = new this.model(newReceiptItemData);
         const savedReceiptItem = await newReceiptItem.save();
