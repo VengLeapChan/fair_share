@@ -140,51 +140,6 @@ class App {
       }
     })
 
-    // Get Specific Receipt
-    // Needs to make test 
-    router.get('/app/receipt/:receiptID', async (req, res) => {
-      const profile: string = JSON.stringify(req.user);
-      const userObject = JSON.parse(profile);
-
-      const userId = userObject.id;
-      const receiptID = req.params.receiptID;
-
-      try {
-        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
-        if (receipt) {
-          res.send(receipt);
-        } else {
-          res.status(404).json("This user does not have that receipt.")
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    });
-
-    // retreiveItems of a specific receipt
-    router.get('/app/receipt/:receiptID/receiptItems', async (req, res) => {
-      const receiptID = req.params.receiptID;
-      const profile: string = JSON.stringify(req.user);
-
-      const userObject = JSON.parse(profile);
-
-      const userId = userObject.id;
-
-      try {
-        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
-
-        if (receipt) {
-          const items = await this.ReceiptItem.retreiveItems(receiptID);
-          res.send(items);
-        }
-        else {
-          res.json("This user does not have that receipt.")
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    })
-
     // Add A Receipt
     router.post('/app/receipt', this.validateAuth, async (req, res) => {
       const newReceiptId: string = crypto.randomBytes(16).toString("hex");
@@ -238,6 +193,50 @@ class App {
 
 
     //Unprotected Routes
+
+    router.get('/app/receipt/:receiptID', async (req, res) => {
+      const profile: string = JSON.stringify(req.user);
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
+      const receiptID = req.params.receiptID;
+
+      try {
+        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
+        if (receipt) {
+          res.send(receipt);
+        } else {
+          res.status(404).json("This user does not have that receipt.")
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    // retreiveItems of a specific receipt
+    router.get('/app/receipt/:receiptID/receiptItems', async (req, res) => {
+      const receiptID = req.params.receiptID;
+      const profile: string = JSON.stringify(req.user);
+
+      const userObject = JSON.parse(profile);
+
+      const userId = userObject.id;
+
+      try {
+        const receipt = await this.Receipt.getSpecificReceipt(res, userId, receiptID);
+
+        if (receipt) {
+          const items = await this.ReceiptItem.retreiveItems(receiptID);
+          res.send(items);
+        }
+        else {
+          res.json("This user does not have that receipt.")
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })
+
     //routes to go get a list of receipts
     router.get('/app/userID/:userID/receipt', async (req, res) => {
       const userId = req.params.userID;
@@ -298,16 +297,16 @@ class App {
       }
     });
 
-    router.delete("/app/userID/:userID/receipt/:receiptID",this.validateAuth,async (req, res) => {
-      const userId = req.params.userID;
-      const receiptID = req.params.receiptID;
-      console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
-      try {
-        await this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
-      } catch (e) {
-        console.error(e);
-      }
-    })
+    // router.delete("/app/userID/:userID/receipt/:receiptID",this.validateAuth,async (req, res) => {
+    //   const userId = req.params.userID;
+    //   const receiptID = req.params.receiptID;
+    //   console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
+    //   try {
+    //     await this.Receipt.deleteOneReceiptForASpecificUser(res, userId, receiptID);
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // })
 
     this.expressApp.use('/', router);
     this.expressApp.use('/app/json/', express.static(__dirname + '/app/json'));
