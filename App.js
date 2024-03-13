@@ -265,7 +265,7 @@ class App {
                 console.error(e);
             }
         }));
-        router.delete("/app/userID/:userID/receipt/:receiptID", this.validateAuth, (req, res) => __awaiter(this, void 0, void 0, function* () {
+        router.delete("/app/userID/:userID/receipt/:receiptID", (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = req.params.userID;
             const receiptID = req.params.receiptID;
             console.log("Deleting Receipt wiht Receipt ID: " + receiptID);
